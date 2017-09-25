@@ -1,0 +1,10 @@
+#!/bin/bash
+DIR=$(dirname $0)
+echo "Compiling..."
+g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o ~/.local/bin/comfortable-swipe || exec echo "Installation aborted"
+cat $DIR/src/comfortable-swipe-serve > ~/.local/bin/comfortable-swipe-serve
+chmod +x ~/.local/bin/comfortable-swipe-serve
+echo "Successfully installed. You may now try running 'comfortable-swipe-serve'."
+echo "--------------------------------------------------------------------------"
+echo "If you want 'comfortable-swipe-serve' to automatically load on login, add it to your Startup Applications."
+echo "See https://help.ubuntu.com/stable/ubuntu-help/startup-applications.html"

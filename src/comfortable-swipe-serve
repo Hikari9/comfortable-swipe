@@ -1,0 +1,2 @@
+#!/bin/sh
+stdbuf -oL -eL libinput-debug-events | comfortable-swipe "$@"
