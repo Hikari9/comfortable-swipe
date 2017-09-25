@@ -11,11 +11,11 @@ Comfortable 3-finger and 4-finger swipe gestures. Uses Xdotool in native C++. Fo
 5. `bash install`
 
 ## How to Run
-1. `comfortable-swipe-serve` =
+1. `comfortable-swipe-serve`
 2. Flick away!
 
 ## Optional: Add to Startup Applications
 1. `gnome-session-properties`
-2. Add
+2. Click `Add`
 
   ![Comfortable Swipe](img/sample.png)
