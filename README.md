@@ -1,7 +1,7 @@
 # Ubuntu-Comfortable-3-Finger-Swipe
 Author: Rico Tiongson  
 
-Comfortable 3-finger and 4-finger swipe gesture using Xdotool in native C++, for Ubuntu 16.04LTS and beyond. Makes use of Xdotool to simulate a keyboard shortcut via
+Comfortable 3-finger and 4-finger swipe gestures. Uses Xdotool in native C++. For Ubuntu 14.04 LTS and beyond.
 
 ## Installation
 1. `sudo apt install libinput-dev libxdo-dev`
