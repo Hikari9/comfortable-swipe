@@ -5,8 +5,10 @@ Comfortable 3-finger and 4-finger swipe gesture using Xdotool in native C++, for
 
 ## Installation
 1. `sudo apt install libinput-dev libxdo-dev`
-2. Tweak `src/comfortable-swipe.cpp` to fit keyboard shortcuts of your gestures
-3. `bash install`
+2. `git clone https://github.com/Hikari9/Ubuntu-Comfortable-3-Finger-Swipe.git`
+3. `cd Ubuntu-Comfortable-3-Finger-Swipe`
+4. Tweak `src/comfortable-swipe.cpp` to fit keyboard shortcuts of your gestures
+5. `bash install`
 
 ## How to Run
 1. `comfortable-swipe-serve` =
