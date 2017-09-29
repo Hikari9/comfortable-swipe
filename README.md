@@ -14,8 +14,14 @@ Comfortable 3-finger and 4-finger swipe gestures. Uses Xdotool in native C++. Fo
 1. `comfortable-swipe-serve`
 2. Flick away!
 
+### Input Permissions
+Sometimes, you'll need some permissions to read touchpad input data. Perform these steps to solve the permission issue:
+
+1. `sudo gpasswd -a input $USER`
+2. Log out / log back in
+
 ## Optional: Add to Startup Applications
 1. `gnome-session-properties`
-2. Click `Add`
+2. Click `Add`, then enter `comfortable-swipe-serve`
 
   ![Comfortable Swipe](img/sample.png)
