@@ -1,8 +1,7 @@
-# Ubuntu Comfortable Swipe
-Author: Rico Tiongson  
-
+# Comfortable Swipe (Ubuntu)
 Comfortable 3-finger (and 4-finger) swipe gestures for Ubuntu 14.04 LTS+.
 
+by Rico Tiongson     
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  
 
 ## Installation
