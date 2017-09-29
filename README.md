@@ -9,8 +9,7 @@ Comfortable 3-finger (and 4-finger) swipe gestures for Ubuntu 14.04 LTS+
 1. `sudo apt install libinput-tools libinput-dev libxdo-dev`
 2. `git clone https://github.com/Hikari9/comfortable-swipe-ubuntu.git`
 3. `cd comfortable-swipe-ubuntu`
-4. Tweak `src/comfortable-swipe.cpp` to fit keyboard shortcuts of your gestures
-5. `bash install`
+4. `bash install`
 
 ## How to Run
 1. `comfortable-swipe start`
