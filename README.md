@@ -45,4 +45,4 @@ down4     | 4-finger swipe down | super+d | show desktop
 threshold | mouse pixels to activate swipe; higher = less sensitive; integers only | 20
 
 ## Bug Reports
-Please create an issue to report a bug.
+Create an issue [here](https://github.com/Hikari9/comfortable-swipe-ubuntu/issues/new) to report a bug.
