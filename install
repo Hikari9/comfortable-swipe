@@ -1,11 +1,21 @@
 #!/bin/bash
 DIR=$(dirname $0)
-echo "Compiling..."
+#copy config file
+mkdir -p ~/.config
+DCONF_PATH=$DIR/src/defaults.conf
+CONF_PATH=~/.config/comfortable-swipe.conf
+if [ ! -f $CONF_PATH ]; then
+    cat $DCONF_PATH > $CONF_PATH
+else
+    # config file found, ask user if overwrite
+    echo "Previous conf file found in $CONF_PATH"
+    read -r -p "Do you want to overwrite? [Y/n] " response
+    response=${response,,} # tolower
+    if [[ "$response" =~ ^(yes|y)$ ]]; then
+        cat $DCONF_PATH > $CONF_PATH
+    fi
+fi
+echo "Installing..."
 mkdir -p ~/.local/bin
 g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o ~/.local/bin/comfortable-swipe || exec echo "Installation aborted"
-cat $DIR/src/comfortable-swipe-serve > ~/.local/bin/comfortable-swipe-serve
-chmod +x ~/.local/bin/comfortable-swipe-serve
-echo "Successfully installed. You may now try running 'comfortable-swipe-serve'."
-echo "--------------------------------------------------------------------------"
-echo "If you want 'comfortable-swipe-serve' to automatically load on login, add it to your Startup Applications."
-echo "See https://help.ubuntu.com/stable/ubuntu-help/startup-applications.html"
+echo "Successfully installed. You may now run 'comfortable-swipe start'."

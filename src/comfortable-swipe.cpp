@@ -1,31 +1,25 @@
-// you may tweak these before calling `build`
-#define THRESHOLD                           20
+/*
+Comfortable Swipe
+by Rico Tiongson
 
-#define CMD_THREE_FINGERS_RIGHT    "ctrl+alt+Left"
-#define CMD_THREE_FINGERS_LEFT     "ctrl+alt+Right"
-#define CMD_THREE_FINGERS_UP       "super+w"
-#define CMD_THREE_FINGERS_DOWN     "super+w"
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-#define CMD_FOUR_FINGERS_RIGHT     "ctrl+shift+alt+Left"
-#define CMD_FOUR_FINGERS_LEFT      "ctrl+shift+alt+Right"
-#define CMD_FOUR_FINGERS_UP        "super+d"
-#define CMD_FOUR_FINGERS_DOWN      "super+d"
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-#define MSK_THREE_FINGERS 0
-#define MSK_FOUR_FINGERS 1
-#define MSK_NEGATIVE 0
-#define MSK_POSITIVE 2
-#define MSK_HORIZONTAL 0
-#define MSK_VERTICAL 4
-
-const char* commands[] = {
-    CMD_THREE_FINGERS_LEFT /* 000 */, CMD_FOUR_FINGERS_LEFT /* 001 */,
-    CMD_THREE_FINGERS_RIGHT /* 010 */ , CMD_FOUR_FINGERS_RIGHT /* 011 */,
-    CMD_THREE_FINGERS_UP /* 100 */ , CMD_FOUR_FINGERS_UP /* 101 */,
-    CMD_THREE_FINGERS_DOWN /* 110 */, CMD_FOUR_FINGERS_DOWN /* 111 */
-};
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <map>
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
@@ -35,12 +29,23 @@ const char* commands[] = {
 #include <chrono>
 #include <ctime>
 #include <unistd.h>
+#define cstr const string&
+using namespace std;
+
 extern "C" {
     // sudo apt install libxdo-dev
     #include <xdo.h>
 }
-using namespace std;
-#define cstr const string&
+
+/* MASKS FOR GESTURES */
+
+#define MSK_THREE_FINGERS 0
+#define MSK_FOUR_FINGERS 1
+#define MSK_NEGATIVE 0
+#define MSK_POSITIVE 2
+#define MSK_HORIZONTAL 0
+#define MSK_VERTICAL 4
+
 
 /* FORWARD DECLARATIONS */
 
@@ -49,6 +54,31 @@ namespace util {
     string build_gesture_begin();
     string build_gesture_update();
     string build_gesture_end();
+    map<string, string> read_config_file(const char*);
+}
+
+namespace service {
+    void buffer();
+    void start();
+    void stop();
+    void restart();
+    void help();
+}
+
+/* MAIN DRIVER FUNCTION */
+
+int main(int argc, char** args) {
+    if (argc > 1) {
+        string arg = args[1];
+        // select based on argument
+        if (arg == "start") service::start();
+        else if (arg == "stop") service::stop();
+        else if (arg == "restart") service::restart();
+        else if (arg == "buffer") service::buffer();
+        else service::help();
+    } else {
+        service::help();
+    }
 }
 
 struct swipe_gesture {
@@ -62,17 +92,50 @@ struct swipe_gesture {
     ~swipe_gesture() {xdo_free(xdo);}
 };
 
+const char* const command_map[] = {
+    "left 3",
+    "left 4",
+    "right 3",
+    "right 4",
+    "up 3",
+    "up 4",
+    "down 3",
+    "down 4"
+};
+
 struct swipe_gesture_impl : swipe_gesture {
-    int screen_num, ix, iy;
+    int screen_num, ix, iy, threshold;
     double x, y;
     bool gesture_done;
-    swipe_gesture_impl(): swipe_gesture() {}
-    ~swipe_gesture_impl() {}
+    const char** commands;
+    swipe_gesture_impl(
+        const int threshold,
+        const char* left3   /* 000 */,
+        const char* left4   /* 001 */,
+        const char* right3  /* 010 */,
+        const char* right4  /* 011 */,
+        const char* up3     /* 100 */,
+        const char* up4     /* 101 */,
+        const char* down3   /* 110 */,
+        const char* down4   /* 111 */
+    ): swipe_gesture(), threshold(threshold) {
+        commands = new const char*[8];
+        commands[0] = left3;
+        commands[1] = left4;
+        commands[2] = right3;
+        commands[3] = right4;
+        commands[4] = up3;
+        commands[5] = up4;
+        commands[6] = down3;
+        commands[7] = down4;
+    }
+    ~swipe_gesture_impl() {
+        delete[] commands;
+    }
     void key(const char* cmd) const {
         xdo_send_keysequence_window(xdo, CURRENTWINDOW, cmd, 0);
     }
     void on_begin() override {
-        // cout << "BEGIN" << endl;
         xdo_get_mouse_location(xdo, &ix, &iy, &screen_num);
         gesture_done = false;
         x = 0;
@@ -80,10 +143,9 @@ struct swipe_gesture_impl : swipe_gesture {
     }
     void on_update() override {
         if (gesture_done) return;
-        // cout << "UPDATE " << x << ' ' << y << " [" << dx << ", " << dy << "]" << endl;
         x += stod(dx);
         y += stod(dy);
-        if (x*x + y*y > THRESHOLD*THRESHOLD) {
+        if (x*x + y*y > threshold*threshold) {
             gesture_done = true;
             int mask = 0;
             if (fingers == "3") mask |= MSK_THREE_FINGERS; else
@@ -97,51 +159,105 @@ struct swipe_gesture_impl : swipe_gesture {
                 if (y < 0) mask |= MSK_NEGATIVE;
                 else mask |= MSK_POSITIVE;
             }
-            // cout << "FLICK " << mask << ' ' << commands[mask] << endl;
+            cout << "SWIPE " << command_map[mask] << endl;
             key(commands[mask]);
         }
     }
     void on_end() override {
-        // pass
     }
 };
 
-
-/* MAIN DRIVER FUNCTION */
-
-int main(int argc, char** args) {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    const regex gesture_begin(util::build_gesture_begin());
-    const regex gesture_update(util::build_gesture_update());
-    const regex gesture_end(util::build_gesture_end());
-    string sentence;
-    swipe_gesture_impl swipe;
-    while (getline(cin, sentence)) {
-        auto data = sentence.data();
-        cmatch matches;
-        if (regex_match(data, matches, gesture_begin)) {
-            swipe.device = matches[1];
-            swipe.stamp = matches[2];
-            swipe.fingers = matches[3];
-            swipe.on_begin();
+namespace service {    
+    // parses output from libinput-debug-events
+    void buffer() {
+        // check first if $user
+        ios::sync_with_stdio(false);
+        cin.tie(0);
+        const regex gesture_begin(util::build_gesture_begin());
+        const regex gesture_update(util::build_gesture_update());
+        const regex gesture_end(util::build_gesture_end());
+        string sentence;
+        // read config file
+        string conf_filename = string(getenv("HOME"))
+            + "/.config/comfortable-swipe.conf";
+        auto config = util::read_config_file(conf_filename.data());
+        // initialize gesture handler       
+        swipe_gesture_impl swipe(
+            config.count("threshold") ? stoi(config["threshold"]) : 20,
+            config["left3"].c_str(),
+            config["left4"].c_str(),
+            config["right3"].c_str(),
+            config["right4"].c_str(),
+            config["up3"].c_str(),
+            config["up4"].c_str(),
+            config["down3"].c_str(),
+            config["down4"].c_str()
+        );
+        while (getline(cin, sentence)) {
+            auto data = sentence.data();
+            cmatch matches;
+            if (regex_match(data, matches, gesture_begin)) {
+               swipe.device = matches[1];
+               swipe.stamp = matches[2];
+               swipe.fingers = matches[3];
+               swipe.on_begin();
+            }
+            else if (regex_match(data, matches, gesture_end)) {
+               swipe.device = matches[1];
+               swipe.stamp = matches[2];
+               swipe.fingers = matches[3];
+               swipe.on_end();
+            }
+            else if (regex_match(data, matches, gesture_update)) {
+               swipe.device = matches[1];
+               swipe.stamp = matches[2];
+               swipe.fingers = matches[3];
+               swipe.dx = matches[4];
+               swipe.dy = matches[5];
+               swipe.udx = matches[6];
+               swipe.udy = matches[7];
+               swipe.on_update();
+            }
         }
-        else if (regex_match(data, matches, gesture_end)) {
-            swipe.device = matches[1];
-            swipe.stamp = matches[2];
-            swipe.fingers = matches[3];
-            swipe.on_end();
+    }
+    // starts service
+    void start() {
+        int x = system("stdbuf -oL -eL libinput-debug-events | comfortable-swipe buffer");
+    }
+    // stops service
+    void stop() {
+        // kill all comfortable-swipe, except self
+        char* buffer = new char[20];
+        FILE* pipe = popen("pgrep -f comfortable-swipe", "r");
+        if (!pipe) throw std::runtime_error("stop command failed");
+        string kill = "kill";
+        while (!feof(pipe)) {
+            if (fgets(buffer, 20, pipe) != NULL) {
+                int pid = atoi(buffer);
+                if (pid != getpid()) {
+                    kill += " " + to_string(pid);
+                }
+            }
         }
-        else if (regex_match(data, matches, gesture_update)) {
-            swipe.device = matches[1];
-            swipe.stamp = matches[2];
-            swipe.fingers = matches[3];
-            swipe.dx = matches[4];
-            swipe.dy = matches[5];
-            swipe.udx = matches[6];
-            swipe.udy = matches[7];
-            swipe.on_update();
-        }
+        int result = system(kill.data());
+        delete[] buffer;
+        pclose(pipe);
+    }
+    // stops then starts service
+    void restart() {
+        service::stop();
+        service::start();
+    }
+    // shows help
+    void help() {
+        puts("comfortable-swipe [start|stop|restart|buffer|help]");
+        puts("start      - starts 3/4-finger gesture service");
+        puts("stop       - stops 3/4-finger gesture service");
+        puts("restart    - stops then starts 3/4-finger gesture service");
+        puts("buffer     - parses output of libinput-debug-events");
+        puts("help       - shows the help dialog");
+        puts("");
+        puts("Configuration file can be found in ~/.config/comfortable-swipe.conf");
     }
 }
 
@@ -191,6 +307,39 @@ namespace util {
         string fingers = "\\s*(\\d+)\\s*";
         string arr[] = {device, gesture, seconds, fingers};
         return join("\\s+", arr, 4);
+    }
+    
+    map<string, string> read_config_file(const char* filename) {
+        map<string, string> conf;
+        ifstream fin(filename);
+        if (!fin.is_open()) {
+            cerr << "file \"" << filename << "\" does not exist!" << endl;
+            exit(1);
+        }
+        string line, key, token, buffer, value;
+        int line_number = 0;
+        while (getline(fin, line)) {
+            ++line_number;
+            istringstream is(line);
+            buffer.clear();
+            while (is >> token) {
+                if (token[0] == '#')
+                    break;
+                buffer += token;
+            }
+            if (buffer.empty())
+                continue;
+            auto id = buffer.find('=');
+            if (id == string::npos) {
+                cerr << "error in conf file: " << filename << endl;
+                cerr << "equal sign expected in line " << line_number << endl;
+                exit(1);
+            }
+            key = buffer.substr(0, id);
+            value = buffer.substr(id + 1);
+            conf[key] = value;
+        }
+        return conf;
     }
 
 }
