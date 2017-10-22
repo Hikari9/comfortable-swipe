@@ -4,7 +4,7 @@
 Comfortable 3-finger (and 4-finger) swipe gestures for Ubuntu 14.04 LTS+
 
 ## Installation
-1. `sudo apt install libinput-tools libinput-dev libxdo-dev`
+1. `sudo apt-get install git libinput-tools libxdo-dev`
 2. `git clone https://github.com/Hikari9/comfortable-swipe-ubuntu.git`
 3. `cd comfortable-swipe-ubuntu`
 4. `bash install`
@@ -48,6 +48,9 @@ right4    | 4-finger swipe right | ctrl+alt+shift+Left | move window to left wor
 up4       | 4-finger swipe up | super+d | show desktop
 down4     | 4-finger swipe down | super+d | show desktop
 threshold | mouse pixels to activate swipe; higher = less sensitive; integers only | 20
+
+## Uninstall
+1. `bash uninstall`
 
 ## Bug Reports
 Create an issue [here](https://github.com/Hikari9/comfortable-swipe-ubuntu/issues/new) to report a bug.
