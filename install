@@ -8,11 +8,17 @@ if [ ! -f $CONF_PATH ]; then
     cat $DCONF_PATH > $CONF_PATH
 else
     # config file found, ask user if overwrite
-    echo "Previous conf file found in $CONF_PATH"
-    read -r -p "Do you want to overwrite? [Y/n] " response
+    echo "Old conf file found in $CONF_PATH"
+    read -r -p "Keep the old conf file? (default: yes) [Y/n] " response
     response=${response,,} # tolower
-    if [[ "$response" =~ ^(yes|y)$ ]]; then
-        cat $DCONF_PATH > $CONF_PATH
+    if [[ "$response" =~ ^(no|n)$ ]]; then
+        read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
+        response=${response,,}
+        if [[ "$response" =~ ^(yes|y)$ ]]; then
+            cat $DCONF_PATH > $CONF_PATH
+        else
+            exec echo "Installation aborted."
+        fi
     fi
 fi
 echo "Installing..."
