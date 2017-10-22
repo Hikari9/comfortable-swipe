@@ -3,8 +3,6 @@
 
 Comfortable 3-finger (and 4-finger) swipe gestures for Ubuntu 14.04 LTS+
 
-(c) Rico Tiongson
-
 ## Installation
 1. `sudo apt install libinput-tools libinput-dev libxdo-dev`
 2. `git clone https://github.com/Hikari9/comfortable-swipe-ubuntu.git`
@@ -12,8 +10,10 @@ Comfortable 3-finger (and 4-finger) swipe gestures for Ubuntu 14.04 LTS+
 4. `bash install`
 
 ## How to Run
-1. `comfortable-swipe start`
+1. Run `comfortable-swipe start` in Terminal
 2. Flick away!
+
+> If you get 'command not found' error or similar, try running with the full path: `/home/$USER/.local/bin/comfortable-swipe start`
 
 ### Permissions
 Sometimes, you'll need some permissions to read touchpad input data. Perform these steps to solve the permission issue:
@@ -21,12 +21,17 @@ Sometimes, you'll need some permissions to read touchpad input data. Perform the
 1. `sudo gpasswd -a $USER input`
 2. Log out / log back in
 
-## Optional: Add to Startup Applications
+### Optional: Add to Startup Applications
 1. `gnome-session-properties`
-2. Add, then enter:  
-    ![Add to Startup Applications](img/sample.png)
+2. Click `Add`
+3. Enter the following:
 
-3. Save
+    Name    | Comforable Swipe
+    ------- | -------------------
+    Command | `comfortable-swipe-start`
+    Comment | Comfortable 3 or 4 finger swipe gestures
+
+4. Save
 
 ## Configurations
 The configuration file is located at `~/.config/comfortable-swipe.conf`.  
