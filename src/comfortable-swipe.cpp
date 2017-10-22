@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <cstdarg>
 #include <cassert>
+#include <cmath>
 #include <regex>
 #include <chrono>
 #include <ctime>
