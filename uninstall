@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Uninstalling..."
+rm ${XDG_CONFIG_HOME:-$HOME/.config}/autostart/comfortable-swipe.desktop 2> /dev/null
 comfortable-swipe stop 2> /dev/null
 rm $HOME/.local/bin/comfortable-swipe 2> /dev/null
-sleep 1
-echo "Successfully uninstalled comfortable-swipe"
+echo "Successfully uninstalled comfortablex-swipe"
