@@ -3,7 +3,7 @@ DIR=$(dirname $0)
 #copy config file
 mkdir -p ~/.config
 DCONF_PATH=$DIR/src/defaults.conf
-CONF_PATH=~/.config/comfortable-swipe.conf
+CONF_PATH=${XDG_CONFIG_HOME:-$HOME/.config}/comfortable-swipe.conf
 if [ ! -f $CONF_PATH ]; then
     cat $DCONF_PATH > $CONF_PATH
 else
@@ -23,5 +23,5 @@ else
 fi
 echo "Installing..."
 mkdir -p ~/.local/bin
-g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o ~/.local/bin/comfortable-swipe || exec echo "Installation aborted"
+g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $HOME/.local/bin/comfortable-swipe || exec echo "Installation aborted"
 echo "Successfully installed. You may now run 'comfortable-swipe start'."

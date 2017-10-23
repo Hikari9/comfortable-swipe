@@ -63,6 +63,7 @@ namespace service {
     void start();
     void stop();
     void restart();
+    void autostart();
     void help();
 }
 
@@ -76,6 +77,7 @@ int main(int argc, char** args) {
         else if (arg == "stop") service::stop();
         else if (arg == "restart") service::restart();
         else if (arg == "buffer") service::buffer();
+        else if (arg == "autostart") service::autostart();
         else service::help();
     } else {
         service::help();
@@ -168,20 +170,52 @@ struct swipe_gesture_impl : swipe_gesture {
     }
 };
 
+// path services
+namespace service {
+    // get the full path of the .conf file
+    string conf_filename() {
+        static string *filename = NULL;
+        if (filename == NULL) {
+            const char* xdg_config = getenv("XDG_CONFIG_HOME");
+            string config(
+                xdg_config == NULL
+                    ? string(getenv("HOME")) + "/.config"
+                    : xdg_config
+            );
+            filename = new string(config + "/comfortable-swipe.conf");
+        }
+        return *filename;
+    }
+    // get the full path of the .desktop file associated
+    // with the autostart feature
+    string autostart_filename() {
+        static string *filename = NULL;
+        if (filename == NULL) {
+            const char* xdg_config = getenv("XDG_CONFIG_HOME");
+            string config(
+                xdg_config == NULL
+                    ? string(getenv("HOME")) + "/.config"
+                    : xdg_config
+            );
+            filename = new string(config
+                + "/autostart/comfortable-swipe.desktop");
+        }
+        return *filename;
+    }
+}
+
 namespace service {    
     // parses output from libinput-debug-events
     void buffer() {
         // check first if $user
         ios::sync_with_stdio(false);
-        cin.tie(0);
+        cin.tie(0); cout.tie(0);
         const regex gesture_begin(util::build_gesture_begin());
         const regex gesture_update(util::build_gesture_update());
         const regex gesture_end(util::build_gesture_end());
         string sentence;
         // read config file
-        string conf_filename = string(getenv("HOME"))
-            + "/.config/comfortable-swipe.conf";
-        auto config = util::read_config_file(conf_filename.data());
+        auto config = util::read_config_file(conf_filename().data());
         // initialize gesture handler       
         swipe_gesture_impl swipe(
             config.count("threshold") ? stoi(config["threshold"]) : 20,
@@ -223,7 +257,7 @@ namespace service {
     }
     // starts service
     void start() {
-        int x = system("stdbuf -oL -eL libinput-debug-events | comfortable-swipe buffer");
+        int x = system("stdbuf -oL -eL libinput-debug-events | $HOME/.local/bin/comfortable-swipe buffer");
     }
     // stops service
     void stop() {
@@ -249,16 +283,48 @@ namespace service {
         service::stop();
         service::start();
     }
+    // toggle automatically start application on startup
+    void autostart() {
+        string path = autostart_filename();
+        if (ifstream(path.data()).good()) {
+            // file found, delete it
+            if (remove(path.data()) != 0)
+                cerr << "Error: failed to switch off autostart. "
+                     << "Maybe the autostart file is in use?"
+                     << endl;
+            else
+                cout << "Autostart switched off" << endl;
+        } else {
+            // file not found, create it
+            int result = system(("mkdir -p $(dirname " + path + ")").data());
+            ofstream fout(path.data());
+            if (result != 0 || !fout.good())
+                cerr << "Error: failed to switch on autostart. "
+                     << "Are you sure you have the permissions?"
+                     << endl;
+            else
+                fout <<
+                    "[Desktop Entry]\n"
+                    "Type=Application\n"
+                    "Exec=comfortable-swipe start\n"
+                    "Hidden=false\n"
+                    "NoDisplay=false\n"
+                    "X-GNOME-Autostart-enabled=true\n"
+                    "Name=Comfortable Swipe\n"
+                    "Comment=3 or 4 touchpad gestures\n";
+        }
+    }
     // shows help
     void help() {
         puts("comfortable-swipe [start|stop|restart|buffer|help]");
         puts("start      - starts 3/4-finger gesture service");
         puts("stop       - stops 3/4-finger gesture service");
         puts("restart    - stops then starts 3/4-finger gesture service");
+        puts("autostart  - automatically run on startup (toggleable)");
         puts("buffer     - parses output of libinput-debug-events");
         puts("help       - shows the help dialog");
         puts("");
-        puts("Configuration file can be found in ~/.config/comfortable-swipe.conf");
+        puts((("Configuration file can be found in ") + conf_filename()).data());
     }
 }
 
