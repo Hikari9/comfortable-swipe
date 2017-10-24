@@ -1,38 +1,65 @@
 # Comfortable Swipe (Ubuntu)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  
 
-Comfortable 3-finger (and 4-finger) swipe gestures for Ubuntu 14.04 LTS+
+Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures for Ubuntu 14.04 LTS and beyond. May work for other Linux distros that support `libinput`.
 
 ## Installation
-1. `sudo apt-get install git libinput-tools libxdo-dev`
-2. `git clone https://github.com/Hikari9/comfortable-swipe-ubuntu.git`
-3. `cd comfortable-swipe-ubuntu`
-4. `bash install`
-5. You may delete the downloaded `comfortable-swipe-ubuntu` folder.
+
+1. Install `libinput-tools` and `libxdo-dev`
+    
+    ```bash
+    sudo apt-get install libinput-tools libxdo-dev
+    ```
+
+2. Clone this repository
+    
+    ```bash
+    git clone https://github.com/Hikari9/comfortable-swipe-ubuntu.git
+    cd comfortable-swipe-ubuntu
+    ```
+
+3. Install
+
+    ```bash
+    bash install
+    ```
+
+4. You may delete the downloaded `comfortable-swipe-ubuntu` folder after installation.
 
 ## How to Run
-1. Run `comfortable-swipe start` in Terminal
-2. Flick away!
 
-    > If you're getting *command not found*, try running: `/home/$USER/.local/bin/comfortable-swipe start`
+1. Make sure `~/.local/bin/` is added to your PATH.
+2. Run
+    
+    ```
+    comfortable-swipe start
+    ```
+    
+3. Optional: Automatically run on startup
+
+    ```
+    comfortable-swipe autostart
+    ```
 
 ### Permissions
-Sometimes, you'll need some permissions to read touchpad input data. Perform these steps to solve the permission issue:
+Sometimes, you'll need some permissions to read touchpad input data.
 
-1. `sudo gpasswd -a $USER input`
-2. Log out / log back in
+1. Find out your permission group with `ls -l /dev/input/event*`
+    ```bash
+    $ ls -l /dev/input/event*
 
-### Optional: Add to Startup Applications
-1. `gnome-session-properties`
-2. Click `Add`
-3. Enter the following:
-    
-    Name    | Comforable Swipe
-    ------- | -------------------
-    Command | `comfortable-swipe-start`
-    Comment | Comfortable 3 or 4 finger swipe gestures
+    crw-rw---- 1 root input 13, 64 Oct 23 23:09 /dev/input/event0
+    crw-rw---- 1 root input 13, 65 Oct 23 23:09 /dev/input/event1
+    crw-rw---- 1 root input 13, 66 Oct 23 23:09 /dev/input/event2
+    crw-rw---- 1 root input 13, 67 Oct 23 23:09 /dev/input/event3
+    ```
 
-4. Save
+2. Check the fourth column (e.g. `input`) then run
+    ```bash
+    sudo gpasswd -a $USER input
+    ```
+
+3. ***Important***: Log out / Log back in 
 
 ## Configurations
 The configuration file is located at `~/.config/comfortable-swipe.conf`.  
@@ -51,7 +78,7 @@ down4     | 4-finger swipe down | super+d | show desktop
 threshold | mouse pixels to activate swipe; higher = less sensitive; integers only | 20
 
 ## Uninstall
-1. `bash uninstall`
+Download the `uninstall` script then run `bash uninstall`  
 
 ## Bug Reports
 Create an issue [here](https://github.com/Hikari9/comfortable-swipe-ubuntu/issues/new) to report a bug.

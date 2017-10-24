@@ -302,7 +302,7 @@ namespace service {
                 cerr << "Error: failed to switch on autostart. "
                      << "Are you sure you have the permissions?"
                      << endl;
-            else
+            else {
                 fout <<
                     "[Desktop Entry]\n"
                     "Type=Application\n"
@@ -312,11 +312,14 @@ namespace service {
                     "X-GNOME-Autostart-enabled=true\n"
                     "Name=Comfortable Swipe\n"
                     "Comment=3 or 4 touchpad gestures\n";
+                cout << "Autostart switched on" << endl;
+            }
         }
     }
     // shows help
     void help() {
-        puts("comfortable-swipe [start|stop|restart|buffer|help]");
+        puts("comfortable-swipe [start|stop|restart|autostart|buffer|help]");
+        puts("");
         puts("start      - starts 3/4-finger gesture service");
         puts("stop       - stops 3/4-finger gesture service");
         puts("restart    - stops then starts 3/4-finger gesture service");
