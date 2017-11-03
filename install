@@ -1,5 +1,11 @@
 #!/bin/bash
 DIR=$(dirname $0)
+
+if [ -x "$(command -v git)" ]; then
+    # stop any running comfortable-swipe if it exists
+    comfortable-swipe stop
+fi
+
 #copy config file
 mkdir -p ~/.config
 DCONF_PATH=$DIR/src/defaults.conf

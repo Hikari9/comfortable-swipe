@@ -47,6 +47,9 @@ extern "C" {
 #define MSK_HORIZONTAL 0
 #define MSK_VERTICAL 4
 
+/* GESTURE MNEMONYMS */
+#define FRESH -1
+#define OPPOSITE (mask ^ MSK_POSITIVE)
 
 /* FORWARD DECLARATIONS */
 
@@ -108,8 +111,8 @@ const char* const command_map[] = {
 
 struct swipe_gesture_impl : swipe_gesture {
     int screen_num, ix, iy, threshold;
-    double x, y;
-    bool gesture_done;
+    float x, y;
+    int previous_gesture;
     const char** commands;
     swipe_gesture_impl(
         const int threshold,
@@ -140,16 +143,18 @@ struct swipe_gesture_impl : swipe_gesture {
     }
     void on_begin() override {
         xdo_get_mouse_location(xdo, &ix, &iy, &screen_num);
-        gesture_done = false;
+        previous_gesture = FRESH;
         x = 0;
         y = 0;
     }
     void on_update() override {
-        if (gesture_done) return;
-        x += stod(dx);
-        y += stod(dy);
-        if (x*x + y*y > threshold*threshold) {
-            gesture_done = true;
+        x += stof(dx);
+        y += stof(dy);
+        // scale threshold to 1/10 when gesture is not fresh
+        float scale = previous_gesture == FRESH ?
+                1.0f :
+                0.1f;
+        if (x*x + y*y > threshold*threshold*(scale*scale)) {
             int mask = 0;
             if (fingers == "3") mask |= MSK_THREE_FINGERS; else
             if (fingers == "4") mask |= MSK_FOUR_FINGERS;
@@ -162,8 +167,13 @@ struct swipe_gesture_impl : swipe_gesture {
                 if (y < 0) mask |= MSK_NEGATIVE;
                 else mask |= MSK_POSITIVE;
             }
-            cout << "SWIPE " << command_map[mask] << endl;
-            key(commands[mask]);
+            // send command on fresh OR opposite gesture
+            if (previous_gesture == FRESH or previous_gesture == OPPOSITE) {
+                x = y = 0;
+                previous_gesture = mask;
+                cout << "SWIPE " << command_map[mask] << endl;
+                key(commands[mask]);
+            }
         }
     }
     void on_end() override {
