@@ -2,7 +2,7 @@
 DIR=$(dirname $0)
 PROGRAM=$HOME/.local/bin/comfortable-swipe
 
-if [ -x "$(command -v git)" ]; then
+if [ -x "$(command -v $PROGRAM)" ]; then
     # stop any running comfortable-swipe if it exists
     $PROGRAM stop
 fi
