@@ -1,9 +1,10 @@
 #!/bin/bash
 DIR=$(dirname $0)
+PROGRAM=$HOME/.local/bin/comfortable-swipe
 
 if [ -x "$(command -v git)" ]; then
     # stop any running comfortable-swipe if it exists
-    comfortable-swipe stop
+    $PROGRAM stop
 fi
 
 #copy config file
@@ -29,5 +30,10 @@ else
 fi
 echo "Installing..."
 mkdir -p ~/.local/bin
-g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $HOME/.local/bin/comfortable-swipe || exec echo "Installation aborted"
+g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $PROGRAM || exec echo "Installation aborted"
+
+# toggle autostart twice to refresh any changes
+$PROGRAM autostart > /dev/null || exec echo "Installation aborted"
+$PROGRAM autostart > /dev/null || exec echo "Installation aborted"
+
 echo "Successfully installed. You may now run 'comfortable-swipe start'."
