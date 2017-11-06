@@ -31,6 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <ctime>
 #include <unistd.h>
 #define cstr const string&
+#define PROGRAM "$HOME/.local/bin/comfortable-swipe"
 using namespace std;
 
 extern "C" {
@@ -267,7 +268,7 @@ namespace service {
     }
     // starts service
     void start() {
-        int x = system("stdbuf -oL -eL libinput-debug-events | $HOME/.local/bin/comfortable-swipe buffer");
+        int x = system("stdbuf -oL -eL libinput-debug-events | " PROGRAM " buffer");
     }
     // stops service
     void stop() {
@@ -316,7 +317,7 @@ namespace service {
                 fout <<
                     "[Desktop Entry]\n"
                     "Type=Application\n"
-                    "Exec=comfortable-swipe start\n"
+                    "Exec=bash -c \"" PROGRAM " start\"\n"
                     "Hidden=false\n"
                     "NoDisplay=false\n"
                     "X-GNOME-Autostart-enabled=true\n"
