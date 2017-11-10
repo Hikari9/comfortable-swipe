@@ -38,7 +38,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 3. Optional: Automatically run on startup
 
     ```
-    comfortable-swipe-autostart
+    comfortable-swipe autostart
     ```
 
 ### Permissions
