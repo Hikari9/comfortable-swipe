@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <ctime>
 #include <unistd.h>
 #define cstr const string&
-#define PROGRAM "$HOME/.local/bin/comfortable-swipe"
+#define PROGRAM "/usr/local/bin/comfortable-swipe"
 using namespace std;
 
 extern "C" {
