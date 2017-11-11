@@ -54,10 +54,11 @@ Sometimes, you'll need some permissions to read touchpad input data.
     crw-rw---- 1 root input 13, 67 Oct 23 23:09 /dev/input/event3
     ```
 
-2. Check the fourth column (e.g. `input`) then run
+2. Check the fourth column (e.g. `input`) then run:
     ```bash
     sudo gpasswd -a $USER input
     ```
+    > Note: Don't forget to input your `sudo` password!
 
 3. ***Important***: Log out / Log back in 
 
@@ -67,15 +68,15 @@ Make sure to run `comfortable-swipe restart` after making changes.
 
 Property  | Description | Default Value | Default Behavior
 --------- | ----------- | -------------- | -----
+threshold | mouse pixels to activate swipe; higher = less sensitive; floating-point | 0.0
 left3     | 3-finger swipe left | ctrl+shift+Right | switch to right workspace
-right3    | 3-finger swipe right | ctrl+shift+Left | switch to left workspace
-up3       | 3-finger swipe up | super+w | window spread
-down3     | 3-finger swipe down | super+w | window spread
 left4     | 4-finger swipe left | ctrl+alt+shift+Right | move window to right workspace
+right3    | 3-finger swipe right | ctrl+shift+Left | switch to left workspace
 right4    | 4-finger swipe right | ctrl+alt+shift+Left | move window to left workspace
-up4       | 4-finger swipe up | super+d | show desktop
-down4     | 4-finger swipe down | super+d | show desktop
-threshold | mouse pixels to activate swipe; higher = less sensitive; integers only | 20
+up3       | 3-finger swipe up | ctrl+shift+Down | switch to bottom workspace
+up4       | 4-finger swipe up | ctrl+alt+shift+Down | move window to bottom workspace
+down3     | 3-finger swipe down | ctrl+shift+Down | switch to above workspace
+down4     | 4-finger swipe down | ctrl+alt+shift+Up | move window to above workpace
 
 ## Uninstall
 Download the `uninstall` script then run `bash uninstall`  
