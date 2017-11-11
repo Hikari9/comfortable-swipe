@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <ctime>
 #include <unistd.h>
 #define cstr const string&
-#define PROGRAM "$HOME/.local/bin/comfortable-swipe"
+#define PROGRAM "/usr/local/bin/comfortable-swipe"
 using namespace std;
 
 extern "C" {
@@ -111,12 +111,12 @@ const char* const command_map[] = {
 };
 
 struct swipe_gesture_impl : swipe_gesture {
-    int screen_num, ix, iy, threshold;
-    float x, y;
+    int screen_num, ix, iy;
+    float x, y, threshold;
     int previous_gesture;
     const char** commands;
     swipe_gesture_impl(
-        const int threshold,
+        const float threshold,
         const char* left3   /* 000 */,
         const char* left4   /* 001 */,
         const char* right3  /* 010 */,
@@ -229,7 +229,7 @@ namespace service {
         auto config = util::read_config_file(conf_filename().data());
         // initialize gesture handler       
         swipe_gesture_impl swipe(
-            config.count("threshold") ? stoi(config["threshold"]) : 20,
+            config.count("threshold") ? stof(config["threshold"]) : 0.0,
             config["left3"].c_str(),
             config["left4"].c_str(),
             config["right3"].c_str(),
