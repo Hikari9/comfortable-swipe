@@ -9,6 +9,7 @@ echo "Uninstall $(date)" >> .log
 # stop service
 systemctl stop comfortable-swipe.service >> .log 2>> .log
 systemctl disable comfortable-swipe.service >> .log 2>> .log
+systemctl daemon-reload
 
 # remove service
 SERVICE_PATH="/lib/systemd/system/comfortable-swipe.service"

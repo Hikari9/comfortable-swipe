@@ -81,7 +81,6 @@ int main(int argc, char** args) {
         else if (arg == "stop") service::stop();
         else if (arg == "restart") service::restart();
         else if (arg == "buffer") service::buffer();
-        else if (arg == "autostart") service::autostart();
         else service::help();
     } else {
         service::help();
@@ -190,22 +189,6 @@ namespace service {
             filename = new string("/usr/local/share/comfortable-swipe.conf");
         return *filename;
     }
-    // get the full path of the .desktop file associated
-    // with the autostart feature
-    string autostart_filename() {
-        static string *filename = NULL;
-        if (filename == NULL) {
-            const char* xdg_config = getenv("XDG_CONFIG_HOME");
-            string config(
-                xdg_config == NULL
-                    ? string(getenv("HOME")) + "/.config"
-                    : xdg_config
-            );
-            filename = new string(config
-                + "/autostart/comfortable-swipe.desktop");
-        }
-        return *filename;
-    }
 }
 
 namespace service {    
@@ -261,73 +244,23 @@ namespace service {
     }
     // starts service
     void start() {
-        int x = system("/usr/bin/stdbuf -oL -eL /usr/bin/libinput-debug-events | " PROGRAM " buffer");
+        int x = system("systemctl start comfortable-swipe.service");
     }
     // stops service
     void stop() {
-        // kill all comfortable-swipe, except self
-        char* buffer = new char[20];
-        FILE* pipe = popen("/usr/bin/pgrep -f comfortable-swipe", "r");
-        if (!pipe) throw std::runtime_error("stop command failed");
-        string kill = "kill";
-        while (!feof(pipe)) {
-            if (fgets(buffer, 20, pipe) != NULL) {
-                int pid = atoi(buffer);
-                if (pid != getpid()) {
-                    kill += " " + to_string(pid);
-                }
-            }
-        }
-        int result = system(kill.data());
-        delete[] buffer;
-        pclose(pipe);
+        int x = system("systemctl stop comfortable-swipe.service");
     }
     // stops then starts service
     void restart() {
-        service::stop();
-        service::start();
-    }
-    // toggle automatically start application on startup
-    void autostart() {
-        string path = autostart_filename();
-        if (ifstream(path.data()).good()) {
-            // file found, delete it
-            if (remove(path.data()) != 0)
-                cerr << "Error: failed to switch off autostart. "
-                     << "Maybe the autostart file is in use?"
-                     << endl;
-            else
-                cout << "Autostart switched off" << endl;
-        } else {
-            // file not found, create it
-            int result = system(("mkdir -p $(dirname " + path + ")").data());
-            ofstream fout(path.data());
-            if (result != 0 || !fout.good())
-                cerr << "Error: failed to switch on autostart. "
-                     << "Are you sure you have the permissions?"
-                     << endl;
-            else {
-                fout <<
-                    "[Desktop Entry]\n"
-                    "Type=Application\n"
-                    "Exec=bash -c \"" PROGRAM " start\"\n"
-                    "Hidden=false\n"
-                    "NoDisplay=false\n"
-                    "X-GNOME-Autostart-enabled=true\n"
-                    "Name=Comfortable Swipe\n"
-                    "Comment=3 or 4 touchpad gestures\n";
-                cout << "Autostart switched on" << endl;
-            }
-        }
+        int x = system("systemctl restart comfortable-swipe.service");
     }
     // shows help
     void help() {
-        puts("comfortable-swipe [start|stop|restart|autostart|buffer|help]");
+        puts("comfortable-swipe [start|stop|restart|buffer|help]");
         puts("");
         puts("start      - starts 3/4-finger gesture service");
         puts("stop       - stops 3/4-finger gesture service");
         puts("restart    - stops then starts 3/4-finger gesture service");
-        puts("autostart  - automatically run on startup (toggleable)");
         puts("buffer     - parses output of libinput-debug-events");
         puts("help       - shows the help dialog");
         puts("");

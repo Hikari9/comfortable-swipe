@@ -14,6 +14,7 @@ DCONF_PATH=$DIR/src/defaults.conf
 if [ -x "$(command -v $PROGRAM)" ]; then
     # stop any running comfortable-swipe if it exists
     systemctl stop comfortable-swipe.service >> .log 2>> .log
+    systemctl disable comfortable-swipe.service >> .log 2>> .log
 fi
 
 mkdir -p $(dirname $CONF_PATH)
@@ -58,7 +59,7 @@ Description=Comfortable 3 or 4 finger gestures
 
 [Service]
 Environment=DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY
-ExecStart=$PROGRAM start
+ExecStart=/bin/sh -c '/usr/bin/stdbuf -oL -eL /usr/bin/libinput-debug-events | $PROGRAM buffer'
 
 [Install]
 WantedBy=multi-user.target" \
