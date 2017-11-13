@@ -58,7 +58,7 @@ SERVICE_PATH="/lib/systemd/system/comfortable-swipe.service"
 
 echo "[Unit]
 Description=Comfortable 3 or 4 finger gestures
-After=display-manager.service
+After=display-manager.service keyboard-setup.service
 
 [Service]
 Environment=DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY
@@ -67,7 +67,7 @@ Restart=always
 RestartSec=2
 
 [Install]
-WantedBy=multi-user.target" \
+WantedBy=graphical.target" \
 > $SERVICE_PATH
 
 # run immediately
