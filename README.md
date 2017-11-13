@@ -39,6 +39,25 @@ Useful References:
 - [How to turn on Workspaces?](https://askubuntu.com/questions/260510/how-do-i-turn-on-workspaces-why-do-i-only-have-one-workspace)
 - [How to set keyboard shortcuts in Ubuntu](https://help.ubuntu.com/stable/ubuntu-help/keyboard-shortcuts-set.html)
 
+### Other Commands
+
+You can run `comfortable-swipe help` to see a list of commands:
+
+```
+$ comfortable-swipe help
+
+comfortable-swipe [start|stop|status|restart|buffer|help]
+
+start      - starts 3/4-finger gesture service
+stop       - stops 3/4-finger gesture service
+status     - shows the status of the program (service log)
+restart    - stops then starts 3/4-finger gesture service
+buffer     - parses output of libinput-debug-events
+help       - shows the help dialog
+
+Configuration file can be found in /usr/local/share/comfortable-swipe.conf
+```
+
 ### Configurations
 The configuration file is located at `/usr/local/share/comfortable-swipe.conf`.
 Run `comfortable-swipe restart` after making changes.
@@ -63,4 +82,4 @@ Create an issue [here](https://github.com/Hikari9/comfortable-swipe-ubuntu/issue
 to add the following to your issue:
 
 1. Content of `.log` (found in the cloned folder)
-2. Output of `sudo systemctl status comfortable-swipe.service`
+2. Output of `comfortable-swipe status`

@@ -4,7 +4,10 @@ if [ $(id -u) != "0" ]; then
     sudo bash "$0" "$@"
     exit $?
 fi
-echo "Install $(date)" >> .log
+
+echo "
+Install $(date)" >> .log
+
 DIR=$(dirname $0)
 PROGRAM=/usr/local/bin/comfortable-swipe
 CONF_PATH=/usr/local/share/comfortable-swipe.conf

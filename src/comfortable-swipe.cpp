@@ -275,7 +275,7 @@ namespace service {
         puts("");
         puts("start      - starts 3/4-finger gesture service");
         puts("stop       - stops 3/4-finger gesture service");
-        puts("status     - shows the status of the program");
+        puts("status     - shows the status of the program (service log)");
         puts("restart    - stops then starts 3/4-finger gesture service");
         puts("buffer     - parses output of libinput-debug-events");
         puts("help       - shows the help dialog");
