@@ -223,11 +223,6 @@ namespace service {
             config["down4"].c_str()
         );
         while (getline(cin, sentence)) {
-            // exit on core dump
-            if (sentence.find("Segmentation fault") != string::npos)
-                exit(EXIT_FAILURE);
-            if (sentence.find("Error") != string::npos)
-                exit(EXIT_FAILURE);
             auto data = sentence.data();
             cmatch matches;
             if (regex_match(data, matches, gesture_begin)) {
@@ -251,6 +246,10 @@ namespace service {
                swipe.udx = matches[6];
                swipe.udy = matches[7];
                swipe.on_update();
+            } else if (sentence.find("Segmentation fault") != string::npos) {
+                exit(EXIT_FAILURE);
+            } else if (sentence.find("Error") != string::npos) {
+                exit(EXIT_FAILURE);
             }
         }
     }
