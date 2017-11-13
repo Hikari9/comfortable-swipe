@@ -4,7 +4,8 @@ if [ $(id -u) != "0" ]; then
     exit $?
 fi
 echo "Uninstalling..."
-echo "Uninstall $(date)" >> .log
+echo "
+Uninstall $(date)" >> .log
 
 # stop service
 systemctl stop comfortable-swipe.service >> .log 2>> .log

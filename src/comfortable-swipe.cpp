@@ -66,9 +66,10 @@ namespace service {
     void buffer();
     void start();
     void stop();
+    void status();
     void restart();
-    void autostart();
     void help();
+    void exec();
 }
 
 /* MAIN DRIVER FUNCTION */
@@ -79,8 +80,10 @@ int main(int argc, char** args) {
         // select based on argument
         if (arg == "start") service::start();
         else if (arg == "stop") service::stop();
+        else if (arg == "status") service::status();
         else if (arg == "restart") service::restart();
         else if (arg == "buffer") service::buffer();
+        else if (arg == "exec") service::exec();
         else service::help();
     } else {
         service::help();
@@ -191,7 +194,11 @@ namespace service {
     }
 }
 
-namespace service {    
+namespace service {
+    void exec() {
+        sleep(1);
+        exit(system("/usr/bin/stdbuf -oL -eL /usr/bin/libinput-debug-events 2>&1 | " PROGRAM " buffer"));
+    }
     // parses output from libinput-debug-events
     void buffer() {
         // check first if $user
@@ -216,6 +223,11 @@ namespace service {
             config["down4"].c_str()
         );
         while (getline(cin, sentence)) {
+            // exit on core dump
+            if (sentence.find("Segmentation fault") != string::npos)
+                exit(EXIT_FAILURE);
+            if (sentence.find("Error") != string::npos)
+                exit(EXIT_FAILURE);
             auto data = sentence.data();
             cmatch matches;
             if (regex_match(data, matches, gesture_begin)) {
@@ -244,22 +256,27 @@ namespace service {
     }
     // starts service
     void start() {
-        int x = system("systemctl start comfortable-swipe.service");
+        exit(system("systemctl start comfortable-swipe.service"));
     }
     // stops service
     void stop() {
-        int x = system("systemctl stop comfortable-swipe.service");
+        exit(system("systemctl stop comfortable-swipe.service"));
+    }
+    // shows the status of the program
+    void status() {
+        exit(system("systemctl status comfortable-swipe.service"));
     }
     // stops then starts service
     void restart() {
-        int x = system("systemctl restart comfortable-swipe.service");
+        exit(system("systemctl restart comfortable-swipe.service"));
     }
     // shows help
     void help() {
-        puts("comfortable-swipe [start|stop|restart|buffer|help]");
+        puts("comfortable-swipe [start|stop|status|restart|buffer|help]");
         puts("");
         puts("start      - starts 3/4-finger gesture service");
         puts("stop       - stops 3/4-finger gesture service");
+        puts("status     - shows the status of the program");
         puts("restart    - stops then starts 3/4-finger gesture service");
         puts("buffer     - parses output of libinput-debug-events");
         puts("help       - shows the help dialog");
