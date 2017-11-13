@@ -26,9 +26,22 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
 4. You may delete the downloaded `comfortable-swipe-ubuntu` folder after installation.
 
-## Configurations
+## How to Run
+
+Comfortable swipe should already be running as a service upon installation. Some notes:
+
+- The program makes use of **keyboard gestures** for swiping (e.g. `ctrl+alt+Right`)
+- By default, comfortable swipe uses Ubuntu workspace shortcuts (see [configurations](#configurations)).
+
+Useful References:
+
+- [Xdotool keycodes](https://www.linux.org/threads/xdotool-keyboard.10528/)
+- [How to turn on Workspaces?](https://askubuntu.com/questions/260510/how-do-i-turn-on-workspaces-why-do-i-only-have-one-workspace)
+- [How to set keyboard shortcuts in Ubuntu](https://help.ubuntu.com/stable/ubuntu-help/keyboard-shortcuts-set.html)
+
+### Configurations
 The configuration file is located at `/usr/local/share/comfortable-swipe.conf`.
-Run `sudo systemctl restart comfortable-swipe.service` after making changes.
+Run `comfortable-swipe restart` after making changes.
 
 Property  | Description | Default Value | Default Behavior
 --------- | ----------- | -------------- | -----
