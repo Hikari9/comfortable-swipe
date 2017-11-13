@@ -1,7 +1,24 @@
 #!/bin/bash
+if [ $(id -u) != "0" ]; then
+    sudo bash "$0" "$@"
+    exit $?
+fi
 echo "Uninstalling..."
-rm ${XDG_CONFIG_HOME:-$HOME/.config}/autostart/comfortable-swipe.desktop 2> /dev/null
-comfortable-swipe stop 2> /dev/null
-rm $HOME/.local/bin/comfortable-swipe 2> /dev/null # compat
-rm /usr/local/bin/comfortable-swipe 2> /dev/null
+echo "Uninstall $(date)" >> .log
+
+# stop service
+systemctl stop comfortable-swipe.service >> .log 2>> .log
+systemctl disable comfortable-swipe.service >> .log 2>> .log
+
+# remove service
+SERVICE_PATH="/lib/systemd/system/comfortable-swipe.service"
+rm $SERVICE_PATH >> .log 2>> .log
+
+# remove old program
+OLD_PROGRAM=$HOME/.local/bin/comfortable-swipe
+rm $OLD_PROGRAM >> .log 2>> .log # compat
+
+# remove program
+PROGRAM=/usr/local/bin/comfortable-swipe
+rm $PROGRAM >> .log 2>> .log
 echo "Successfully uninstalled comfortable-swipe"

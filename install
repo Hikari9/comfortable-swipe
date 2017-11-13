@@ -1,20 +1,33 @@
 #!/bin/bash
+# prefer running as root
+if [ $(id -u) != "0" ]; then
+    sudo bash "$0" "$@"
+    exit $?
+fi
+echo "Install $(date)" >> .log
 DIR=$(dirname $0)
 PROGRAM=/usr/local/bin/comfortable-swipe
+CONF_PATH=/usr/local/share/comfortable-swipe.conf
+OLD_CONF_PATH=${XDG_CONFIG_HOME:-$HOME/.config}/comfortable-swipe.conf
+DCONF_PATH=$DIR/src/defaults.conf
 
 if [ -x "$(command -v $PROGRAM)" ]; then
     # stop any running comfortable-swipe if it exists
-    $PROGRAM stop
-    # remove existing comfortable-swipe
-    rm $(which comfortable-swipe)
+    systemctl stop comfortable-swipe.service >> .log 2>> .log
 fi
 
-#copy config file
-mkdir -p ~/.config
-DCONF_PATH=$DIR/src/defaults.conf
-CONF_PATH=${XDG_CONFIG_HOME:-$HOME/.config}/comfortable-swipe.conf
+mkdir -p $(dirname $CONF_PATH)
+
+# copy config file
 if [ ! -f $CONF_PATH ]; then
-    cat $DCONF_PATH > $CONF_PATH
+    if [ ! -f $OLD_CONF_PATH ]; then
+        # old config file not found, create from scratch
+        cp -a $DCONF_PATH $(dirname $CONF_PATH) >> .log 2>> .log
+    else
+        # old config file found, move to the new path
+        echo "Configuration copied from $OLD_CONF_PATH to $CONF_PATH"
+        cp -a $OLD_CONF_PATH $(dirname $CONF_PATH) >> .log 2>> .log
+    fi
 else
     # config file found, ask user if overwrite
     echo "Old conf file found in $CONF_PATH"
@@ -24,18 +37,44 @@ else
         read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
         response=${response,,}
         if [[ "$response" =~ ^(yes|y)$ ]]; then
-            cat $DCONF_PATH > $CONF_PATH
+            cp -a $DCONF_PATH $(dirname $CONF_PATH) >> .log 2>> .log
         else
+            echo "Installation aborted." >> .log
             exec echo "Installation aborted."
         fi
     fi
 fi
+
+# install with g++
 echo "Installing..."
-# mkdir -p ~/.local/bin
-g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $PROGRAM || exec echo "Installation aborted"
+echo "Running g++" >> .log
+g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $PROGRAM >> .log 2>> .log || exec echo "Installation aborted"
 
-# toggle autostart twice to refresh any changes
-$PROGRAM autostart > /dev/null || exec echo "Installation aborted"
-$PROGRAM autostart > /dev/null || exec echo "Installation aborted"
+# add as service
+SERVICE_PATH="/lib/systemd/system/comfortable-swipe.service"
 
-echo "Successfully installed. You may now run 'comfortable-swipe start'."
+echo "[Unit]
+Description=Comfortable 3 or 4 finger gestures
+
+[Service]
+Environment=DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY
+ExecStart=$PROGRAM start
+
+[Install]
+WantedBy=multi-user.target" \
+> $SERVICE_PATH
+
+# run immediately
+systemctl daemon-reload >> .log 2>> .log
+systemctl enable comfortable-swipe.service >> .log 2>> .log
+systemctl start comfortable-swipe.service >> .log 2>> .log
+echo "Installation successful" >> .log
+
+# prvide success message
+echo ""
+echo "Successfully installed comfortable-swipe. Try swiping and see if it works."
+echo "Configuration file is located at $CONF_PATH"
+
+echo ""
+echo "[Report bugs to https://github.com/Hikari9/comfortable-swipe-ubuntu/issues/new]"
+echo ""

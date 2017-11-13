@@ -186,15 +186,8 @@ namespace service {
     // get the full path of the .conf file
     string conf_filename() {
         static string *filename = NULL;
-        if (filename == NULL) {
-            const char* xdg_config = getenv("XDG_CONFIG_HOME");
-            string config(
-                xdg_config == NULL
-                    ? string(getenv("HOME")) + "/.config"
-                    : xdg_config
-            );
-            filename = new string(config + "/comfortable-swipe.conf");
-        }
+        if (filename == NULL)
+            filename = new string("/usr/local/share/comfortable-swipe.conf");
         return *filename;
     }
     // get the full path of the .desktop file associated
@@ -268,13 +261,13 @@ namespace service {
     }
     // starts service
     void start() {
-        int x = system("stdbuf -oL -eL libinput-debug-events | " PROGRAM " buffer");
+        int x = system("/usr/bin/stdbuf -oL -eL /usr/bin/libinput-debug-events | " PROGRAM " buffer");
     }
     // stops service
     void stop() {
         // kill all comfortable-swipe, except self
         char* buffer = new char[20];
-        FILE* pipe = popen("pgrep -f comfortable-swipe", "r");
+        FILE* pipe = popen("/usr/bin/pgrep -f comfortable-swipe", "r");
         if (!pipe) throw std::runtime_error("stop command failed");
         string kill = "kill";
         while (!feof(pipe)) {

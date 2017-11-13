@@ -26,45 +26,9 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
 4. You may delete the downloaded `comfortable-swipe-ubuntu` folder after installation.
 
-## How to Run
-
-1. Make sure `~/.local/bin/` is added to your PATH.
-2. Run
-    
-    ```
-    comfortable-swipe start
-    ```
-    
-3. Optional: Automatically run on startup
-
-    ```
-    comfortable-swipe autostart
-    ```
-
-### Permissions
-Sometimes, you'll need some permissions to read touchpad input data.
-
-1. Find out your permission group with `ls -l /dev/input/event*`
-    ```bash
-    $ ls -l /dev/input/event*
-
-    crw-rw---- 1 root input 13, 64 Oct 23 23:09 /dev/input/event0
-    crw-rw---- 1 root input 13, 65 Oct 23 23:09 /dev/input/event1
-    crw-rw---- 1 root input 13, 66 Oct 23 23:09 /dev/input/event2
-    crw-rw---- 1 root input 13, 67 Oct 23 23:09 /dev/input/event3
-    ```
-
-2. Check the fourth column (e.g. `input`) then run:
-    ```bash
-    sudo gpasswd -a $USER input
-    ```
-    > Note: Don't forget to input your `sudo` password!
-
-3. ***Important***: Log out / Log back in 
-
 ## Configurations
-The configuration file is located at `~/.config/comfortable-swipe.conf`.  
-Make sure to run `comfortable-swipe restart` after making changes.
+The configuration file is located at `/usr/local/share/comfortable-swipe.conf`.
+Run `sudo systemctl restart comfortable-swipe.service` after making changes.
 
 Property  | Description | Default Value | Default Behavior
 --------- | ----------- | -------------- | -----
@@ -79,7 +43,11 @@ down3     | 3-finger swipe down | ctrl+shift+Down | switch to above workspace
 down4     | 4-finger swipe down | ctrl+alt+shift+Up | move window to above workpace
 
 ## Uninstall
-Download the `uninstall` script then run `bash uninstall`  
+Clone the repository then run `bash uninstall`.
 
 ## Bug Reports
-Create an issue [here](https://github.com/Hikari9/comfortable-swipe-ubuntu/issues/new) to report a bug.
+Create an issue [here](https://github.com/Hikari9/comfortable-swipe-ubuntu/issues/new) to report a bug. Please make sure
+to add the following to your issue:
+
+1. Content of `.log` (found in the cloned folder)
+2. Output of `sudo systemctl status comfortable-swipe.service`
