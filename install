@@ -77,6 +77,7 @@ WantedBy=graphical.target" \
 systemctl daemon-reload >> .log 2>> .log
 systemctl enable comfortable-swipe.service >> .log 2>> .log
 systemctl start comfortable-swipe.service >> .log 2>> .log
+sleep 1
 echo "Installation successful" >> .log
 
 # prvide success message
