@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <unistd.h>
 #define cstr const string&
 #define PROGRAM "/usr/local/bin/comfortable-swipe"
+#define CONFIG "/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
 using namespace std;
 
 extern "C" {
@@ -185,17 +186,7 @@ struct swipe_gesture_impl : swipe_gesture {
 namespace service {
     // get the full path of the .conf file
     string conf_filename() {
-        static string *filename = NULL;
-        if (filename == NULL) {
-            const char* xdg_config = getenv("XDG_CONFIG_HOME");
-            string config(
-                xdg_config == NULL
-                    ? string(getenv("HOME")) + "/.config"
-                    : xdg_config
-            );
-            filename = new string(config + "/comfortable-swipe.conf");
-        }
-        return *filename;
+        return CONFIG;
     }
     // get the full path of the .desktop file associated
     // with the autostart feature
