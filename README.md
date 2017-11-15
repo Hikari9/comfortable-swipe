@@ -37,12 +37,11 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
     ```
     comfortable-swipe start
     ```
-4. Optional: Automatically run on startup
+4. _Optional_: Automatically run on startup
     ```
     comfortable-swipe autostart
     ```
-5. Optional: Change keyboard configurations (refer [below](#configurations)).  
-    Then restart after making changes with
+5. _Optional_: Change keyboard [configurations](#configurations). After making changes, run
     ```
     comfortable-swipe restart
     ```
