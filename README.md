@@ -28,43 +28,27 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
 ## How to Run
 
-1. Make sure `~/.local/bin/` is added to your PATH.
-2. Run
-    
+1. You'll need some group permissions to read touchpad input data. Run
+    ```bash
+    sudo gpasswd -a $USER $(ls -l /dev/input/event* | awk '{print $4}' | head --line=1)
+    ```
+2. ***Important***: After inputing your `sudo` password, log out then log back in
+3. Run
     ```
     comfortable-swipe start
     ```
-    
-3. Optional: Automatically run on startup
-
+4. Optional: Automatically run on startup
     ```
     comfortable-swipe autostart
     ```
-
-### Permissions
-Sometimes, you'll need some permissions to read touchpad input data.
-
-1. Find out your permission group with `ls -l /dev/input/event*`
-    ```bash
-    $ ls -l /dev/input/event*
-
-    crw-rw---- 1 root input 13, 64 Oct 23 23:09 /dev/input/event0
-    crw-rw---- 1 root input 13, 65 Oct 23 23:09 /dev/input/event1
-    crw-rw---- 1 root input 13, 66 Oct 23 23:09 /dev/input/event2
-    crw-rw---- 1 root input 13, 67 Oct 23 23:09 /dev/input/event3
+5. Optional: Change keyboard configurations (refer [below](#configurations)).  
+    Then restart after making changes with
     ```
-
-2. Check the fourth column (e.g. `input`) then run:
-    ```bash
-    sudo gpasswd -a $USER input
+    comfortable-swipe restart
     ```
-    > Note: Don't forget to input your `sudo` password!
-
-3. ***Important***: Log out / Log back in 
 
 ## Configurations
-The configuration file is located at `~/.config/comfortable-swipe.conf`.  
-Make sure to run `comfortable-swipe restart` after making changes.
+Comfortable swipe makes use of keyboard shortcuts for configurations. The configuration file is located at `/usr/share/comfortable-swipe/comfortable-swipe.conf`. Make sure to run `comfortable-swipe restart` after making changes.
 
 Property  | Description | Default Value | Default Behavior
 --------- | ----------- | -------------- | -----
