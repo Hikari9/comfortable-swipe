@@ -1,6 +1,10 @@
 #!/bin/bash
+# prefer running as root
 DIR=$(dirname $0)
 PROGRAM=/usr/local/bin/comfortable-swipe
+CONF_PATH=/usr/local/share/comfortable-swipe/comfortable-swipe.conf
+DCONF_PATH=$DIR/src/defaults.conf
+OLD_CONF_PATH=${XDG_CONFIG_HOME:-$HOME/.config}/comfortable-swipe.conf
 
 if [ -x "$(command -v $PROGRAM)" ]; then
     # stop any running comfortable-swipe if it exists
@@ -10,11 +14,19 @@ if [ -x "$(command -v $PROGRAM)" ]; then
 fi
 
 #copy config file
-mkdir -p ~/.config
-DCONF_PATH=$DIR/src/defaults.conf
-CONF_PATH=${XDG_CONFIG_HOME:-$HOME/.config}/comfortable-swipe.conf
+abort () {
+    exec echo "Installation aborted"
+}
+mkdir -p $(dirname $CONF_PATH) || abort
 if [ ! -f $CONF_PATH ]; then
-    cat $DCONF_PATH > $CONF_PATH
+    if [ ! -f $OLD_CONF_PATH ]; then
+        # old config file not found, create from scratch
+        cat $DCONF_PATH > $CONF_PATH || abort
+    else
+        # old config file found, move to the new path
+        cat $OLD_CONF_PATH > $CONF_PATH || abort
+        echo "Configuration copied from $OLD_CONF_PATH to $CONF_PATH"
+    fi
 else
     # config file found, ask user if overwrite
     echo "Old conf file found in $CONF_PATH"
@@ -24,9 +36,9 @@ else
         read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
         response=${response,,}
         if [[ "$response" =~ ^(yes|y)$ ]]; then
-            cat $DCONF_PATH > $CONF_PATH
+            cat $DCONF_PATH > $CONF_PATH || abort
         else
-            exec echo "Installation aborted."
+            abort
         fi
     fi
 fi
@@ -34,8 +46,11 @@ echo "Installing..."
 # mkdir -p ~/.local/bin
 g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $PROGRAM || exec echo "Installation aborted"
 
-# toggle autostart twice to refresh any changes
-$PROGRAM autostart > /dev/null || exec echo "Installation aborted"
-$PROGRAM autostart > /dev/null || exec echo "Installation aborted"
+GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
 
-echo "Successfully installed. You may now run 'comfortable-swipe start'."
+# toggle autostart twice to refresh any changes
+$PROGRAM autostart > /dev/null || abort
+$PROGRAM autostart > /dev/null || abort
+
+echo "Successfully installed comfortable-swipe."
+echo "Configuration file is located at $CONF_PATH"
