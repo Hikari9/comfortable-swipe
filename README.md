@@ -47,7 +47,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
     ```
 
 ## Configurations
-Comfortable swipe makes use of keyboard shortcuts for configurations. The configuration file is located at `/usr/share/comfortable-swipe/comfortable-swipe.conf`. Make sure to run `comfortable-swipe restart` after making changes.
+Comfortable swipe makes use of keyboard shortcuts for configurations. The configuration file is located at `/usr/local/share/comfortable-swipe/comfortable-swipe.conf`. Make sure to run `comfortable-swipe restart` after making changes.
 
 Property  | Description | Default Value | Default Behavior
 --------- | ----------- | -------------- | -----
