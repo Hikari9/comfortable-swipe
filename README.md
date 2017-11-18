@@ -61,6 +61,24 @@ up4       | 4-finger swipe up | ctrl+alt+shift+Down | move window to bottom work
 down3     | 3-finger swipe down | ctrl+shift+Down | switch to above workspace
 down4     | 4-finger swipe down | ctrl+alt+shift+Up | move window to above workpace
 
+Taken from `man xdotool`:
+
+> Type a given keystroke. Examples being "alt+r", "Control_L+J",
+> "ctrl+alt+n", "BackSpace".
+>
+> Generally, any valid X Keysym string will work. Multiple keys are
+> separated by '+'. Aliases exist for "alt", "ctrl", "shift",
+> "super", and "meta" which all map to Foo_L, such as Alt_L and
+> Control_L, etc.
+>
+> In cases where your keyboard doesn't actually have the key you want
+> to type, xdotool will automatically find an unused keycode and use
+> that to type the key.
+
+Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete list of keycodes you can use.
+
+
+
 ## Uninstall
 Download the `uninstall` script then run `bash uninstall`  
 
