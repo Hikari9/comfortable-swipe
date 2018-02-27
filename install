@@ -17,7 +17,8 @@ fi
 abort () {
     exec echo "Installation aborted"
 }
-mkdir -p $(dirname $CONF_PATH) || abort
+sudo mkdir -p $(dirname $CONF_PATH) || abort
+sudo chown $USER $(dirname $CONF_PATH)
 if [ ! -f $CONF_PATH ]; then
     if [ ! -f $OLD_CONF_PATH ]; then
         # old config file not found, create from scratch
@@ -44,7 +45,7 @@ else
 fi
 echo "Installing..."
 # mkdir -p ~/.local/bin
-g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $PROGRAM || exec echo "Installation aborted"
+sudo g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $PROGRAM || exec echo "Installation aborted"
 
 GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
 
