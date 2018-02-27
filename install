@@ -17,7 +17,8 @@ fi
 abort () {
     exec echo "Installation aborted"
 }
-mkdir -p $(dirname $CONF_PATH) || abort
+sudo mkdir -p $(dirname $CONF_PATH) || abort
+sudo chown $USER $(dirname $CONF_PATH)
 if [ ! -f $CONF_PATH ]; then
     if [ ! -f $OLD_CONF_PATH ]; then
         # old config file not found, create from scratch
