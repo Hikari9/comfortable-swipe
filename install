@@ -45,7 +45,7 @@ else
 fi
 echo "Installing..."
 # mkdir -p ~/.local/bin
-g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $PROGRAM || exec echo "Installation aborted"
+sudo g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $PROGRAM || exec echo "Installation aborted"
 
 GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
 
