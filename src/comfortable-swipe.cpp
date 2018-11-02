@@ -207,7 +207,7 @@ namespace service {
 }
 
 namespace service {    
-    // parses output from libinput-debug-events
+    // parses output from libinput debug-events
     void buffer() {
         // check first if $user
         ios::sync_with_stdio(false);
@@ -259,7 +259,7 @@ namespace service {
     }
     // starts service
     void start() {
-        int x = system("stdbuf -oL -eL libinput-debug-events | " PROGRAM " buffer");
+        int x = system("stdbuf -oL -eL libinput debug-events | " PROGRAM " buffer");
     }
     // stops service
     void stop() {
@@ -326,7 +326,7 @@ namespace service {
         puts("stop       - stops 3/4-finger gesture service");
         puts("restart    - stops then starts 3/4-finger gesture service");
         puts("autostart  - automatically run on startup (toggleable)");
-        puts("buffer     - parses output of libinput-debug-events");
+        puts("buffer     - parses output of libinput debug-events");
         puts("help       - shows the help dialog");
         puts("");
         puts((("Configuration file can be found in ") + conf_filename()).data());
