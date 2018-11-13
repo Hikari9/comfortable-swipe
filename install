@@ -55,3 +55,5 @@ $PROGRAM autostart > /dev/null || abort
 
 echo "Successfully installed comfortable-swipe."
 echo "Configuration file is located at $CONF_PATH"
+echo ""
+echo "Try running 'comfortable-swipe start' to test."
