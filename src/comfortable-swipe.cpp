@@ -343,12 +343,12 @@ namespace util {
      *                                        fingers
      */
     const char* GESTURE_SWIPE_BEGIN_REGEX_PATTERN =
-        "^\\s*"                    // trim start of string
-        "\\s+event\\d+"            // event
+        "^"                        // start of string
+        "[ -]event\\d+"            // event
         "\\s+GESTURE_SWIPE_BEGIN"  // gesture
         "\\s+\\S+"                 // timestamp
         "\\s+(\\d+)"               // fingers
-        "\\s*$"                    // trim end of string
+        "$"                        // end of string
     ;
 
     /**
@@ -360,12 +360,12 @@ namespace util {
      *                                        fingers
      */
     const char* GESTURE_SWIPE_END_REGEX_PATTERN =
-        "^\\s*"                    // trim start of string
-        "\\s+event\\d+"            // event
+        "^"                        // start of string
+        "[ -]event\\d+"            // event
         "\\s+GESTURE_SWIPE_END"    // gesture
         "\\s+\\S+"                 // timestamp
         "\\s+(\\d+)"               // fingers
-        "\\s*$"                    // trim end of string
+        "$"                        // end of string
     ;
 
     // matches signed decimal numbers (eg. "6.02" "-1.1")
@@ -383,14 +383,14 @@ namespace util {
      *                                          fingers  dx   dy    udx   udy
      */
     const char* GESTURE_SWIPE_UPDATE_REGEX_PATTERN =
-        "^\\s*"                                             // trim start of string
-        "\\s+event\\d+"                                     // event
+        "^"                                                 // start of string
+        "[ -]event\\d+"                                     // event
         "\\s+GESTURE_SWIPE_UPDATE"                          // gesture
         "\\s+\\S+"                                          // timestamp
         "\\s+(\\d+)"                                        // fingers
         "\\s+" CF_NUMBER_DIVISION                           // speed (dx/dy)
         "\\s+\\(" CF_NUMBER_DIVISION "\\s+unaccelerated\\)" // unaccelerated speed (udx/udy)
-        "\\s*$"                                             // trim end of string
+        "$"                                                 // end of string
     ;
 
     // delete macros
