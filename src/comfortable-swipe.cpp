@@ -206,14 +206,17 @@ namespace service {
 }
 
 namespace service {    
+
+    // process regex at compile time
+    const regex gesture_begin(util::GESTURE_SWIPE_BEGIN_REGEX_PATTERN);
+    const regex gesture_update(util::GESTURE_SWIPE_UPDATE_REGEX_PATTERN);
+    const regex gesture_end(util::GESTURE_SWIPE_END_REGEX_PATTERN);
+
     // parses output from libinput debug-events
     void buffer() {
         // check first if $user
         ios::sync_with_stdio(false);
         cin.tie(0); cout.tie(0);
-        const regex gesture_begin(util::GESTURE_SWIPE_BEGIN_REGEX_PATTERN);
-        const regex gesture_update(util::GESTURE_SWIPE_UPDATE_REGEX_PATTERN);
-        const regex gesture_end(util::GESTURE_SWIPE_END_REGEX_PATTERN);
         string sentence;
         // read config file
         auto config = util::read_config_file(conf_filename().data());
@@ -252,7 +255,7 @@ namespace service {
     }
     // starts service
     void start() {
-        int x = system("stdbuf -oL -e0 libinput debug-events | " PROGRAM " buffer");
+        int x = system("stdbuf -oL -eL libinput debug-events | " PROGRAM " buffer");
     }
     // stops service
     void stop() {
@@ -380,14 +383,14 @@ namespace util {
      *                                          fingers  dx   dy    udx   udy
      */
     const char* GESTURE_SWIPE_UPDATE_REGEX_PATTERN =
-        "^\\s*"                                            // trim start of string
-        "\\s+event\\d+"                                    // event
-        "\\s+GESTURE_SWIPE_UPDATE"                         // gesture
-        "\\s+\\S+"                                         // timestamp
-        "\\s+(\\d+)"                                       // fingers
+        "^\\s*"                                             // trim start of string
+        "\\s+event\\d+"                                     // event
+        "\\s+GESTURE_SWIPE_UPDATE"                          // gesture
+        "\\s+\\S+"                                          // timestamp
+        "\\s+(\\d+)"                                        // fingers
         "\\s+" CF_NUMBER_DIVISION                           // speed (dx/dy)
-        "\\s+\\(" CF_NUMBER_DIVISION "\\s+unaccelerated\\)"  // unaccelerated speed (udx/udy)
-        "\\s*$"                                            // trim end of string
+        "\\s+\\(" CF_NUMBER_DIVISION "\\s+unaccelerated\\)" // unaccelerated speed (udx/udy)
+        "\\s*$"                                             // trim end of string
     ;
 
     // delete macros
