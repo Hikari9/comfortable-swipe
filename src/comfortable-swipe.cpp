@@ -265,7 +265,7 @@ namespace service {
     }
     // starts service
     void start() {
-        int x = system("stdbuf -oL -eL libinput debug-events | " PROGRAM " buffer");
+        int x = system("stdbuf -oL -e0 libinput debug-events | " PROGRAM " buffer");
     }
     // stops service
     void stop() {
