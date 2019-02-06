@@ -113,7 +113,7 @@ const char* const command_map[] = {
 
 struct swipe_gesture_impl : swipe_gesture {
     int screen_num, ix, iy;
-    float x, y, threshold;
+    float x, y, threshold_squared;
     int previous_gesture;
     const char** commands;
     swipe_gesture_impl(
@@ -126,7 +126,7 @@ struct swipe_gesture_impl : swipe_gesture {
         const char* up4     /* 101 */,
         const char* down3   /* 110 */,
         const char* down4   /* 111 */
-    ): swipe_gesture(), threshold(threshold) {
+    ): swipe_gesture(), threshold_squared(threshold*threshold) {
         commands = new const char*[8];
         commands[0] = left3;
         commands[1] = left4;
@@ -153,10 +153,10 @@ struct swipe_gesture_impl : swipe_gesture {
         x += stof(dx);
         y += stof(dy);
         // scale threshold to 1/10 when gesture is not fresh
-        float scale = previous_gesture == FRESH ?
-                1.0f :
-                0.1f;
-        if (x*x + y*y > threshold*threshold*(scale*scale)) {
+        float scale = previous_gesture == FRESH
+            ? 1.00f
+            : 0.01f; // square root of 1/10
+        if (x*x + y*y > threshold_squared*scale) {
             int mask = 0;
             if (fingers == "3") mask |= MSK_THREE_FINGERS; else
             if (fingers == "4") mask |= MSK_FOUR_FINGERS;
