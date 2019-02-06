@@ -388,28 +388,38 @@ namespace util {
             cerr << "file \"" << filename << "\" does not exist!" << endl;
             exit(1);
         }
-        string line, key, token, buffer, value;
+        static string line, token[2];
         int line_number = 0;
         while (getline(fin, line)) {
             ++line_number;
-            istringstream is(line);
-            buffer.clear();
-            while (is >> token) {
-                if (token[0] == '#')
+            token[0].clear();
+            token[1].clear();
+            int length = line.length();
+            int equal_flag = 0;
+            for (int i = 0; i < length; ++i) {
+                if (line[i] == '#')
                     break;
-                buffer += token;
+                if (line[i] == '=') {
+                    if (++equal_flag > 1) {
+                        cerr << "error in conf file " << filename << endl;
+                        cerr << "multiple equal signs in line " << line_number << endl;
+                        exit(1);
+                    }
+                } else if (!isspace(line[i])) {
+                    token[equal_flag].push_back(line[i]);
+                }
             }
-            if (buffer.empty())
+            // ignore empty lines
+            if (equal_flag == 0 && token[0].length() == 0)
                 continue;
-            auto id = buffer.find('=');
-            if (id == string::npos) {
+            if (equal_flag == 0) {
                 cerr << "error in conf file: " << filename << endl;
                 cerr << "equal sign expected in line " << line_number << endl;
                 exit(1);
             }
-            key = buffer.substr(0, id);
-            value = buffer.substr(id + 1);
-            conf[key] = value;
+            if (equal_flag == 1 && token[1].length() > 0) {
+                conf[token[0]] = token[1];
+            }
         }
         return conf;
     }
