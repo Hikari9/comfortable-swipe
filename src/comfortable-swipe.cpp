@@ -380,37 +380,86 @@ namespace util {
         string arr[] = {device, gesture, seconds, fingers};
         return join("\\s+", arr, 4);
     }
+
+    const int MAX_LINE_LENGTH = 65536;
+    char line[MAX_LINE_LENGTH];
     
+    /**
+     * Reads config file and returns a map of configuration keys
+     */
     map<string, string> read_config_file(const char* filename) {
+
         map<string, string> conf;
-        ifstream fin(filename);
-        if (!fin.is_open()) {
+
+        // open config file for reading
+        FILE *config_file = fopen(filename, "r");
+        if (config_file == NULL) {
             cerr << "file \"" << filename << "\" does not exist!" << endl;
             exit(1);
         }
-        string line, key, token, buffer, value;
-        int line_number = 0;
-        while (getline(fin, line)) {
-            ++line_number;
-            istringstream is(line);
-            buffer.clear();
-            while (is >> token) {
-                if (token[0] == '#')
+
+        // parse each line in config
+        for (int line_number = 0; fgets(line, MAX_LINE_LENGTH, config_file) != NULL; ++line_number) {
+
+            int i, equal = -1;
+
+            // find "=" delimiter
+            for (i = 0; line[i]; ++i) {
+                if (line[i] == '#') {
+                    // found comment; make end of line
+                    line[i] = '\0';
                     break;
-                buffer += token;
+                } else if (line[i] == '=') {
+                    line[i] = '\0';
+                    if (equal == -1)
+                        equal = i;
+                    else {
+                        cerr << "error in conf file: " << filename << endl;
+                        cerr << "multiple equal signs found in line " << line_number << endl;
+                        fclose(config_file);
+                        exit(1); 
+                    }
+                }
             }
-            if (buffer.empty())
+
+            int length = i;
+
+            // trim end
+            while (length > 0 && isspace(line[length - 1]))
+                line[--length] = '\0';
+
+            // ignore empty lines
+            if (length == 0)
                 continue;
-            auto id = buffer.find('=');
-            if (id == string::npos) {
+
+            // check if key is found
+            if (equal == -1) {
                 cerr << "error in conf file: " << filename << endl;
                 cerr << "equal sign expected in line " << line_number << endl;
+                fclose(config_file);
                 exit(1);
             }
-            key = buffer.substr(0, id);
-            value = buffer.substr(id + 1);
-            conf[key] = value;
+
+            // trim key
+            for (int j = equal - 1; j >= 0 && isspace(line[j]); --j)
+                line[j] = '\0';
+
+            int key = 0;
+            while (isspace(line[key]))
+                ++key;
+
+            // trim value
+            int value = equal + 1;
+            while (isspace(line[value]))
+                ++value;
+
+            // set configuration keys
+            conf[line + key] = line + value;
+
         }
+
+        // close config file
+        fclose(config_file);
         return conf;
     }
 
