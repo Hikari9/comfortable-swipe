@@ -215,7 +215,6 @@ namespace service {
         const regex gesture_begin(util::build_gesture_begin());
         const regex gesture_update(util::build_gesture_update());
         const regex gesture_end(util::build_gesture_end());
-        string sentence;
         // read config file
         auto config = util::read_config_file(conf_filename().data());
         // initialize gesture handler       
@@ -230,6 +229,8 @@ namespace service {
             config["down3"].c_str(),
             config["down4"].c_str()
         );
+        // start reading lines from input one by one
+        static string sentence;
         while (getline(cin, sentence)) {
             auto data = sentence.data();
             cmatch matches;
