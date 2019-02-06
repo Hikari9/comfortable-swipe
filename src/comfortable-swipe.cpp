@@ -90,7 +90,7 @@ int main(int argc, char** args) {
 }
 
 struct swipe_gesture {
-    string device, stamp, fingers;
+    string fingers;
     string dx, dy, udx, udy;
     xdo_t* xdo;
     virtual void on_update() = 0;
@@ -234,32 +234,26 @@ namespace service {
             auto data = sentence.data();
             cmatch matches;
             if (regex_match(data, matches, gesture_begin)) {
-               swipe.device = matches[1];
-               swipe.stamp = matches[2];
-               swipe.fingers = matches[3];
+               swipe.fingers = matches[1];
                swipe.on_begin();
             }
             else if (regex_match(data, matches, gesture_end)) {
-               swipe.device = matches[1];
-               swipe.stamp = matches[2];
-               swipe.fingers = matches[3];
+               swipe.fingers = matches[1];
                swipe.on_end();
             }
             else if (regex_match(data, matches, gesture_update)) {
-               swipe.device = matches[1];
-               swipe.stamp = matches[2];
-               swipe.fingers = matches[3];
-               swipe.dx = matches[4];
-               swipe.dy = matches[5];
-               swipe.udx = matches[6];
-               swipe.udy = matches[7];
+               swipe.fingers = matches[1];
+               swipe.dx = matches[2];
+               swipe.dy = matches[3];
+               swipe.udx = matches[4];
+               swipe.udy = matches[5];
                swipe.on_update();
             }
         }
     }
     // starts service
     void start() {
-        int x = system("stdbuf -oL -eL libinput debug-events | " PROGRAM " buffer");
+        int x = system("stdbuf -oL -e0 libinput debug-events | " PROGRAM " buffer");
     }
     // stops service
     void stop() {
@@ -342,41 +336,43 @@ namespace util {
     }
 
     string join(cstr delim, string arr[], int n) {
-        string ans = arr[0];
+        string ans = "^\\s*" + arr[0];
         for (int i = 1; i < n; ++i) {
             ans += delim;
             ans += arr[i];
         }
+        ans += "\\s*$";
         return ans;
     }
 
     string build_gesture_begin() {
-        string device = "\\s*(\\S+)\\s*";
-        string gesture = "\\s*GESTURE_SWIPE_BEGIN\\s*";
-        string seconds = "\\s*(\\S+)\\s*";
-        string fingers = "\\s*(\\d+)\\s*";
+        string device = "\\S+";
+        string gesture = "GESTURE_SWIPE_BEGIN";
+        string seconds = "\\S+";
+        string fingers = "(\\d+)";
         string arr[] = {device, gesture, seconds, fingers};
         return join("\\s+", arr, 4);
     }
 
     string build_gesture_update() {
-        string device = "\\s*(\\S+)\\s*";
-        string gesture = "\\s*GESTURE_SWIPE_UPDATE\\s*";
-        string seconds = "\\s*(\\S+)\\s*";
-        string fingers = "\\s*(\\d+)\\s*";
-        string num_1 = "\\s*(" + number_regex() + ")\\s*";
+        string device = "\\S+";
+        string gesture = "GESTURE_SWIPE_UPDATE";
+        string seconds = "\\S+";
+        string fingers = "(\\d+)";
+        string num_1 = "\\s*(" + number_regex() + ")";
         string num_2 = num_1;
         string num_div = num_1 + "/" + num_2;
-        string num_accel = "\\s*\\(\\s*" + num_div + "\\s*unaccelerated\\s*\\)\\s*";
+        string num_accel = "\\(" + num_div + "\\s+unaccelerated\\)";
         string arr[] = {device, gesture, seconds, fingers, num_div, num_accel};
-        return join("\\s+", arr, 6);
+        string result = join("\\s+", arr, 6);
+        return result;
     }
 
     string build_gesture_end() {
-        string device = "\\s*(\\S+)\\s*";
-        string gesture = "\\s*GESTURE_SWIPE_END\\s*";
-        string seconds = "\\s*(\\S+)\\s*";
-        string fingers = "\\s*(\\d+)\\s*";
+        string device = "\\S+";
+        string gesture = "GESTURE_SWIPE_END";
+        string seconds = "\\S+";
+        string fingers = "(\\d+)";
         string arr[] = {device, gesture, seconds, fingers};
         return join("\\s+", arr, 4);
     }
