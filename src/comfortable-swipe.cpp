@@ -158,8 +158,8 @@ struct swipe_gesture_impl : swipe_gesture {
             : 0.01f; // square root of 1/10
         if (x*x + y*y > threshold_squared*scale) {
             int mask = 0;
-            if (fingers == "3") mask |= MSK_THREE_FINGERS; else
-            if (fingers == "4") mask |= MSK_FOUR_FINGERS;
+            if (fingers[0] == '3') mask |= MSK_THREE_FINGERS; else
+            if (fingers[0] == '4') mask |= MSK_FOUR_FINGERS;
             if (abs(x) > abs(y)) {
                 mask |= MSK_HORIZONTAL;
                 if (x < 0) mask |= MSK_NEGATIVE;
