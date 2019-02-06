@@ -185,7 +185,7 @@ struct swipe_gesture_impl : swipe_gesture {
 // path services
 namespace service {
     // get the full path of the .conf file
-    string conf_filename() {
+    const char* conf_filename() {
         return CONFIG;
     }
     // get the full path of the .desktop file associated
@@ -216,7 +216,7 @@ namespace service {
         const regex gesture_update(util::build_gesture_update());
         const regex gesture_end(util::build_gesture_end());
         // read config file
-        auto config = util::read_config_file(conf_filename().data());
+        auto config = util::read_config_file(conf_filename());
         // initialize gesture handler       
         swipe_gesture_impl swipe(
             config.count("threshold") ? stof(config["threshold"]) : 0.0,
