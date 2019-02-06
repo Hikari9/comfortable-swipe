@@ -230,10 +230,10 @@ namespace service {
             config["down4"].c_str()
         );
         // start reading lines from input one by one
-        static string sentence;
+        static const int MAX_LINE_LENGTH = 256;
+        static char data[MAX_LINE_LENGTH];
         bool flag_begin = false;
-        while (getline(cin, sentence)) {
-            auto data = sentence.data();
+        while (fgets_unlocked(data, MAX_LINE_LENGTH, stdin) != NULL) {
             cmatch matches;
             if (!flag_begin) {
                 if (regex_match(data, matches, gesture_begin)) {
