@@ -231,31 +231,36 @@ namespace service {
         );
         // start reading lines from input one by one
         static string sentence;
+        bool flag_begin = false;
         while (getline(cin, sentence)) {
             auto data = sentence.data();
             cmatch matches;
-            if (regex_match(data, matches, gesture_begin)) {
-               swipe.device = matches[1];
-               swipe.stamp = matches[2];
-               swipe.fingers = matches[3];
-               swipe.on_begin();
-            }
-            else if (regex_match(data, matches, gesture_end)) {
-               swipe.device = matches[1];
-               swipe.stamp = matches[2];
-               swipe.fingers = matches[3];
-               swipe.on_end();
-            }
-            else if (regex_match(data, matches, gesture_update)) {
-               swipe.device = matches[1];
-               swipe.stamp = matches[2];
-               swipe.fingers = matches[3];
-               swipe.dx = matches[4];
-               swipe.dy = matches[5];
-               swipe.udx = matches[6];
-               swipe.udy = matches[7];
-               swipe.on_update();
-            }
+            if (!flag_begin) {
+                if (regex_match(data, matches, gesture_begin)) {
+                    swipe.device = matches[1];
+                    swipe.stamp = matches[2];
+                    swipe.fingers = matches[3];
+                    swipe.on_begin();
+                    flag_begin = true;
+                }
+            } else {
+                if (regex_match(data, matches, gesture_update)) {
+                    swipe.device = matches[1];
+                    swipe.stamp = matches[2];
+                    swipe.fingers = matches[3];
+                    swipe.dx = matches[4];
+                    swipe.dy = matches[5];
+                    swipe.udx = matches[6];
+                    swipe.udy = matches[7];
+                    swipe.on_update();
+                } else if (regex_match(data, matches, gesture_end)) {
+                    swipe.device = matches[1];
+                    swipe.stamp = matches[2];
+                    swipe.fingers = matches[3];
+                    swipe.on_end();
+                    flag_begin = false;
+                }
+            } 
         }
     }
     // starts service
