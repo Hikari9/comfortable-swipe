@@ -232,9 +232,9 @@ namespace service {
         // start reading lines from input one by one
         static const int MAX_LINE_LENGTH = 256;
         static char data[MAX_LINE_LENGTH];
+        static cmatch matches;
         bool flag_begin = false;
         while (fgets_unlocked(data, MAX_LINE_LENGTH, stdin) != NULL) {
-            cmatch matches;
             if (!flag_begin) {
                 if (regex_match(data, matches, gesture_begin)) {
                     swipe.device = matches[1];
@@ -293,7 +293,7 @@ namespace service {
     }
     // toggle automatically start application on startup
     void autostart() {
-        string path = autostart_filename();
+        cstr path = autostart_filename();
         if (ifstream(path.data()).good()) {
             // file found, delete it
             if (remove(path.data()) != 0)
