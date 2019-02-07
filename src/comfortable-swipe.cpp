@@ -335,7 +335,7 @@ namespace service {
         puts("buffer     - parses output of libinput debug-events");
         puts("help       - shows the help dialog");
         puts("");
-        puts((("Configuration file can be found in ") + conf_filename()).data());
+        printf("Configuration file can be found in %s", conf_filename());
     }
 }
 
