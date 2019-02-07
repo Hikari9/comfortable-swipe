@@ -42,7 +42,7 @@ namespace comfortable_swipe::service
         // initialize swipe gesture handler
         comfortable_swipe::gesture::swipe_gesture swipe
         (
-            config.count("threshold") ? std::atof(config["threshold"].data()) : 0.0,
+            config.count("threshold") ? std::stof(config["threshold"]) : 0.0,
             config["left3"].c_str(),
             config["left4"].c_str(),
             config["right3"].c_str(),
