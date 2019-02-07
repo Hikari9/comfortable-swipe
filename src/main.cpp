@@ -25,22 +25,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int main(int argc, char** args)
 {
-    using namespace comfortable_swipe::service;
-
     if (argc > 1)
     {
         std::string arg = args[1];
+        
         // select based on argument
-        if (arg == "start") start();
-        else if (arg == "stop") stop();
-        else if (arg == "restart") restart();
-        else if (arg == "buffer") buffer();
-        else if (arg == "autostart") autostart();
-        else help();
-    }
+        if (arg == "start")
+            comfortable_swipe::service::start();
 
+        else if (arg == "stop")
+            comfortable_swipe::service::stop();
+
+        else if (arg == "restart")
+            comfortable_swipe::service::restart();
+
+        else if (arg == "buffer")
+            comfortable_swipe::service::buffer();
+
+        else if (arg == "autostart")
+            comfortable_swipe::service::autostart();
+
+        else /* if (arg == "help") */
+            comfortable_swipe::service::help();
+    }
     else
-        help();
+        comfortable_swipe::service::help();
 
     return 0;
 }

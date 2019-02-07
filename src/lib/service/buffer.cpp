@@ -27,78 +27,76 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /**
  * Starts the comfortable-swipe service by buffering libinput debug-events.
  */
-void comfortable_swipe::service::buffer()
+namespace comfortable_swipe::service
 {
-
-    // import utility methods
-    using comfortable_swipe::util::read_config_file;
-    using comfortable_swipe::util::conf_filename;
-    using comfortable_swipe::gesture::swipe_gesture;
-
-    // import regex patterns
-    using comfortable_swipe::util::GESTURE_SWIPE_BEGIN_REGEX_PATTERN;
-    using comfortable_swipe::util::GESTURE_SWIPE_UPDATE_REGEX_PATTERN;
-    using comfortable_swipe::util::GESTURE_SWIPE_END_REGEX_PATTERN;
-
-    // pre-compile regex patterns
-    static const std::regex gesture_begin(GESTURE_SWIPE_BEGIN_REGEX_PATTERN);
-    static const std::regex gesture_update(GESTURE_SWIPE_UPDATE_REGEX_PATTERN);
-    static const std::regex gesture_end(GESTURE_SWIPE_END_REGEX_PATTERN);
-
-    // read config file
-    auto config = read_config_file(conf_filename());
-
-    // initialize swipegesture handler
-    swipe_gesture swipe
-    (
-        config.count("threshold") ? std::atof(config["threshold"].data()) : 0.0,
-        config["left3"].c_str(),
-        config["left4"].c_str(),
-        config["right3"].c_str(),
-        config["right4"].c_str(),
-        config["up3"].c_str(),
-        config["up4"].c_str(),
-        config["down3"].c_str(),
-        config["down4"].c_str()
-    );
-
-    // prepare data containers
-    static const int MAX_LINE_LENGTH = 256;
-    static char data[MAX_LINE_LENGTH];
-    static std::cmatch matches;
-
-    // optimization flag for checking if GESTURE_SWIPE_BEGIN was dispatched
-    bool flag_begin = false;
-
-    // start reading lines from input one by one
-    while (fgets_unlocked(data, MAX_LINE_LENGTH, stdin) != NULL)
+    void buffer()
     {
-        if (!flag_begin)
+        // read config file
+        auto config = comfortable_swipe::util::read_config_file(comfortable_swipe::util::conf_filename());
+
+        // pre-compile regex patterns
+        static const std::regex gesture_swipe_begin(comfortable_swipe::util::GESTURE_SWIPE_BEGIN_REGEX_PATTERN);
+        static const std::regex gesture_swipe_update(comfortable_swipe::util::GESTURE_SWIPE_UPDATE_REGEX_PATTERN);
+        static const std::regex gesture_swipe_end(comfortable_swipe::util::GESTURE_SWIPE_END_REGEX_PATTERN);
+
+        // initialize swipe gesture handler
+        comfortable_swipe::gesture::swipe_gesture swipe
+        (
+            config.count("threshold") ? std::atof(config["threshold"].data()) : 0.0,
+            config["left3"].c_str(),
+            config["left4"].c_str(),
+            config["right3"].c_str(),
+            config["right4"].c_str(),
+            config["up3"].c_str(),
+            config["up4"].c_str(),
+            config["down3"].c_str(),
+            config["down4"].c_str()
+        );
+
+        // prepare data containers
+        static const int MAX_LINE_LENGTH = 256;
+        static char data[MAX_LINE_LENGTH];
+        static std::cmatch matches;
+
+        // optimization flag for checking if GESTURE_SWIPE_BEGIN was dispatched
+        bool flag_swiping = false;
+
+        // start reading lines from input one by one
+        while (fgets_unlocked(data, MAX_LINE_LENGTH, stdin) != NULL)
         {
-            if (std::regex_match(data, matches, gesture_begin) != 0)
+            if (flag_swiping)
             {
-               swipe.fingers = std::stoi(matches[1]);
-               swipe.begin();
-               flag_begin = true;
+                // currently swiping
+                if (std::regex_match(data, matches, gesture_swipe_update) != 0)
+                {
+                    // update swipe
+                    swipe.fingers = std::stoi(matches[1]);
+                    swipe.dx = std::stof(matches[2]);
+                    swipe.dy = std::stof(matches[3]);
+                    swipe.udx = std::stof(matches[4]);
+                    swipe.udy = std::stof(matches[5]);
+                    swipe.update();
+                }
+                else if (std::regex_match(data, matches, gesture_swipe_end) != 0)
+                {
+                    // end swipe
+                    flag_swiping = false;
+                    swipe.fingers = std::stoi(matches[1]);
+                    swipe.end();
+                }
             }
-        }
-        else /* flag_begin == true */
-        {
-            if (std::regex_match(data, matches, gesture_update) != 0)
+            else /* !flag_swiping */
             {
-               swipe.fingers = std::stoi(matches[1]);
-               swipe.dx = std::stof(matches[2]);
-               swipe.dy = std::stof(matches[3]);
-               swipe.udx = std::stof(matches[4]);
-               swipe.udy = std::stof(matches[5]);
-               swipe.update();
+                // not swiping, check if swipe will begin
+                if (std::regex_match(data, matches, gesture_swipe_begin) != 0)
+                {
+                    // begin swipe
+                    flag_swiping = true;
+                    swipe.fingers = std::stoi(matches[1]);
+                    swipe.begin();
+                }
             }
-            else if (std::regex_match(data, matches, gesture_end) != 0)
-            {
-               swipe.fingers = std::stoi(matches[1]);
-               swipe.end();
-               flag_begin = false;
-            }
+            
         }
     }
 }
