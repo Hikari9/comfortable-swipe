@@ -1,3 +1,6 @@
+#ifndef __COMFORTABLE_SWIPE__index_hpp__
+#define __COMFORTABLE_SWIPE__index_hpp__
+
 /*
 Comfortable Swipe
 by Rico Tiongson
@@ -16,10 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __COMFORTABLE_SWIPE__index_hpp__
-#define __COMFORTABLE_SWIPE__index_hpp__
-
-// global definitions
+// global defines
 #ifndef __COMFORTABLE_SWIPE__PROGRAM__
 #define __COMFORTABLE_SWIPE__PROGRAM__ "/usr/local/bin/comfortable-swipe"
 #endif /* __COMFORTABLE_SWIPE__PROGRAM__ */
@@ -28,30 +28,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __COMFORTABLE_SWIPE__CONFIG__ "/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
 #endif /* __COMFORTABLE_SWIPE__CONFIG__ */
 
+
 #include <map> // std::map
 #include <string> // std::string
 #include "gesture/swipe_gesture.h"
 
 // other program header files
-
-#ifdef  __cplusplus
-// allow function overloading
-extern "C" {
-#endif
-
-namespace comfortable_swipe
+extern "C"
 {
-    namespace util
+    namespace comfortable_swipe::util
     {
         extern const char* GESTURE_SWIPE_BEGIN_REGEX_PATTERN;
         extern const char* GESTURE_SWIPE_UPDATE_REGEX_PATTERN;
         extern const char* GESTURE_SWIPE_END_REGEX_PATTERN;
-        std::map<std::string, std::string> read_config_file(const char*);
         const char* autostart_filename();
         constexpr const char* conf_filename();
+        std::map<std::string, std::string> read_config_file(const char*);
     }
-
-    namespace service
+    namespace comfortable_swipe::service
     {
         void autostart();
         void buffer();
@@ -61,9 +55,5 @@ namespace comfortable_swipe
         void stop();
     }
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __COMFORTABLE_SWIPE__index_hpp__ */

@@ -1,3 +1,6 @@
+#ifndef __COMFORTABLE_SWIPE__
+#define __COMFORTABLE_SWIPE__
+
 /*
 Comfortable Swipe
 by Rico Tiongson
@@ -15,9 +18,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#ifndef __COMFORTABLE_SWIPE__
-#define __COMFORTABLE_SWIPE__
 
 // export all modules here
 #include "gesture/swipe_gesture.cpp"
