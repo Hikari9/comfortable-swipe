@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__util_conf_filename__
-#define __COMFORTABLE_SWIPE__util_conf_filename__
+#ifndef __COMFORTABLE_SWIPE__util_autostart_filename__
+#define __COMFORTABLE_SWIPE__util_autostart_filename__
 
 #include <string> // std::string
 #include <unistd.h> // getenv
@@ -25,4 +25,4 @@ namespace comfortable_swipe::util
     }
 }
 
-#endif /* __COMFORTABLE_SWIPE__util_conf_filename__ */
+#endif /* __COMFORTABLE_SWIPE__util_autostart_filename__ */

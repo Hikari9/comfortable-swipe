@@ -16,20 +16,29 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __COMFORTABLE_SWIPE__
-#define __COMFORTABLE_SWIPE__
+#include <string> // std::string
+#include "comfortable_swipe/index.cpp"
 
-// export all modules here
-#include "gesture/swipe_gesture.cpp"
-#include "service/autostart.cpp"
-#include "service/buffer.cpp"
-#include "service/help.cpp"
-#include "service/restart.cpp"
-#include "service/start.cpp"
-#include "service/stop.cpp"
-#include "util/autostart_filename.cpp"
-#include "util/conf_filename.cpp"
-#include "util/read_config_file.cpp"
-#include "util/regex.cpp"
+/* MAIN DRIVER FUNCTION */
 
-#endif /* __COMFORTABLE_SWIPE__ */
+int main(int argc, char** args)
+{
+    using namespace comfortable_swipe::service;
+
+    if (argc > 1)
+    {
+        std::string arg = args[1];
+        // select based on argument
+        if (arg == "start") start();
+        else if (arg == "stop") stop();
+        else if (arg == "restart") restart();
+        else if (arg == "buffer") buffer();
+        else if (arg == "autostart") autostart();
+        else help();
+    }
+
+    else
+        help();
+
+    return 0;
+}

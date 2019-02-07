@@ -9,6 +9,10 @@ extern "C"
     #include <xdo.h> // xdo_t
 }
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 namespace comfortable_swipe
 {
     namespace gesture
@@ -60,5 +64,9 @@ namespace comfortable_swipe
         };
     }
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __COMFORTABLE_SWIPE__gesture_swipe_gesture_h__ */
