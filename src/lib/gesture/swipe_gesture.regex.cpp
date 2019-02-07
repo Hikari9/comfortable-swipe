@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__util_regex__
-#define __COMFORTABLE_SWIPE__util_regex__
+#ifndef __COMFORTABLE_SWIPE__gesture_swipe_gesture_regex__
+#define __COMFORTABLE_SWIPE__gesture_swipe_gesture_regex__
 
 /*
 Comfortable Swipe
@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace comfortable_swipe::util
+namespace comfortable_swipe::gesture
 {
     /**
      * Regex pattern for the libinput entry for start of swipe.
@@ -29,7 +29,7 @@ namespace comfortable_swipe::util
      *                                          ^
      *                                        fingers
      */
-    const char* GESTURE_SWIPE_BEGIN_REGEX_PATTERN =
+    const char* swipe_gesture::GESTURE_BEGIN_REGEX_PATTERN =
         "^"                        // start of string
         "[ -]event\\d+"            // event
         "\\s+GESTURE_SWIPE_BEGIN"  // gesture
@@ -46,7 +46,7 @@ namespace comfortable_swipe::util
      *                                          ^
      *                                        fingers
      */
-    const char* GESTURE_SWIPE_END_REGEX_PATTERN =
+    const char* swipe_gesture::GESTURE_END_REGEX_PATTERN =
         "^"                        // start of string
         "[ -]event\\d+"            // event
         "\\s+GESTURE_SWIPE_END"    // gesture
@@ -69,7 +69,7 @@ namespace comfortable_swipe::util
      *                                              ^    ^    ^      ^     ^
      *                                          fingers  dx   dy    udx   udy
      */
-    const char* GESTURE_SWIPE_UPDATE_REGEX_PATTERN =
+    const char* swipe_gesture::GESTURE_UPDATE_REGEX_PATTERN =
         "^"                                                 // start of string
         "[ -]event\\d+"                                     // event
         "\\s+GESTURE_SWIPE_UPDATE"                          // gesture
@@ -86,4 +86,4 @@ namespace comfortable_swipe::util
     #undef CF_NUMBER_REGEX
 }
 
-#endif /* __COMFORTABLE_SWIPE__util_regex__ */
+#endif /* __COMFORTABLE_SWIPE__gesture_swipe_gesture_regex__ */

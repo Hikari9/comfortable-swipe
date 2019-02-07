@@ -19,11 +19,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern "C"
-{
-    #include <xdo.h> // xdo_t
-}
-
 #include "xdo_gesture.h"
 
 #ifdef __cplusplus
@@ -77,6 +72,10 @@ namespace comfortable_swipe::gesture
         static const int MSK_VERTICAL;
         static const int FRESH;
         static const char * const command_map[8];
+        // regex patterns
+        static const char* GESTURE_BEGIN_REGEX_PATTERN;
+        static const char* GESTURE_UPDATE_REGEX_PATTERN;
+        static const char* GESTURE_END_REGEX_PATTERN;
     };
 }
 

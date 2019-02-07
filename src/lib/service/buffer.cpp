@@ -35,9 +35,9 @@ namespace comfortable_swipe::service
         auto config = comfortable_swipe::util::read_config_file(comfortable_swipe::util::conf_filename());
 
         // pre-compile regex patterns
-        static const std::regex gesture_swipe_begin(comfortable_swipe::util::GESTURE_SWIPE_BEGIN_REGEX_PATTERN);
-        static const std::regex gesture_swipe_update(comfortable_swipe::util::GESTURE_SWIPE_UPDATE_REGEX_PATTERN);
-        static const std::regex gesture_swipe_end(comfortable_swipe::util::GESTURE_SWIPE_END_REGEX_PATTERN);
+        static const std::regex gesture_swipe_begin(comfortable_swipe::gesture::swipe_gesture::GESTURE_BEGIN_REGEX_PATTERN);
+        static const std::regex gesture_swipe_update(comfortable_swipe::gesture::swipe_gesture::GESTURE_UPDATE_REGEX_PATTERN);
+        static const std::regex gesture_swipe_end(comfortable_swipe::gesture::swipe_gesture::GESTURE_END_REGEX_PATTERN);
 
         // initialize swipe gesture handler
         comfortable_swipe::gesture::swipe_gesture swipe
