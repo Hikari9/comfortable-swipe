@@ -41,14 +41,19 @@ else
         fi
     fi
 fi
+
 echo "Installing..."
+
 # remove existing comfortable-swipe
 if [ -x "$(command -v $PROGRAM)" ]; then
     sudo rm -f $(which comfortable-swipe)
 fi
+
+# compile library
 sudo $DIR/src/compile $PROGRAM || abort
 
-GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
+# add permissions to input group (defer)
+# GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
 
 # toggle autostart twice to refresh any changes
 $PROGRAM autostart > /dev/null || abort
