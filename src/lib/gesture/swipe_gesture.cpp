@@ -47,6 +47,7 @@ namespace comfortable_swipe::gesture
         const char* down4   /* 111 */
     ):
         comfortable_swipe::gesture::xdo_gesture(),
+        threshold_squared(threshold*threshold),
         commands(new const char*[8]{left3, left4, right3, right4, up3, up4, down3, down4})
     { }
 
