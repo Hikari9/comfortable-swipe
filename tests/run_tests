@@ -1,0 +1,6 @@
+#!/bin/sh
+
+DIR=$(dirname $0)
+g++ -std=c++11 -O2 $DIR/test_regex.cpp -lxdo -o test.out || exec "Test aborted"
+./test.out || rm test.out
+rm test.out
