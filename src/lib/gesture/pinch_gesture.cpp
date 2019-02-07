@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream> // std::cout, std::endl
+#include <regex> // std::regex, std::cmatch, std::regex_match
 #include "xdo_gesture.h"
 
 extern "C"
@@ -62,7 +63,7 @@ namespace comfortable_swipe::gesture
      */
     inline void pinch_gesture::begin()
     {
-        this->previous_gesture = swipe_gesture::FRESH;
+        this->previous_gesture = pinch_gesture::FRESH;
         this->previous_radius = this->radius;
     }
 
@@ -76,11 +77,11 @@ namespace comfortable_swipe::gesture
 
         // TODO: use a different epsilon threshold
         const float EPSILON = this->threshold;
-        if (this->delta_radius > EPSILON)
+        if (delta_radius > EPSILON)
         {
             // TODO: pinch out
         }
-        else if (this->delta_radius < -EPSILON)
+        else if (delta_radius < -EPSILON)
         {
             // TODO: pinch in
         }

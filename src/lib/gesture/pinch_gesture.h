@@ -42,6 +42,7 @@ namespace comfortable_swipe::gesture
         );
 
         ~pinch_gesture();
+        int fingers;
         float radius;
 
         inline void begin() override;
