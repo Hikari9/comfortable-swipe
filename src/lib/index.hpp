@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /**
  * Make sure to include your header files here so that they can be imported by other modules.
  */
+#include "gesture/xdo_gesture.h"
 #include "gesture/swipe_gesture.h"
 extern "C"
 {

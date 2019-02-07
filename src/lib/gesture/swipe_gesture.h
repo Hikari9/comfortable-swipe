@@ -24,60 +24,60 @@ extern "C"
     #include <xdo.h> // xdo_t
 }
 
+#include "xdo_gesture.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-namespace comfortable_swipe
+namespace comfortable_swipe::gesture
 {
-    namespace gesture
+    class swipe_gesture : protected xdo_gesture
     {
-        struct swipe_gesture
-        {
-            // constructor
-            swipe_gesture(
-                const float,
-                const char*,
-                const char*,
-                const char*,
-                const char*,
-                const char*,
-                const char*,
-                const char*,
-                const char*
-            );
+    public:
+        // constructor
+        swipe_gesture(
+            const float threshold,
+            const char* left3   /* 000 */,
+            const char* left4   /* 001 */,
+            const char* right3  /* 010 */,
+            const char* right4  /* 011 */,
+            const char* up3     /* 100 */,
+            const char* up4     /* 101 */,
+            const char* down3   /* 110 */,
+            const char* down4   /* 111 */
+        );
 
-            ~swipe_gesture();
+        ~swipe_gesture();
 
-            // fields for xdo
-            int fingers;
-            float dx, dy, udx, udy;
-            xdo_t * xdo;
-            
-            // location of mouse
-            int screen_num, ix, iy;
+        // fields for xdo
+        int fingers;
+        float dx, dy, udx, udy;
 
-            // current location
-            float x, y, threshold_squared;
-            int previous_gesture;
-            const char ** commands;
+        void begin() override;
+        void update() override;
+        void end() override;
+        
+    protected:
+        // location of mouse
+        int screen_num, ix, iy;
 
-            // hooks
-            void update();
-            void begin();
-            void end();
+        // current location
+        float x, y, threshold_squared;
+        int previous_gesture;
+        const char ** commands;
 
-            // statics
-            static const int MSK_THREE_FINGERS;
-            static const int MSK_FOUR_FINGERS;
-            static const int MSK_NEGATIVE;
-            static const int MSK_POSITIVE;
-            static const int MSK_HORIZONTAL;
-            static const int MSK_VERTICAL;
-            static const int FRESH;
-            static const char * const command_map[8];
-        };
-    }
+    public:
+        // static constants
+        static const int MSK_THREE_FINGERS;
+        static const int MSK_FOUR_FINGERS;
+        static const int MSK_NEGATIVE;
+        static const int MSK_POSITIVE;
+        static const int MSK_HORIZONTAL;
+        static const int MSK_VERTICAL;
+        static const int FRESH;
+        static const char * const command_map[8];
+    };
 }
 
 #ifdef __cplusplus
