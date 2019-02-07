@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream> // std::cout, std::endl
-#include "../index.hpp"
 #include "xdo_gesture.h"
 
 extern "C"

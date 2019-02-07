@@ -42,9 +42,6 @@ extern "C"
     {
         namespace util
         {
-            extern const char* GESTURE_SWIPE_BEGIN_REGEX_PATTERN;
-            extern const char* GESTURE_SWIPE_UPDATE_REGEX_PATTERN;
-            extern const char* GESTURE_SWIPE_END_REGEX_PATTERN;
             const char* autostart_filename();
             constexpr const char* conf_filename();
             std::map<std::string, std::string> read_config_file(const char*);

@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "gesture/xdo_gesture.cpp"
 #include "gesture/swipe_gesture.cpp"
+#include "gesture/swipe_gesture.regex.cpp"
 #include "service/autostart.cpp"
 #include "service/buffer.cpp"
 #include "service/help.cpp"
@@ -36,6 +37,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "util/autostart_filename.cpp"
 #include "util/conf_filename.cpp"
 #include "util/read_config_file.cpp"
-#include "util/regex.cpp"
 
 #endif /* __COMFORTABLE_SWIPE__ */
