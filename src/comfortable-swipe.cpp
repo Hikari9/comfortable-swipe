@@ -56,10 +56,9 @@ extern "C" {
 /* FORWARD DECLARATIONS */
 
 namespace util {
-    string join(cstr, string[], int);
-    string build_gesture_begin();
-    string build_gesture_update();
-    string build_gesture_end();
+    extern const char* GESTURE_SWIPE_BEGIN_REGEX_PATTERN;
+    extern const char* GESTURE_SWIPE_UPDATE_REGEX_PATTERN;
+    extern const char* GESTURE_SWIPE_END_REGEX_PATTERN;
     map<string, string> read_config_file(const char*);
 }
 
@@ -90,7 +89,7 @@ int main(int argc, char** args) {
 }
 
 struct swipe_gesture {
-    string device, stamp, fingers;
+    string fingers;
     string dx, dy, udx, udy;
     xdo_t* xdo;
     virtual void on_update() = 0;
@@ -207,14 +206,17 @@ namespace service {
 }
 
 namespace service {    
+
+    // process regex at compile time
+    const regex gesture_begin(util::GESTURE_SWIPE_BEGIN_REGEX_PATTERN);
+    const regex gesture_update(util::GESTURE_SWIPE_UPDATE_REGEX_PATTERN);
+    const regex gesture_end(util::GESTURE_SWIPE_END_REGEX_PATTERN);
+
     // parses output from libinput debug-events
     void buffer() {
         // check first if $user
         ios::sync_with_stdio(false);
         cin.tie(0); cout.tie(0);
-        const regex gesture_begin(util::build_gesture_begin());
-        const regex gesture_update(util::build_gesture_update());
-        const regex gesture_end(util::build_gesture_end());
         string sentence;
         // read config file
         auto config = util::read_config_file(conf_filename().data());
@@ -234,25 +236,19 @@ namespace service {
             auto data = sentence.data();
             cmatch matches;
             if (regex_match(data, matches, gesture_begin)) {
-               swipe.device = matches[1];
-               swipe.stamp = matches[2];
-               swipe.fingers = matches[3];
+               swipe.fingers = matches[1];
                swipe.on_begin();
             }
             else if (regex_match(data, matches, gesture_end)) {
-               swipe.device = matches[1];
-               swipe.stamp = matches[2];
-               swipe.fingers = matches[3];
+               swipe.fingers = matches[1];
                swipe.on_end();
             }
             else if (regex_match(data, matches, gesture_update)) {
-               swipe.device = matches[1];
-               swipe.stamp = matches[2];
-               swipe.fingers = matches[3];
-               swipe.dx = matches[4];
-               swipe.dy = matches[5];
-               swipe.udx = matches[6];
-               swipe.udy = matches[7];
+               swipe.fingers = matches[1];
+               swipe.dx = matches[2];
+               swipe.dy = matches[3];
+               swipe.udx = matches[4];
+               swipe.udy = matches[5];
                swipe.on_update();
             }
         }
@@ -337,50 +333,76 @@ namespace service {
 
 namespace util {
 
-    string number_regex() {
-        return "-?\\d+(?:\\.\\d+)";
-    }
 
-    string join(cstr delim, string arr[], int n) {
-        string ans = arr[0];
-        for (int i = 1; i < n; ++i) {
-            ans += delim;
-            ans += arr[i];
-        }
-        return ans;
-    }
+    /**
+     * Regex pattern for the libinput entry for start of swipe.
+     * Extracts one match for the number of fingers used during the swipe.
+     * 
+     * eg. event15  GESTURE_SWIPE_BEGIN +34.33s 3
+     *                                          ^
+     *                                        fingers
+     */
+    const char* GESTURE_SWIPE_BEGIN_REGEX_PATTERN =
+        "^"                        // start of string
+        "[ -]event\\d+"            // event
+        "\\s+GESTURE_SWIPE_BEGIN"  // gesture
+        "\\s+\\S+"                 // timestamp
+        "\\s+(\\d+)"               // fingers
+        "$"                        // end of string
+    ;
 
-    string build_gesture_begin() {
-        string device = "\\s*(\\S+)\\s*";
-        string gesture = "\\s*GESTURE_SWIPE_BEGIN\\s*";
-        string seconds = "\\s*(\\S+)\\s*";
-        string fingers = "\\s*(\\d+)\\s*";
-        string arr[] = {device, gesture, seconds, fingers};
-        return join("\\s+", arr, 4);
-    }
+    /**
+     * Regex pattern for the libinput entry for the end of swipe.
+     * Extracts one match for the number of fingers used during the swipe.
+     * 
+     * eg. event15  GESTURE_SWIPE_END +35.03s   3
+     *                                          ^
+     *                                        fingers
+     */
+    const char* GESTURE_SWIPE_END_REGEX_PATTERN =
+        "^"                        // start of string
+        "[ -]event\\d+"            // event
+        "\\s+GESTURE_SWIPE_END"    // gesture
+        "\\s+\\S+"                 // timestamp
+        "\\s+(\\d+)"               // fingers
+        "$"                        // end of string
+    ;
 
-    string build_gesture_update() {
-        string device = "\\s*(\\S+)\\s*";
-        string gesture = "\\s*GESTURE_SWIPE_UPDATE\\s*";
-        string seconds = "\\s*(\\S+)\\s*";
-        string fingers = "\\s*(\\d+)\\s*";
-        string num_1 = "\\s*(" + number_regex() + ")\\s*";
-        string num_2 = num_1;
-        string num_div = num_1 + "/" + num_2;
-        string num_accel = "\\s*\\(\\s*" + num_div + "\\s*unaccelerated\\s*\\)\\s*";
-        string arr[] = {device, gesture, seconds, fingers, num_div, num_accel};
-        return join("\\s+", arr, 6);
-    }
+    // matches signed decimal numbers (eg. "6.02" "-1.1")
+    #define CF_NUMBER_REGEX "-?\\d+(?:\\.\\d+)"
 
-    string build_gesture_end() {
-        string device = "\\s*(\\S+)\\s*";
-        string gesture = "\\s*GESTURE_SWIPE_END\\s*";
-        string seconds = "\\s*(\\S+)\\s*";
-        string fingers = "\\s*(\\d+)\\s*";
-        string arr[] = {device, gesture, seconds, fingers};
-        return join("\\s+", arr, 4);
-    }
+    // matches and extracts a space-prefixed signed fraction (eg. "-3.00/ 5.12")
+    #define CF_NUMBER_DIVISION "\\s*(" CF_NUMBER_REGEX ")/\\s*(" CF_NUMBER_REGEX ")"
+
+    /**
+     * Regex pattern for the libinput entry for during a swipe.
+     * Extracts number of fingers used and the speed (normal and accelerated) of the swipe.
+     * 
+     * eg. event15  GESTURE_SWIPE_UPDATE +34.70s    3 -0.12/ 4.99 (-0.33/13.50 unaccelerated)
+     *                                              ^    ^    ^      ^     ^
+     *                                          fingers  dx   dy    udx   udy
+     */
+    const char* GESTURE_SWIPE_UPDATE_REGEX_PATTERN =
+        "^"                                                 // start of string
+        "[ -]event\\d+"                                     // event
+        "\\s+GESTURE_SWIPE_UPDATE"                          // gesture
+        "\\s+\\S+"                                          // timestamp
+        "\\s+(\\d+)"                                        // fingers
+        "\\s+" CF_NUMBER_DIVISION                           // speed (dx/dy)
+        "\\s+\\(" CF_NUMBER_DIVISION "\\s+unaccelerated\\)" // unaccelerated speed (udx/udy)
+        "$"                                                 // end of string
+    ;
+
+    // delete macros
+    #undef CF_NUMBER_DIVISION
+    #undef CF_NUMBER_EXTRACT
+    #undef CF_NUMBER_REGEX
     
+    /**
+     * A utility method for reading the config file.
+     * 
+     * @param filename (const char*) the path of the config file.
+     */
     map<string, string> read_config_file(const char* filename) {
         map<string, string> conf;
         ifstream fin(filename);
