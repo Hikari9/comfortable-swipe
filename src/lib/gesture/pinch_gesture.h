@@ -42,7 +42,7 @@ namespace comfortable_swipe::gesture
         );
 
         ~pinch_gesture();
-        float radius, omega;
+        float radius;
 
         inline void begin() override;
         inline void update() override;
@@ -52,8 +52,9 @@ namespace comfortable_swipe::gesture
     protected:
         // current location
         float previous_radius; 
-        float threshold_squared;
+        float threshold;
         int previous_gesture;
+        bool flag_pinching;
         const char ** commands;
 
     public:

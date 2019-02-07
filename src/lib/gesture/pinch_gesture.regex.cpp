@@ -60,8 +60,8 @@ namespace comfortable_swipe::gesture
     // matches signed decimal numbers (eg. "6.02" "-1.1")
     #define CF_NUMBER_REGEX "-?\\d+(?:\\.\\d+)"
 
-    // matches and extracts a space-prefixed signed fraction (eg. "-3.00/ 5.12")
-    #define CF_NUMBER_DIVISION "\\s*(" CF_NUMBER_REGEX ")/\\s*(" CF_NUMBER_REGEX ")"
+    // matches a space-prefixed signed fraction (eg. "-3.00/ 5.12")
+    #define CF_NUMBER_DIVISION "\\s*" CF_NUMBER_REGEX "/\\s*" CF_NUMBER_REGEX
 
     /**
      * Regex pattern for the libinput entry for during a pinch.
@@ -81,7 +81,7 @@ namespace comfortable_swipe::gesture
         "\\s+" CF_NUMBER_DIVISION                           // speed (dx/dy)
         "\\s+\\(" CF_NUMBER_DIVISION "\\s+unaccelerated\\)" // unaccelerated speed (udx/udy)
         "\\s+(" CF_NUMBER_REGEX ")"                         // radius
-        " @\\s+(" CF_NUMBER_REGEX ")"                       // angular velocity (omega)
+        " @\\s+" CF_NUMBER_REGEX ""                         // angular velocity (omega)
         "\\s*$"                                             // end of string
     ;
 

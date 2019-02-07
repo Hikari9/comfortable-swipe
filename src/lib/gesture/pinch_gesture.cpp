@@ -45,7 +45,7 @@ namespace comfortable_swipe::gesture
         const char* pinch_out4
     ):
         comfortable_swipe::gesture::xdo_gesture(),
-        threshold_squared(threshold),
+        threshold(threshold),
         commands(new const char*[4]{pinch_in3, pinch_in4, pinch_out3, pinch_out4})
     { }
 
@@ -60,7 +60,7 @@ namespace comfortable_swipe::gesture
     /**
      * Hook on begin of pinch gesture.
      */
-    void pinch_gesture::begin()
+    inline void pinch_gesture::begin()
     {
         this->previous_gesture = swipe_gesture::FRESH;
         this->previous_radius = this->radius;
@@ -69,10 +69,13 @@ namespace comfortable_swipe::gesture
     /**
      * Hook on update of swipe gesture.
      */
-    void swipe_gesture::update()
+    inline void pinch_gesture::update()
     {
         float delta_radius = this->radius - this->previous_radius;
         this->previous_radius = this->radius;
+
+        // TODO: use a different epsilon threshold
+        const float EPSILON = this->threshold;
         if (this->delta_radius > EPSILON)
         {
             // TODO: pinch out
@@ -86,8 +89,59 @@ namespace comfortable_swipe::gesture
     /**
      * Hook on end of swipe gesture.
      */
-    void pinch_gesture::end()
+    inline void pinch_gesture::end()
     { }
+
+    /**
+     * Parses an output line and dispatches pinch begin/update/end upon match.
+     * Uses GESTURE_BEGIN_REGEX_PATTERN for begin,
+     *      GESTURE_UPDATE_REGEX_PATTERN for update,
+     *      GESTURE_END_REGEX_PATTERN for end.
+     *
+     * @param  line the output line from libinput debug-events
+     * @return      true if line matches this gesture
+     */
+    inline bool pinch_gesture::parse_line(const char * line)
+    {
+        // pre-compile regex patterns
+        static const std::regex gesture_swipe_begin(pinch_gesture::GESTURE_BEGIN_REGEX_PATTERN);
+        static const std::regex gesture_swipe_update(pinch_gesture::GESTURE_UPDATE_REGEX_PATTERN);
+        static const std::regex gesture_swipe_end(pinch_gesture::GESTURE_END_REGEX_PATTERN);
+        std::cmatch matches;
+        if (this->flag_pinching)
+        {
+            // currently pinching
+            if (std::regex_match(line, matches, gesture_swipe_update) != 0)
+            {
+                // update pinch
+                this->fingers = std::stoi(matches[1]);
+                this->radius = std::stof(matches[2]);
+                this->update();
+                return true;
+            }
+            else if (std::regex_match(line, matches, gesture_swipe_end) != 0)
+            {
+                // end pinch
+                this->flag_pinching = false;
+                this->fingers = std::stoi(matches[1]);
+                this->end();
+                return true;
+            }
+        }
+        else /* !flag_swiping */
+        {
+            // not swiping, check if swipe will begin
+            if (std::regex_match(line, matches, gesture_swipe_begin) != 0)
+            {
+                // begin swipe
+                this->flag_pinching = true;
+                this->fingers = std::stoi(matches[1]);
+                this->begin();
+                return true;
+            }
+        }
+        return false;
+    }
 
     /* STATICS DEFINITIONS */
     const int pinch_gesture::MSK_THREE_FINGERS = 0;
