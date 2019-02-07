@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream> // std::cout, std::endl
+#include <regex> // std::regex, std::regex_match
+#include <string> // std::stof, std::stoi
 #include "xdo_gesture.h"
 
 extern "C"
@@ -62,7 +64,7 @@ namespace comfortable_swipe::gesture
     /**
      * Hook on begin of swipe gesture.
      */
-    void swipe_gesture::begin()
+    inline void swipe_gesture::begin()
     {
         xdo_get_mouse_location(this->xdo, &this->ix, &this->iy, &this->screen_num);
         this->previous_gesture = swipe_gesture::FRESH;
@@ -73,7 +75,7 @@ namespace comfortable_swipe::gesture
     /**
      * Hook on update of swipe gesture.
      */
-    void swipe_gesture::update()
+    inline void swipe_gesture::update()
     {
         this->x += this->dx;
         this->y += this->dy;
@@ -121,8 +123,63 @@ namespace comfortable_swipe::gesture
     /**
      * Hook on end of swipe gesture.
      */
-    void swipe_gesture::end()
+    inline void swipe_gesture::end()
     { }
+
+    /**
+     * Parses an output line and dispatches swipe begin/update/end upon match.
+     * Uses GESTURE_BEGIN_REGEX_PATTERN for begin,
+     *      GESTURE_UPDATE_REGEX_PATTERN for update,
+     *      GESTURE_END_REGEX_PATTERN for end.
+     *
+     * @param  line the output line from libinput debug-events
+     * @return      true if line matches this gesture
+     */
+    inline bool swipe_gesture::parse_line(const char * line)
+    {
+        // pre-compile regex patterns
+        static const std::regex gesture_swipe_begin(swipe_gesture::GESTURE_BEGIN_REGEX_PATTERN);
+        static const std::regex gesture_swipe_update(swipe_gesture::GESTURE_UPDATE_REGEX_PATTERN);
+        static const std::regex gesture_swipe_end(swipe_gesture::GESTURE_END_REGEX_PATTERN);
+        std::cmatch matches;
+        if (this->flag_swiping)
+        {
+            // currently swiping
+            if (std::regex_match(line, matches, gesture_swipe_update) != 0)
+            {
+                // update swipe
+                this->fingers = std::stoi(matches[1]);
+                this->dx = std::stof(matches[2]);
+                this->dy = std::stof(matches[3]);
+                this->udx = std::stof(matches[4]);
+                this->udy = std::stof(matches[5]);
+                this->update();
+                return true;
+            }
+            else if (std::regex_match(line, matches, gesture_swipe_end) != 0)
+            {
+                // end swipe
+                this->flag_swiping = false;
+                this->fingers = std::stoi(matches[1]);
+                this->end();
+                return true;
+            }
+        }
+        else /* !flag_swiping */
+        {
+            // not swiping, check if swipe will begin
+            if (std::regex_match(line, matches, gesture_swipe_begin) != 0)
+            {
+                // begin swipe
+                this->flag_swiping = true;
+                this->fingers = std::stoi(matches[1]);
+                this->begin();
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /* STATICS DEFINITIONS */
     const int swipe_gesture::MSK_THREE_FINGERS = 0;

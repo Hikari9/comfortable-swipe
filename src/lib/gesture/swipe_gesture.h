@@ -49,9 +49,10 @@ namespace comfortable_swipe::gesture
         int fingers;
         float dx, dy, udx, udy;
 
-        void begin() override;
-        void update() override;
-        void end() override;
+        inline void begin() override;
+        inline void update() override;
+        inline void end() override;
+        inline bool parse_line(const char *) override;
         
     protected:
         // location of mouse
@@ -60,6 +61,7 @@ namespace comfortable_swipe::gesture
         // current location
         float x, y, threshold_squared;
         int previous_gesture;
+        bool flag_swiping;
         const char ** commands;
 
     public:

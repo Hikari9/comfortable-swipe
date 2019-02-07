@@ -42,9 +42,10 @@ namespace comfortable_swipe
             ~xdo_gesture();
 
             // hooks
-            virtual void begin() = 0;
-            virtual void update() = 0;
-            virtual void end() = 0;
+            virtual inline void begin() = 0;
+            virtual inline void update() = 0;
+            virtual inline void end() = 0;
+            virtual inline bool parse_line(const char *) = 0;
         };
     }
 }

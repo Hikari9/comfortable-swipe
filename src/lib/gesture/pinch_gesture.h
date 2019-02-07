@@ -44,9 +44,10 @@ namespace comfortable_swipe::gesture
         ~pinch_gesture();
         float radius, omega;
 
-        void begin() override;
-        void update() override;
-        void end() override;
+        inline void begin() override;
+        inline void update() override;
+        inline void end() override;
+        inline bool parse_line(const char *) override;
         
     protected:
         // current location
