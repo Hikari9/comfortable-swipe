@@ -16,8 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// Compile: g++ main.cpp -std=c++11 -lxdo 
+
 #include <string> // std::string
-#include "comfortable_swipe/index.cpp"
+#include "lib/comfortable_swipe"
 
 /* MAIN DRIVER FUNCTION */
 

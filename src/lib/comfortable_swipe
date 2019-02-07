@@ -19,7 +19,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// export all modules here
+#include "index.hpp"
+
+/**
+ * Make sure to include all implementation (.cpp) files below to be ready for export.
+ */
+
 #include "gesture/swipe_gesture.cpp"
 #include "service/autostart.cpp"
 #include "service/buffer.cpp"

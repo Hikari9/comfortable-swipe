@@ -28,12 +28,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __COMFORTABLE_SWIPE__CONFIG__ "/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
 #endif /* __COMFORTABLE_SWIPE__CONFIG__ */
 
-
 #include <map> // std::map
 #include <string> // std::string
-#include "gesture/swipe_gesture.h"
 
-// other program header files
+/**
+ * Make sure to include your header files here so that they can be imported by other modules.
+ */
+#include "gesture/swipe_gesture.h"
 extern "C"
 {
     namespace comfortable_swipe::util
