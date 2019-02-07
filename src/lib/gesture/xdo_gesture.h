@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__
-#define __COMFORTABLE_SWIPE__
+#ifndef __COMFORTABLE_SWIPE__xdo_gesture_h__
+#define __COMFORTABLE_SWIPE__xdo_gesture_h__
 
 /*
 Comfortable Swipe
@@ -19,23 +19,38 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "index.hpp"
+extern "C"
+{
+    #include <xdo.h> // xdo_t
+}
 
-/**
- * Make sure to include all implementation (.cpp) files below to be ready for export.
- */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#include "gesture/xdo_gesture.cpp"
-#include "gesture/swipe_gesture.cpp"
-#include "service/autostart.cpp"
-#include "service/buffer.cpp"
-#include "service/help.cpp"
-#include "service/restart.cpp"
-#include "service/start.cpp"
-#include "service/stop.cpp"
-#include "util/autostart_filename.cpp"
-#include "util/conf_filename.cpp"
-#include "util/read_config_file.cpp"
-#include "util/regex.cpp"
+namespace comfortable_swipe
+{
+    namespace gesture
+    {
+        class xdo_gesture
+        {
+        protected:
+            xdo_t * xdo;
 
-#endif /* __COMFORTABLE_SWIPE__ */
+        public:
+            xdo_gesture();
+            ~xdo_gesture();
+
+            // hooks
+            virtual void begin() = 0;
+            virtual void update() = 0;
+            virtual void end() = 0;
+        };
+    }
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __COMFORTABLE_SWIPE__xdo_gesture_h__ */
