@@ -51,7 +51,7 @@ Comfortable swipe makes use of keyboard shortcuts for configurations. The config
 
 Property  | Description | Default Value | Default Behavior
 --------- | ----------- | -------------- | -----
-threshold | mouse pixels to activate swipe; higher = less sensitive; floating-point (Note: Sky is the limit! Can be as large as 1000.0) | 20.0
+threshold | mouse pixels to activate swipe; higher = less sensitive; floating-point (Note: Sky is the limit! Can be as large as 1000.0) | 0.0
 left3     | 3-finger swipe left | ctrl+shift+Right | switch to right workspace
 left4     | 4-finger swipe left | ctrl+alt+shift+Right | move window to right workspace
 right3    | 3-finger swipe right | ctrl+shift+Left | switch to left workspace

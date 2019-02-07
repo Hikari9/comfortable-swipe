@@ -37,23 +37,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gesture/swipe_gesture.h"
 extern "C"
 {
-    namespace comfortable_swipe::util
+    namespace comfortable_swipe
     {
-        extern const char* GESTURE_SWIPE_BEGIN_REGEX_PATTERN;
-        extern const char* GESTURE_SWIPE_UPDATE_REGEX_PATTERN;
-        extern const char* GESTURE_SWIPE_END_REGEX_PATTERN;
-        const char* autostart_filename();
-        constexpr const char* conf_filename();
-        std::map<std::string, std::string> read_config_file(const char*);
-    }
-    namespace comfortable_swipe::service
-    {
-        void autostart();
-        void buffer();
-        void help();
-        void restart();
-        void start();
-        void stop();
+        namespace util
+        {
+            extern const char* GESTURE_SWIPE_BEGIN_REGEX_PATTERN;
+            extern const char* GESTURE_SWIPE_UPDATE_REGEX_PATTERN;
+            extern const char* GESTURE_SWIPE_END_REGEX_PATTERN;
+            const char* autostart_filename();
+            constexpr const char* conf_filename();
+            std::map<std::string, std::string> read_config_file(const char*);
+        }
+        namespace service
+        {
+            void autostart();
+            void buffer();
+            void help();
+            void restart();
+            void start();
+            void stop();
+        }
     }
 }
 

@@ -26,6 +26,8 @@ namespace comfortable_swipe::service
 {
     /**
      * Starts the comfortable-swipe service by buffering libinput debug-events.
+     * This method is deferred. Please refer to comfortable_swipe::service::buffer()
+     * for the technical implementation.
      */
     void start()
     {
