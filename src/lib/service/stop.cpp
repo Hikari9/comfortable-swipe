@@ -61,7 +61,7 @@ namespace comfortable_swipe::service
         }
 
         // run "kill {pid1} {pid2}..."
-        std::system(kill.data());
+        (void) std::system(kill.data());
         delete[] buffer;
 
         // close the pipe 

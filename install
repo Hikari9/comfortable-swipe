@@ -9,8 +9,6 @@ OLD_CONF_PATH=${XDG_CONFIG_HOME:-$HOME/.config}/comfortable-swipe.conf
 if [ -x "$(command -v $PROGRAM)" ]; then
     # stop any running comfortable-swipe if it exists
     $PROGRAM stop
-    # remove existing comfortable-swipe
-    rm $(which comfortable-swipe)
 fi
 
 #copy config file
@@ -44,8 +42,11 @@ else
     fi
 fi
 echo "Installing..."
-# mkdir -p ~/.local/bin
-sudo g++ -std=c++11 -O2 $DIR/src/comfortable-swipe.cpp -lxdo -o $PROGRAM || exec echo "Installation aborted"
+# remove existing comfortable-swipe
+if [ -x "$(command -v $PROGRAM)" ]; then
+    sudo rm -f $(which comfortable-swipe)
+fi
+sudo $DIR/src/compile $PROGRAM || abort
 
 GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
 
