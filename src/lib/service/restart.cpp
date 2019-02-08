@@ -28,8 +28,8 @@ namespace comfortable_swipe::service
      */
     void restart()
     {
-        comfortable_swipe::service::start();
         comfortable_swipe::service::stop();
+        comfortable_swipe::service::start();
     }
 }
 
