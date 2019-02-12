@@ -52,7 +52,8 @@ namespace comfortable_swipe::gesture
         void begin() override;
         void update() override;
         void end() override;
-        
+        bool parse_line(const char *) override;
+
     protected:
         // location of mouse
         int screen_num, ix, iy;
@@ -61,6 +62,9 @@ namespace comfortable_swipe::gesture
         float x, y, threshold_squared;
         int previous_gesture;
         const char ** commands;
+
+        // optimization flag for checking if GESTURE_SWIPE_BEGIN was dispatched
+        bool flag_swiping;
 
     public:
         // static constants

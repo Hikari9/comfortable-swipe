@@ -45,6 +45,7 @@ namespace comfortable_swipe
             virtual void begin() = 0;
             virtual void update() = 0;
             virtual void end() = 0;
+            virtual bool parse_line(const char *) = 0;
         };
     }
 }
