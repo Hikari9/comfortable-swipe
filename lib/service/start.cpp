@@ -31,7 +31,7 @@ namespace comfortable_swipe::service
      */
     void start()
     {
-        (void) std::system("stdbuf -oL -e0 libinput debug-events | " __COMFORTABLE_SWIPE__PROGRAM__ " buffer");
+        (void) std::system(__COMFORTABLE_SWIPE__PROGRAM__ " debug | " __COMFORTABLE_SWIPE__PROGRAM__ " buffer");
     }
 }
 
