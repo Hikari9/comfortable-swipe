@@ -31,7 +31,9 @@ namespace comfortable_swipe::service
      */
     void start()
     {
-        (void) std::system("stdbuf -oL -e0 libinput debug-events | " __COMFORTABLE_SWIPE__PROGRAM__ " buffer");
+        (void) std::system("stdbuf -oL -e0 libinput debug-events | " __COMFORTABLE_SWIPE__PROGRAM__ " buffer "
+            // dont show double tracking bugs from libinput
+            "2> >(grep -v \"double tracking\")");
     }
 }
 
