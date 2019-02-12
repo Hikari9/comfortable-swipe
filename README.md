@@ -1,18 +1,18 @@
 # Comfortable Swipe (Ubuntu)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures for Ubuntu 14.04 LTS and beyond. May work for other Linux distros that support `libinput`.
 
 ## Installation
 
 1. Install git, libinput, and g++
-    
+
     ```bash
     sudo apt-get install git libinput-tools libxdo-dev g++
     ```
 
 2. Clone this repository
-    
+
     ```bash
     git clone https://github.com/Hikari9/comfortable-swipe-ubuntu.git
     cd comfortable-swipe-ubuntu
@@ -41,7 +41,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
     ```
     comfortable-swipe autostart
     ```
-5. _Optional_: Change keyboard [configurations](#configurations). After making changes, run
+5. _Optional_: Change [configurations](#configurations) (see below). After making changes, run
     ```
     comfortable-swipe restart
     ```
@@ -78,9 +78,38 @@ Taken from `man xdotool`:
 Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete list of keycodes you can use.
 
 
+## Debugging
+
+You can check your touchpad driver by running `comfortable-swipe debug`. This is an alias of `libinput debug-events`. This logs all gestures you make on your touchpad, along with other input-based events that can be captured by libinput.
+
+A working swipe gesture will show the following:
+
+```bash
+$ comfortable-swipe debug
+...
+-event9   DEVICE_ADDED     TouchPad                     seat0 default group7  cap:pg  size 70x50mm tap(dl off) left scroll-nat scroll-2fg-edge click-buttonareas-clickfinger dwt-on
+...
+event9   GESTURE_SWIPE_BEGIN  +2.03s   3
+ event9   GESTURE_SWIPE_UPDATE  +2.03s  3 -9.95/ 2.64 (-26.90/ 7.12 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.03s  3 -10.44/ 3.19 (-28.22/ 8.62 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.04s  3 -9.71/ 2.64 (-26.25/ 7.12 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.05s  3 -8.98/ 2.64 (-24.28/ 7.12 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.06s  3 -7.40/ 2.36 (-20.01/ 6.37 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.06s  3 -6.31/ 2.50 (-17.06/ 6.75 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.07s  3 -5.34/ 1.80 (-14.44/ 4.87 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.08s  3 -4.61/ 2.08 (-12.47/ 5.62 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.09s  3 -4.49/ 1.53 (-12.14/ 4.12 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.09s  3 -4.01/ 1.25 (-10.83/ 3.37 unaccelerated)
+ event9   GESTURE_SWIPE_UPDATE  +2.10s  3 -4.13/ 0.42 (-11.15/ 1.12 unaccelerated)
+ event9   GESTURE_SWIPE_END  +2.11s     3
+ ...
+```
+
+If you can see `GESTURE_SWIPE_XXX` in your output, that means your touchpad supports multi-touch swipe gestures.
 
 ## Uninstall
-Download the `uninstall` script then run `bash uninstall`  
+Download the `uninstall` script then run `bash uninstall`
+
 
 ## Bug Reports
 Create an issue [here](https://github.com/Hikari9/comfortable-swipe-ubuntu/issues/new) to report a bug.

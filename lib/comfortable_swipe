@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gesture/swipe_gesture.regex.cpp"
 #include "service/autostart.cpp"
 #include "service/buffer.cpp"
+#include "service/debug.cpp"
 #include "service/help.cpp"
 #include "service/restart.cpp"
 #include "service/start.cpp"

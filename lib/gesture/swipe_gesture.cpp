@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <regex> // std::regex, std::regex_match
 #include <string> // std::stof, std::stoi
 #include "xdo_gesture.h"
+#include "swipe_gesture.h"
 
 extern "C"
 {
@@ -51,7 +52,10 @@ namespace comfortable_swipe::gesture
         comfortable_swipe::gesture::xdo_gesture(),
         threshold_squared(threshold*threshold),
         commands(new const char*[8]{left3, left4, right3, right4, up3, up4, down3, down4})
-    { }
+    {
+        // improve responsiveness of first gesture by pre-empting xdotool runtime
+        xdo_get_mouse_location(this->xdo, &this->ix, &this->iy, &this->screen_num);
+    }
 
     /**
      * Destructs this swipe gesture.
@@ -147,39 +151,42 @@ namespace comfortable_swipe::gesture
             // currently swiping
             if (std::regex_match(line, matches, gesture_swipe_update) != 0)
             {
-                // update swipe
+                // assign necessary variables for swipe update
                 this->fingers = std::stoi(matches[1]);
                 this->dx = std::stof(matches[2]);
                 this->dy = std::stof(matches[3]);
                 this->udx = std::stof(matches[4]);
                 this->udy = std::stof(matches[5]);
+                // dispatch update
                 this->update();
                 return true;
             }
             else if (std::regex_match(line, matches, gesture_swipe_end) != 0)
             {
-                // end swipe
+                // assign necessary variables for swipe end
                 this->flag_swiping = false;
                 this->fingers = std::stoi(matches[1]);
+                // dispatch end
                 this->end();
                 return true;
             }
         }
-        else /* !flag_swiping */
+        else /* if (!this->flag_swiping) */
         {
             // not swiping, check if swipe will begin
             if (std::regex_match(line, matches, gesture_swipe_begin) != 0)
             {
-                // begin swipe
+                // assign necessary variables for swipe begin
                 this->flag_swiping = true;
                 this->fingers = std::stoi(matches[1]);
+                // dispatch begin
                 this->begin();
                 return true;
             }
         }
+
         return false;
     }
-
 
     /* STATICS DEFINITIONS */
     const int swipe_gesture::MSK_THREE_FINGERS = 0;

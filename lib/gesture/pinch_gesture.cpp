@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream> // std::cout, std::endl
 #include <regex> // std::regex, std::cmatch, std::regex_match
 #include "xdo_gesture.h"
+#include "pinch_gesture.h"
 
 extern "C"
 {
@@ -129,7 +130,7 @@ namespace comfortable_swipe::gesture
                 return true;
             }
         }
-        else /* !flag_swiping */
+        else /* if (!this->flag_pinching) */
         {
             // not swiping, check if swipe will begin
             if (std::regex_match(line, matches, gesture_swipe_begin) != 0)

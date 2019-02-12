@@ -33,7 +33,7 @@ namespace comfortable_swipe::service
         auto config = comfortable_swipe::util::read_config_file(comfortable_swipe::util::conf_filename());
 
         // initialize swipe gesture handler
-        comfortable_swipe::gesture::swipe_gesture swipe
+        comfortable_swipe::gesture::swipe_gesture swipe_gesture_handler
         (
             config.count("threshold") ? std::stof(config["threshold"]) : 0.0,
             config["left3"].c_str(),
@@ -48,12 +48,13 @@ namespace comfortable_swipe::service
 
         // prepare data containers
         static const int MAX_LINE_LENGTH = 256;
-        static char line[MAX_LINE_LENGTH];
+        static char data[MAX_LINE_LENGTH];
 
         // start reading lines from input one by one
-        while (fgets_unlocked(line, MAX_LINE_LENGTH, stdin) != NULL)
+        while (fgets_unlocked(data, MAX_LINE_LENGTH, stdin) != NULL)
         {
-            swipe.parse_line(line);
+            // attempt to parse swipe gestures
+            swipe_gesture_handler.parse_line(data);
         }
     }
 }

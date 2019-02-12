@@ -2,8 +2,9 @@
 # prefer running as root
 DIR=$(dirname $0)
 PROGRAM=/usr/local/bin/comfortable-swipe
+COMPILE=$DIR/comfortable-swipe.compile.sh
 CONF_PATH=/usr/local/share/comfortable-swipe/comfortable-swipe.conf
-DCONF_PATH=$DIR/src/defaults.conf
+DCONF_PATH=$DIR/defaults.conf
 OLD_CONF_PATH=${XDG_CONFIG_HOME:-$HOME/.config}/comfortable-swipe.conf
 
 if [ -x "$(command -v $PROGRAM)" ]; then
@@ -16,6 +17,20 @@ abort () {
     exec echo "Installation aborted"
 }
 sudo mkdir -p $(dirname $CONF_PATH) || abort
+
+# check if "-y" or "--yes" is passed as an argument
+YES=false
+while test $# -gt 0
+do
+    case "$1" in
+        -y) YES=true
+            ;;
+        --yes) YES=true
+            ;;
+    esac
+    shift
+done
+
 sudo chown $USER $(dirname $CONF_PATH)
 if [ ! -f $CONF_PATH ]; then
     if [ ! -f $OLD_CONF_PATH ]; then
@@ -29,15 +44,17 @@ if [ ! -f $CONF_PATH ]; then
 else
     # config file found, ask user if overwrite
     echo "Old conf file found in $CONF_PATH"
-    read -r -p "Keep the old conf file? (default: yes) [Y/n] " response
-    response=${response,,} # tolower
-    if [[ "$response" =~ ^(no|n)$ ]]; then
-        read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
-        response=${response,,}
-        if [[ "$response" =~ ^(yes|y)$ ]]; then
-            cat $DCONF_PATH > $CONF_PATH || abort
-        else
-            abort
+    if [ $YES == false ]; then
+        read -r -p "Keep the old conf file? (default: yes) [Y/n] " response
+        response=${response,,} # tolower
+        if [[ "$response" =~ ^(no|n)$ ]]; then
+            read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
+            response=${response,,}
+            if [[ "$response" =~ ^(yes|y)$ ]]; then
+                cat $DCONF_PATH > $CONF_PATH || abort
+            else
+                abort
+            fi
         fi
     fi
 fi
@@ -50,7 +67,7 @@ if [ -x "$(command -v $PROGRAM)" ]; then
 fi
 
 # compile library
-sudo $DIR/src/compile $PROGRAM || abort
+sudo $COMPILE $PROGRAM || abort
 
 # add permissions to input group (defer)
 # GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort

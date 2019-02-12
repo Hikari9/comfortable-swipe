@@ -2,8 +2,8 @@
 #include <cassert>
 #include <regex>
 #include <string>
-#include "../src/lib/gesture/swipe_gesture.h"
-#include "../src/lib/gesture/swipe_gesture.regex.cpp"
+#include "../lib/gesture/swipe_gesture.h"
+#include "../lib/gesture/swipe_gesture.regex.cpp"
 
 /*
 Comfortable Swipe

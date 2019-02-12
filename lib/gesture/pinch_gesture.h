@@ -1,5 +1,7 @@
-#ifndef __COMFORTABLE_SWIPE__gesture_swipe_gesture_h__
-#define __COMFORTABLE_SWIPE__gesture_swipe_gesture_h__
+/* WARNING: experimental */
+
+#ifndef __COMFORTABLE_SWIPE__gesture_pinch_gesture_h__
+#define __COMFORTABLE_SWIPE__gesture_pinch_gesture_h__
 
 /*
 Comfortable Swipe
@@ -27,41 +29,33 @@ extern "C" {
 
 namespace comfortable_swipe::gesture
 {
-    class swipe_gesture : protected xdo_gesture
+    class pinch_gesture : protected xdo_gesture
     {
     public:
         // constructor
-        swipe_gesture(
+        pinch_gesture(
             const float threshold,
-            const char* left3   /* 000 */,
-            const char* left4   /* 001 */,
-            const char* right3  /* 010 */,
-            const char* right4  /* 011 */,
-            const char* up3     /* 100 */,
-            const char* up4     /* 101 */,
-            const char* down3   /* 110 */,
-            const char* down4   /* 111 */
+            const char* pinch_in3,
+            const char* pinch_in4,
+            const char* pinch_out3,
+            const char* pinch_out4
         );
 
-        ~swipe_gesture();
-
-        // fields for xdo
+        ~pinch_gesture();
         int fingers;
-        float dx, dy, udx, udy;
+        float radius;
 
         inline void begin() override;
         inline void update() override;
         inline void end() override;
         inline bool parse_line(const char *) override;
-        
-    protected:
-        // location of mouse
-        int screen_num, ix, iy;
 
+    protected:
         // current location
-        float x, y, threshold_squared;
+        float previous_radius;
+        float threshold;
         int previous_gesture;
-        bool flag_swiping;
+        bool flag_pinching;
         const char ** commands;
 
     public:
@@ -70,10 +64,8 @@ namespace comfortable_swipe::gesture
         static const int MSK_FOUR_FINGERS;
         static const int MSK_NEGATIVE;
         static const int MSK_POSITIVE;
-        static const int MSK_HORIZONTAL;
-        static const int MSK_VERTICAL;
         static const int FRESH;
-        static const char * const command_map[8];
+        static const char * const command_map[4];
         // regex patterns
         static const char* GESTURE_BEGIN_REGEX_PATTERN;
         static const char* GESTURE_UPDATE_REGEX_PATTERN;
@@ -85,4 +77,4 @@ namespace comfortable_swipe::gesture
 }
 #endif
 
-#endif /* __COMFORTABLE_SWIPE__gesture_swipe_gesture_h__ */
+#endif /* __COMFORTABLE_SWIPE__gesture_pinch_gesture_h__ */
