@@ -16,8 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Compile: g++ main.cpp -std=c++11 -lxdo 
-
 #include <string> // std::string
 #include "lib/comfortable_swipe"
 
@@ -28,7 +26,7 @@ int main(int argc, char** args)
     if (argc > 1)
     {
         std::string arg = args[1];
-        
+
         // select based on argument
         if (arg == "start")
             comfortable_swipe::service::start();
