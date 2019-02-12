@@ -2,6 +2,7 @@
 # prefer running as root
 DIR=$(dirname $0)
 PROGRAM=/usr/local/bin/comfortable-swipe
+COMPILE=$DIR/comfortable-swipe.compile.sh
 CONF_PATH=/usr/local/share/comfortable-swipe/comfortable-swipe.conf
 DCONF_PATH=$DIR/defaults.conf
 OLD_CONF_PATH=${XDG_CONFIG_HOME:-$HOME/.config}/comfortable-swipe.conf
@@ -50,7 +51,7 @@ if [ -x "$(command -v $PROGRAM)" ]; then
 fi
 
 # compile library
-sudo $DIR/compile.sh $PROGRAM || abort
+sudo $COMPILE $PROGRAM || abort
 
 # add permissions to input group (defer)
 # GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
