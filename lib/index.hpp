@@ -50,6 +50,7 @@ extern "C"
         {
             void autostart();
             void buffer();
+            void debug();
             void help();
             void restart();
             void start();
