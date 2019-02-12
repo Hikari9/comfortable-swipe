@@ -16,6 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <ios> // std::ios
+#include <iostream> // std::cin, std::cout, std::cerr
 #include <string> // std::string
 #include "lib/comfortable_swipe"
 
@@ -23,6 +25,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int main(int argc, char** args)
 {
+    // improve buffering by decoupling loggers from stdio
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
+    std::cout.tie(0);
+    std::cerr.tie(0);
+
     if (argc > 1)
     {
         std::string arg = args[1];
