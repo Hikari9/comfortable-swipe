@@ -30,7 +30,7 @@ namespace comfortable_swipe::service
     void help()
     {
         using comfortable_swipe::util::conf_filename;
-        std::puts("comfortable-swipe [start|stop|restart|autostart|buffer|help]");
+        std::puts("comfortable-swipe [start|stop|restart|autostart|buffer|help|debug]");
         std::puts("");
         std::puts("start      - starts 3/4-finger gesture service");
         std::puts("stop       - stops 3/4-finger gesture service");
@@ -38,6 +38,7 @@ namespace comfortable_swipe::service
         std::puts("autostart  - automatically run on startup (toggleable)");
         std::puts("buffer     - parses output of libinput debug-events");
         std::puts("help       - shows the help dialog");
+        std::puts("debug      - logs raw output from input events taken from libinput");
         std::puts("");
         std::printf("Configuration file can be found in %s\n", conf_filename());
     }

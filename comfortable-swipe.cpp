@@ -43,6 +43,9 @@ int main(int argc, char** args)
         else if (arg == "autostart")
             comfortable_swipe::service::autostart();
 
+        else if (arg == "debug")
+            comfortable_swipe::service::debug();
+
         else /* if (arg == "help") */
             comfortable_swipe::service::help();
     }

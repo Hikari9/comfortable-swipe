@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__
-#define __COMFORTABLE_SWIPE__
+#ifndef __COMFORTABLE_SWIPE__service_debug__
+#define __COMFORTABLE_SWIPE__service_debug__
 
 /*
 Comfortable Swipe
@@ -19,24 +19,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "index.hpp"
+#include <cstdlib> // std::system
 
-/**
- * Make sure to include all implementation (.cpp) files below to be ready for export.
- */
+namespace comfortable_swipe::service
+{
+    /**
+     * Debugs output from `libinput debug-events`.
+     */
+    void debug()
+    {
+        (void) std::system("stdbuf -oL -e0 libinput debug-events");
+    }
+}
 
-#include "gesture/xdo_gesture.cpp"
-#include "gesture/swipe_gesture.cpp"
-#include "gesture/swipe_gesture.regex.cpp"
-#include "service/autostart.cpp"
-#include "service/buffer.cpp"
-#include "service/debug.cpp"
-#include "service/help.cpp"
-#include "service/restart.cpp"
-#include "service/start.cpp"
-#include "service/stop.cpp"
-#include "util/autostart_filename.cpp"
-#include "util/conf_filename.cpp"
-#include "util/read_config_file.cpp"
-
-#endif /* __COMFORTABLE_SWIPE__ */
+#endif /* __COMFORTABLE_SWIPE__service_debug__ */
