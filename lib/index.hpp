@@ -36,6 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gesture/xdo_gesture.h"
 #include "gesture/swipe_gesture.h"
+#include "gesture/pinch_gesture.h"
 extern "C"
 {
     namespace comfortable_swipe

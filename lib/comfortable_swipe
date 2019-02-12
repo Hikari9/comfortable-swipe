@@ -28,6 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gesture/xdo_gesture.cpp"
 #include "gesture/swipe_gesture.cpp"
 #include "gesture/swipe_gesture.regex.cpp"
+#include "gesture/pinch_gesture.cpp"
+#include "gesture/pinch_gesture.regex.cpp"
 #include "service/autostart.cpp"
 #include "service/buffer.cpp"
 #include "service/debug.cpp"

@@ -80,11 +80,21 @@ namespace comfortable_swipe::gesture
         const float EPSILON = this->threshold;
         if (delta_radius > EPSILON)
         {
-            // TODO: pinch out
+            if (this->previous_gesture != 0)
+            {
+                // TODO
+                std::cout << "PINCH OUT" << std::endl;
+                this->previous_gesture = 0;
+            }
         }
         else if (delta_radius < -EPSILON)
         {
-            // TODO: pinch in
+            if (this->previous_gesture != 1)
+            {
+                // TODO
+                std::cout << "PINCH IN" << std::endl;
+                this->previous_gesture = 1;
+            }
         }
     }
 

@@ -1,2 +1,5 @@
 # C++ generated headers
 *.gch
+
+# IDE-specific
+.vscode

@@ -21,12 +21,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "pinch_gesture.h"
+
 namespace comfortable_swipe::gesture
 {
     /**
      * Regex pattern for the libinput entry for start of pinch.
      * Extracts one match for the number of fingers used during the pionch.
-     * 
+     *
      * eg. event15  GESTURE_PINCH_BEGIN +34.33s 3
      *                                          ^
      *                                        fingers
@@ -43,7 +45,7 @@ namespace comfortable_swipe::gesture
     /**
      * Regex pattern for the libinput entry for the end of swipe.
      * Extracts one match for the number of fingers used during the swipe.
-     * 
+     *
      * eg. event15  GESTURE_PINCH_END +35.03s   3
      *                                          ^
      *                                        fingers
@@ -67,7 +69,7 @@ namespace comfortable_swipe::gesture
      * Regex pattern for the libinput entry for during a pinch.
      * Extracts number of fingers used and the speed (normal and accelerated) of the pinch.
      * Extracts radius and rotational velocity of the pinch motion as well.
-     * 
+     *
      * eg.  event8   GESTURE_PINCH_UPDATE +128.15s  3 -1.64/ 2.08 (-4.43/ 5.62 unaccelerated)  1.40 @ -0.14
      *                                              ^    ^    ^      ^     ^                    ^       ^
      *                                          fingers  dx   dy    udx   udy                 radius  omega

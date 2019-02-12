@@ -46,15 +46,23 @@ namespace comfortable_swipe::service
             config["down4"].c_str()
         );
 
+        comfortable_swipe::gesture::pinch_gesture pinch_gesture_handler
+        (
+            config.count("threshold") ? std::stof(config["threshold"]) : 0.0,
+            config["pinch_in3"].c_str(),
+            config["pinch_in4"].c_str(),
+            config["pinch_out3"].c_str(),
+            config["pinch_out4"].c_str()
+        );
+
         // prepare data containers
-        static const int MAX_LINE_LENGTH = 256;
-        static char data[MAX_LINE_LENGTH];
+        std::array<char, 256> line;
 
         // start reading lines from input one by one
-        while (fgets_unlocked(data, MAX_LINE_LENGTH, stdin) != NULL)
+        while (fgets_unlocked(line.data(), line.size(), stdin) != NULL)
         {
-            // attempt to parse swipe gestures
-            swipe_gesture_handler.parse_line(data);
+            swipe_gesture_handler.parse_line(line.data()) ||
+            pinch_gesture_handler.parse_line(line.data());
         }
     }
 }
