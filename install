@@ -17,6 +17,20 @@ abort () {
     exec echo "Installation aborted"
 }
 sudo mkdir -p $(dirname $CONF_PATH) || abort
+
+# check if "-y" or "--yes" is passed as an argument
+YES=false
+while test $# -gt 0
+do
+    case "$1" in
+        -y) YES=true
+            ;;
+        --yes) YES=true
+            ;;
+    esac
+    shift
+done
+
 sudo chown $USER $(dirname $CONF_PATH)
 if [ ! -f $CONF_PATH ]; then
     if [ ! -f $OLD_CONF_PATH ]; then
@@ -30,15 +44,17 @@ if [ ! -f $CONF_PATH ]; then
 else
     # config file found, ask user if overwrite
     echo "Old conf file found in $CONF_PATH"
-    read -r -p "Keep the old conf file? (default: yes) [Y/n] " response
-    response=${response,,} # tolower
-    if [[ "$response" =~ ^(no|n)$ ]]; then
-        read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
-        response=${response,,}
-        if [[ "$response" =~ ^(yes|y)$ ]]; then
-            cat $DCONF_PATH > $CONF_PATH || abort
-        else
-            abort
+    if [ $YES == false ]; then
+        read -r -p "Keep the old conf file? (default: yes) [Y/n] " response
+        response=${response,,} # tolower
+        if [[ "$response" =~ ^(no|n)$ ]]; then
+            read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
+            response=${response,,}
+            if [[ "$response" =~ ^(yes|y)$ ]]; then
+                cat $DCONF_PATH > $CONF_PATH || abort
+            else
+                abort
+            fi
         fi
     fi
 fi
