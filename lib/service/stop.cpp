@@ -24,6 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdexcept> // std::runtime_error
 #include <unistd.h> // popen, pclose, getpid
+#include <memory> // std::unique_ptr
+#include <array> // std::array
+#include <cstdio> // FILE
 
 namespace comfortable_swipe::service
 {
@@ -34,24 +37,22 @@ namespace comfortable_swipe::service
     {
 
         // read all service names from process (pgrep)
-        char* buffer = new char[20];
-        FILE* pipe = popen("pgrep -f comfortable-swipe", "r");
-        
+        std::array<char, 128> buffer;
+        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("pgrep -f comfortable-swipe", "r"), pclose);
+
         // make sure pipe exists
-        if (pipe == NULL)
-        {
+        if (!pipe)
             throw std::runtime_error("stop command failed");
-        }
 
         // buffer what to kill
         std::string kill = "kill";
 
         // read until end of line
-        while (!std::feof(pipe))
+        while (!std::feof(pipe.get()))
         {
-            if (std::fgets(buffer, 20, pipe) != NULL)
+            if (std::fgets(buffer.data(), buffer.size(), pipe.get()) != NULL)
             {
-                int pid = std::atoi(buffer);
+                int pid = std::atoi(buffer.data());
                 if (pid != getpid())
                 {
                     kill += " ";
@@ -62,11 +63,6 @@ namespace comfortable_swipe::service
 
         // run "kill {pid1} {pid2}..."
         (void) std::system(kill.data());
-        delete[] buffer;
-
-        // close the pipe 
-        pclose(pipe);
-
     }
 }
 
