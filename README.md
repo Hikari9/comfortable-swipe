@@ -45,6 +45,10 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
     ```
     comfortable-swipe restart
     ```
+6. You can check the status of your application by running
+    ```
+    comfortable-swipe status
+    ```
 
 ## Configurations
 Comfortable swipe makes use of keyboard shortcuts for configurations. The configuration file is located at `/usr/local/share/comfortable-swipe/comfortable-swipe.conf`. Make sure to run `comfortable-swipe restart` after making changes.
@@ -80,7 +84,13 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 
 ## Debugging
 
-You can check your touchpad driver by running `comfortable-swipe debug`. This is an alias of `libinput debug-events`. This logs all gestures you make on your touchpad, along with other input-based events that can be captured by libinput.
+You can check your touchpad driver by running
+
+```bash
+comfortable-swipe debug
+```
+
+This is an alias of `libinput debug-events`. This logs all gestures you make on your touchpad, along with other input-based events that can be captured by libinput.
 
 A working swipe gesture will show the following:
 

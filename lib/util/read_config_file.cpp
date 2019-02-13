@@ -22,32 +22,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <map> // std::map
 #include <string> // std::string
 #include <fstream> // std::ifstream
-#include <iostream> // std::cerr, std::endl, std::getline
+#include <sstream> // std::ostringstream
+#include <iostream> // std::endl, std::getline
 #include <cstdlib> // exit
 #include <cctype> // std::isspace
+#include <stdexcept> // std::runtime_error
 
 namespace comfortable_swipe::util
 {
     /**
      * A utility method for reading the config file.
-     * 
+     *
      * @param filename (const char*) the path of the config file.
      */
     std::map<std::string, std::string> read_config_file(const char* filename)
     {
-        
+
         std::map<std::string, std::string> conf;
         std::ifstream fin(filename);
 
         if (!fin.is_open())
         {
-            std::cerr << "file \"" << filename << "\" does not exist!" << std::endl;
-            exit(1);
+            throw std::runtime_error("config file does not exist");
         }
 
         static std::string line, token[2];
         int line_number = 0;
-        
+
         while (std::getline(fin, line))
         {
             ++line_number;
@@ -55,7 +56,7 @@ namespace comfortable_swipe::util
             token[1].clear();
             int length = line.length();
             int equal_flag = 0;
-            
+
             // tokenize comfig config
             for (int i = 0; i < length; ++i)
             {
@@ -65,9 +66,10 @@ namespace comfortable_swipe::util
                 {
                     if (++equal_flag > 1)
                     {
-                        std::cerr << "error in conf file " << filename << std::endl;
-                        std::cerr << "multiple equal signs in line " << line_number << std::endl;
-                        exit(1);
+                        std::ostringstream stream;
+                        stream << "error in conf file " << filename << std::endl;
+                        stream << "multiple equal signs in line " << line_number << std::endl;
+                        throw std::runtime_error(stream.str());
                     }
                 }
                 else if (!std::isspace(line[i]))
@@ -84,16 +86,17 @@ namespace comfortable_swipe::util
             // no equal sign found in non-empty line
             if (equal_flag == 0)
             {
-                std::cerr << "error in conf file: " << filename << std::endl;
-                std::cerr << "equal sign expected in line " << line_number << std::endl;
-                exit(1);
+                std::ostringstream stream;
+                stream << "error in conf file: " << filename << std::endl;
+                stream << "equal sign expected in line " << line_number << std::endl;
+                throw std::runtime_error(stream.str());
             }
 
             // equal sign found, add to tokens
             if (token[1].length() > 0)
                 conf[token[0]] = token[1];
         }
-        
+
         return conf;
     }
 }

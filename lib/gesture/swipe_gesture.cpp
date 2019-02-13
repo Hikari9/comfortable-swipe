@@ -198,14 +198,14 @@ namespace comfortable_swipe::gesture
     const int swipe_gesture::MSK_VERTICAL = 4;
     const int swipe_gesture::FRESH = -1;
     const char * const swipe_gesture::command_map[8] = {
-        "left 3",
-        "left 4",
-        "right 3",
-        "right 4",
-        "up 3",
-        "up 4",
-        "down 3",
-        "down 4"
+        "left3",
+        "left4",
+        "right3",
+        "right4",
+        "up3",
+        "up4",
+        "down3",
+        "down4"
     };
 }
 
