@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace comfortable_swipe::service
 {
     /**
-     * Restarts the comfortable-swipe service.
+     * Prints the status of comfortable-swipe.
      */
     void status()
     {
