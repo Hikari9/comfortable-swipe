@@ -54,6 +54,7 @@ extern "C"
             void help();
             void restart();
             void start();
+            void status();
             void stop();
         }
     }

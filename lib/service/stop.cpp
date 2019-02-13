@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <unistd.h> // popen, pclose, getpid
 #include <memory> // std::unique_ptr
 #include <array> // std::array
+#include <cstdlib> // std::atoi
 #include <cstdio> // FILE, std::feof, std::fgets
 
 namespace comfortable_swipe::service

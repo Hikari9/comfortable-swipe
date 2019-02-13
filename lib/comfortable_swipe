@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "service/help.cpp"
 #include "service/restart.cpp"
 #include "service/start.cpp"
+#include "service/status.cpp"
 #include "service/stop.cpp"
 #include "util/autostart_filename.cpp"
 #include "util/conf_filename.cpp"

@@ -39,6 +39,7 @@ namespace comfortable_swipe::service
         std::puts("buffer     - parses output of libinput debug-events");
         std::puts("help       - shows the help dialog");
         std::puts("debug      - logs raw output from input events taken from libinput");
+        std::puts("status     - checks status of program and autostart");
         std::puts("");
         std::printf("Configuration file can be found in %s\n", conf_filename());
     }
