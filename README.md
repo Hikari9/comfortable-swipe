@@ -41,17 +41,21 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
     ```
     comfortable-swipe autostart
     ```
-5. _Optional_: Change [configurations](#configurations) (see below). After making changes, run
-    ```
-    comfortable-swipe restart
-    ```
-6. You can check the status of your application by running
+5. Check the status of your application by running
     ```
     comfortable-swipe status
     ```
 
 ## Configurations
-Comfortable swipe makes use of keyboard shortcuts for configurations. The configuration file is located at `/usr/local/share/comfortable-swipe/comfortable-swipe.conf`. Make sure to run `comfortable-swipe restart` after making changes.
+Comfortable swipe makes use of keyboard shortcuts for configurations. Edit by running
+```
+nano $(comfortable-swipe config)
+```
+
+Make sure to run after making changes:
+```
+comfortable-swipe restart
+```
 
 Property  | Description | Default Value | Default Behavior
 --------- | ----------- | -------------- | -----
