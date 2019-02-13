@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cstdio> // std::fgets_unlocked, stdin
+#include <cstdio> // fgets_unlocked, stdin
 #include "../index.hpp"
 
 /**
@@ -47,14 +47,13 @@ namespace comfortable_swipe::service
         );
 
         // prepare data containers
-        static const int MAX_LINE_LENGTH = 256;
-        static char data[MAX_LINE_LENGTH];
+        std::array<char, 256> line;
 
         // start reading lines from input one by one
-        while (fgets_unlocked(data, MAX_LINE_LENGTH, stdin) != NULL)
+        while (fgets_unlocked(line.data(), line.size(), stdin) != NULL)
         {
             // attempt to parse swipe gestures
-            swipe_gesture_handler.parse_line(data);
+            swipe_gesture_handler.parse_line(line.data());
         }
     }
 }

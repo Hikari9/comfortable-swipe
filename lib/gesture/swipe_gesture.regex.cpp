@@ -19,12 +19,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "swipe_gesture.h"
+
 namespace comfortable_swipe::gesture
 {
     /**
      * Regex pattern for the libinput entry for start of swipe.
      * Extracts one match for the number of fingers used during the swipe.
-     * 
+     *
      * eg. event15  GESTURE_SWIPE_BEGIN +34.33s 3
      *                                          ^
      *                                        fingers
@@ -41,7 +43,7 @@ namespace comfortable_swipe::gesture
     /**
      * Regex pattern for the libinput entry for the end of swipe.
      * Extracts one match for the number of fingers used during the swipe.
-     * 
+     *
      * eg. event15  GESTURE_SWIPE_END +35.03s   3
      *                                          ^
      *                                        fingers
@@ -64,7 +66,7 @@ namespace comfortable_swipe::gesture
     /**
      * Regex pattern for the libinput entry for during a swipe.
      * Extracts number of fingers used and the speed (normal and accelerated) of the swipe.
-     * 
+     *
      * eg. event15  GESTURE_SWIPE_UPDATE +34.70s    3 -0.12/ 4.99 (-0.33/13.50 unaccelerated)
      *                                              ^    ^    ^      ^     ^
      *                                          fingers  dx   dy    udx   udy

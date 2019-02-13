@@ -116,10 +116,10 @@ namespace comfortable_swipe::gesture
             if (this->previous_gesture == swipe_gesture::FRESH
                 || this->previous_gesture == (mask ^ swipe_gesture::MSK_POSITIVE))
             {
+                xdo_send_keysequence_window(this->xdo, CURRENTWINDOW, swipe_gesture::commands[mask], 0);
                 this->x = this->y = 0;
                 this->previous_gesture = mask;
                 std::cout << "SWIPE " << swipe_gesture::command_map[mask] << std::endl;
-                xdo_send_keysequence_window(xdo, CURRENTWINDOW, swipe_gesture::commands[mask], 0);
             }
         }
     }

@@ -54,6 +54,9 @@ int main(int argc, char** args)
         else if (arg == "debug")
             comfortable_swipe::service::debug();
 
+        else if (arg == "status")
+            comfortable_swipe::service::status();
+
         else /* if (arg == "help") */
             comfortable_swipe::service::help();
     }
