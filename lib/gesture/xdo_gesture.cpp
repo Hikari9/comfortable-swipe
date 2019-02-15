@@ -24,6 +24,8 @@ extern "C"
     #include <xdo.h> // xdo, xdo_new
 }
 
+#include "xdo_gesture.h"
+
 namespace comfortable_swipe::gesture
 {
     /**
