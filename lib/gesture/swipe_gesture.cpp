@@ -87,7 +87,8 @@ namespace comfortable_swipe::gesture
             ? 1.00f
             : 0.01f; // square root of 1/10
         static const float EPSILON = 1e-6f;
-        if (this->x * this->x + this->y * this->y > this->threshold_squared * scale - EPSILON)
+        if (this->x * this->x + this->y * this->y
+            > this->threshold_squared * scale + EPSILON)
         {
             int mask = 0;
             if (this->fingers == 3) mask |= swipe_gesture::MSK_THREE_FINGERS;
