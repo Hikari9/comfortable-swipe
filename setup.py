@@ -15,7 +15,7 @@ __URL__ = 'https://github.com/Hikari9/comfortable-swipe-ubuntu'
 
 NAME = 'comfortable-swipe'
 PYTHON_NAME = NAME.replace('-', '_')
-VERSION = '1.1.0'
+VERSION = '1.1.0-beta'
 PROGRAM = os.path.join(__BIN__, NAME)
 CONFIG = os.path.join(
     _SHARE_
@@ -109,6 +109,9 @@ try:
         # toggle autostart
         os.chdir(os.getenv('HOME'))
         from comfortable_swipe import service
+        service.autostart()
+        service.autostart()
+
 
 finally:
     # move working directory back to where it was before
