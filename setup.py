@@ -76,7 +76,7 @@ try:
         url=__URL__,
         zip_safe=True,
         packages=find_packages(),
-        entry_points=dict(console_scripts=['comfortable-swipe=comfortable_swipe:main']),
+        entry_points=dict(console_scripts=['{}=comfortable_swipe:main'.format(NAME)]),
         ext_modules=extensions,
         # include program to sources so it will be removed on uninstall
     )
@@ -111,6 +111,8 @@ try:
         from comfortable_swipe import service
         service.autostart()
         service.autostart()
+
+        print('\nTry running "{} start" to test'.format(NAME))
 
 
 finally:
