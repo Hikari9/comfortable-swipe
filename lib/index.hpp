@@ -28,6 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __COMFORTABLE_SWIPE__CONFIG__ "/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
 #endif /* __COMFORTABLE_SWIPE__CONFIG__ */
 
+#ifndef __COMFORTABLE_SWIPE__VERSION__
+#error __COMFORTABLE_SWIPE__VERSION__ must be defined.
+#endif /* __COMFORTABLE_SWIPE__VERSION__ */
+
 #include <map> // std::map
 #include <string> // std::string
 
