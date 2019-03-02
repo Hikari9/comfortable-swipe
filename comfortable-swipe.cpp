@@ -21,6 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string> // std::string
 #include "lib/comfortable_swipe"
 
+/* A FORWARD DECLARATION */
+int main(int argc, char** args);
+
+/* Import python module here */
+#include "comfortable-swipe.python.cpp"
+
 /* MAIN DRIVER FUNCTION */
 
 int main(int argc, char** args)

@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.extension import Extension
 
 __CWD__ = os.getcwd()
@@ -10,6 +10,16 @@ NAME = 'comfortable-swipe'
 VERSION = '1.1.0'
 PROGRAM = os.path.join('/usr/local/bin', NAME)
 CONFIG = os.path.join(PROGRAM, 'comfortable-swipe.conf')
+
+# for C++ library
+cpp_sources = ['comfortable-swipe.cpp']
+cpp_macros = dict(
+    __COMFORTABLE_SWIPE__PYTHON__='',
+    __COMFORTABLE_SWIPE__PYTHON_MODULE_NAME__='"{}"'.format(NAME.replace('-', '_')),
+    __COMFORTABLE_SWIPE__PROGRAM__='"{}"'.format(PROGRAM),
+    __COMFORTABLE_SWIPE__VERSION__='"{}"'.format(VERSION),
+    __COMFORTABLE_SWIPE__CONFIG__='"{}"'.format(CONFIG)
+)
 
 try:
     # make sure working directory is here
@@ -23,20 +33,13 @@ try:
     with open('LICENSE', 'r') as LICENSE_file:
         LICENSE = LICENSE_file.read()
 
-    # have a dictionary of macros
-    macros = dict(
-        __COMFORTABLE_SWIPE__PROGRAM__=f'"{PROGRAM}"',
-        __COMFORTABLE_SWIPE__VERSION__=f'"{VERSION}"',
-        __COMFORTABLE_SWIPE__CONFIG__=f'"{CONFIG}"'
-    )
-
     # read C++ library for comfortable swipe
     comfortable_swipe = Extension(
-        name='comfortable_swipe',
-        define_macros=list(macros.items()),
+        name=NAME.replace('-', '_'),
+        define_macros=list(cpp_macros.items()),
         libraries=['xdo'],
         include_dirs=['/usr/local/lib'],
-        sources=['comfortable-swipe.cpp'],
+        sources=cpp_sources,
         extra_compile_args=['-O2', '-Wno-unused-result']
 
     )
@@ -52,8 +55,10 @@ try:
         author_email='thericotiongson@gmail.com',
         url=__URL__,
         # import external modules (aka. C++)
-        ext_modules=[comfortable_swipe],
+        packages=find_packages(),
+        ext_modules=[comfortable_swipe]
     )
+
 
 finally:
     # move working directory back to where it was before
