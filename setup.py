@@ -1,7 +1,11 @@
+from __future__ import print_function
+
 import os
 import sys
+from shutil import copyfile
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
+from setuptools.command.install import install
 
 __BIN__ = os.path.dirname(sys.executable)
 _SHARE_ = os.path.join(os.path.dirname(__BIN__), 'share')
@@ -13,7 +17,23 @@ NAME = 'comfortable-swipe'
 PYTHON_NAME = NAME.replace('-', '_')
 VERSION = '1.1.0'
 PROGRAM = os.path.join(__BIN__, NAME)
-CONFIG = os.path.join(_SHARE_, NAME, NAME + '.conf')
+CONFIG = os.path.join(
+    _SHARE_
+    if os.path.dirname(os.path.basename(_SHARE_)) == 'local'
+    else os.path.join(
+        os.path.dirname(os.path.dirname(_SHARE_)),
+        'local',
+        'share'
+    ), NAME + '.conf'
+)
+
+# prioritize the higher indices
+conf_paths = [
+    os.path.join(__DIR__, 'defaults.conf'),
+    os.path.join(os.getenv('HOME'), '.config', 'comfortable-swipe', 'comfortable-swipe.conf'),
+    os.path.join('usr', 'local', 'share', 'comfortable-swipe', 'comfortable-swipe.conf'),
+    CONFIG
+]
 
 # for C++ library
 cpp_macros = dict(
@@ -25,10 +45,6 @@ cpp_macros = dict(
 try:
     # make sure working directory is here
     os.chdir(__DIR__)
-
-    # make sure paths to program and config exist
-    os.makedirs(os.path.dirname(PROGRAM), exist_ok=True)
-    os.makedirs(os.path.dirname(CONFIG), exist_ok=True)
 
     # save README as long_description
     with open('README.md', 'r') as README_file:
@@ -58,11 +74,41 @@ try:
         author='Rico Tiongson',
         author_email='thericotiongson@gmail.com',
         url=__URL__,
+        zip_safe=True,
         packages=find_packages(),
-        scripts=['scripts/comfortable-swipe'],
-        ext_modules=extensions
+        entry_points=dict(console_scripts=['comfortable-swipe=comfortable_swipe:main']),
+        ext_modules=extensions,
+        # include program to sources so it will be removed on uninstall
     )
 
+    # create directories if they don't exist yet
+    if 'install' in sys.argv:
+        os.path.exists(os.path.dirname(PROGRAM)) or os.makedirs(os.path.dirname(PROGRAM))
+        os.path.exists(os.path.dirname(CONFIG)) or os.makedirs(os.path.dirname(CONFIG))
+
+        # copy any of the old config files
+        conf_files = [path for path in conf_paths if os.path.exists(path) and os.path.isfile(path)]
+        print('using configuration file at', conf_files[-1])
+
+        if conf_files[-1] != CONFIG:
+            # new installation or upgrading from old version, copy to new location
+            copyfile(conf_files[-1], CONFIG)
+
+            if conf_files[-1] == os.path.join(__DIR__, 'defaults.conf'):
+                # new installation - copy default configuration
+                print('copying configuration file to', CONFIG)
+
+            else:
+                # upgrading - delete the deprecated config file (failsafe)
+                try:
+                    os.remove(conf_files[-1])
+                    print('moving deprecated configuration file to', CONFIG)
+                except:
+                    pass
+
+        # toggle autostart
+        os.chdir(os.getenv('HOME'))
+        from comfortable_swipe import service
 
 finally:
     # move working directory back to where it was before
