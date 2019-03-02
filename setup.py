@@ -13,11 +13,7 @@ PROGRAM = os.path.join('/usr/local/bin', NAME)
 CONFIG = os.path.join('/usr/local/share', NAME, NAME + '.conf')
 
 # for C++ library
-cpp_sources = ['comfortable-swipe.cpp']
 cpp_macros = dict(
-    __COMFORTABLE_SWIPE__PYTHON__='',
-    __COMFORTABLE_SWIPE__BOOST_PYTHON__='',
-    __COMFORTABLE_SWIPE__PYTHON_MODULE_NAME__='"{}"'.format(NAME.replace('-', '_')),
     __COMFORTABLE_SWIPE__PROGRAM__='"{}"'.format(PROGRAM),
     __COMFORTABLE_SWIPE__VERSION__='"{}"'.format(VERSION),
     __COMFORTABLE_SWIPE__CONFIG__='"{}"'.format(CONFIG)
@@ -36,17 +32,14 @@ try:
         LICENSE = LICENSE_file.read()
 
     # read C++ libraries for comfortable swipe
-    extension_names = ['gesture', 'service', 'util']
-    extensions = []
-
-    for extension_name in extension_names:
-        extensions.append(Extension(
-            name='{}.{}'.format(PYTHON_NAME, extension_name),
-            define_macros=list(cpp_macros.items()),
-            sources=['lib/__index__.cpp'],
-            extra_compile_args=['-O2', '-Wno-unused-result'],
-            libraries=['xdo', 'boost_python']
-        ))
+    extension_names = ['service', 'util']
+    extensions = [Extension(
+        name='{}.{}'.format(PYTHON_NAME, extension_name),
+        define_macros=list(cpp_macros.items()),
+        sources=['lib/__python__.cpp'],
+        extra_compile_args=['-O2', '-Wno-unused-result'],
+        libraries=['xdo']
+    ) for extension_name in extension_names]
 
     # setup python script
     setup(
@@ -58,7 +51,6 @@ try:
         author='Rico Tiongson',
         author_email='thericotiongson@gmail.com',
         url=__URL__,
-        # import external modules (aka. C++)
         packages=find_packages(),
         ext_modules=extensions
     )
