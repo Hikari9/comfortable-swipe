@@ -19,8 +19,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "../util/__index__.hpp"
 #include <cstdio> // std::puts, std::printf
-#include "../index.hpp"
 
 namespace comfortable_swipe::service
 {

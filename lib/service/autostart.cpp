@@ -19,12 +19,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "../util/__index__.hpp"
 #include <iostream> // std::cerr, std::cout, std::endl
 #include <fstream> // std::ifstream, std::ofstream
 #include <string> // std::string
 #include <cstdio> // std::remove
 #include <cstdlib> // std::system
-#include "../index.hpp"
 
 namespace comfortable_swipe::service
 {
