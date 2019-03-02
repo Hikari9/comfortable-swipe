@@ -81,38 +81,42 @@ try:
         # include program to sources so it will be removed on uninstall
     )
 
-    # create directories if they don't exist yet
-    if 'install' in sys.argv:
-        os.path.exists(os.path.dirname(PROGRAM)) or os.makedirs(os.path.dirname(PROGRAM))
-        os.path.exists(os.path.dirname(CONFIG)) or os.makedirs(os.path.dirname(CONFIG))
+    class Install(install):
+        def run(self):
+            # perform original run command
+            install.run(self)
 
-        # copy any of the old config files
-        conf_files = [path for path in conf_paths if os.path.exists(path) and os.path.isfile(path)]
-        print('using configuration file at', conf_files[-1])
+            # create program/config directories
+            os.path.exists(os.path.dirname(PROGRAM)) or os.makedirs(os.path.dirname(PROGRAM))
+            os.path.exists(os.path.dirname(CONFIG)) or os.makedirs(os.path.dirname(CONFIG))
 
-        if conf_files[-1] != CONFIG:
-            # new installation or upgrading from old version, copy to new location
-            copyfile(conf_files[-1], CONFIG)
+            # copy any of the old config files
+            conf_files = [path for path in conf_paths if os.path.exists(path) and os.path.isfile(path)]
+            print('using configuration file at', conf_files[-1])
 
-            if conf_files[-1] == os.path.join(__DIR__, 'defaults.conf'):
-                # new installation - copy default configuration
-                print('copying configuration file to', CONFIG)
+            if conf_files[-1] != CONFIG:
+                # new installation or upgrading from old version, copy to new location
+                copyfile(conf_files[-1], CONFIG)
 
-            else:
-                # upgrading - delete the deprecated config file (failsafe)
-                try:
-                    os.remove(conf_files[-1])
-                    print('moving deprecated configuration file to', CONFIG)
-                except:
-                    pass
+                if conf_files[-1] == os.path.join(__DIR__, 'defaults.conf'):
+                    # new installation - copy default configuration
+                    print('copying configuration file to', CONFIG)
 
-        # toggle autostart
-        os.chdir(os.getenv('HOME'))
-        from comfortable_swipe import service
-        service.autostart()
-        service.autostart()
+                else:
+                    # upgrading - delete the deprecated config file (failsafe)
+                    try:
+                        os.remove(conf_files[-1])
+                        print('moving deprecated configuration file to', CONFIG)
+                    except:
+                        pass
 
-        print('\nTry running "{} start" to test'.format(NAME))
+            # toggle autostart
+            os.chdir(os.getenv('HOME'))
+            from comfortable_swipe import service
+            service.autostart()
+            service.autostart()
+
+            print('\nTry running "{} start" to test'.format(NAME))
 
 
 finally:
