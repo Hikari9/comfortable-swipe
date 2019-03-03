@@ -1,4 +1,5 @@
 import os
+import sys
 
 from distutils.spawn import find_executable
 
@@ -23,4 +24,4 @@ def autostart_template():
   autostart_template_filename = os.path.join(__RES__, __EXE__ + '.desktop')
   with open(autostart_template_filename, 'r') as file:
     contents = file.read()
-  return contents.replace('Exec=' + __EXE__, 'Exec=' + find_executable(__EXE__))
+  return contents.replace('Exec=' + __EXE__, 'Exec={} {}'.format(sys.executable, find_executable(__EXE__)))
