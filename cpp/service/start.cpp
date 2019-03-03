@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "_index.hpp"
+#include <iostream> // std::cin, std::cout, std::ios
 #include <cstdlib> // std::system
 #include <unistd.h> // pipe, fork, perror, exit
 
@@ -32,6 +33,11 @@ namespace comfortable_swipe::service
      */
     void start()
     {
+        std::ios::sync_with_stdio(false);
+        std::cin.tie(0);
+        std::cout.tie(0);
+        std::cout.flush();
+
         // redirect stdout to stdin
         int fd[2];
         pipe(fd); // create the pipes

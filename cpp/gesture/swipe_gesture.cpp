@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream> // std::cout, std::endl
 #include <string> // std::stoi, std::stof
 #include <regex> // std::regex, std::regex_match, std::cmatch
+#include <ctime>
 #include "swipe_gesture.h"
 
 extern "C"
@@ -50,7 +51,8 @@ namespace comfortable_swipe::gesture
     ):
         comfortable_swipe::gesture::xdo_gesture(),
         threshold_squared(threshold*threshold),
-        commands(new const char*[8]{left3, left4, right3, right4, up3, up4, down3, down4})
+        commands(new const char*[8]{left3, left4, right3, right4, up3, up4, down3, down4}),
+        flag_swiping(false)
     {
         // improve responsiveness of first gesture by pre-empting xdotool runtime
         xdo_get_mouse_location(this->xdo, &this->ix, &this->iy, &this->screen_num);
@@ -139,8 +141,6 @@ namespace comfortable_swipe::gesture
      */
     bool swipe_gesture::parse_line(const char * line)
     {
-
-        // prepare regex matchers (will only load at most once)
         static const std::regex gesture_swipe_begin(swipe_gesture::GESTURE_BEGIN_REGEX_PATTERN);
         static const std::regex gesture_swipe_update(swipe_gesture::GESTURE_UPDATE_REGEX_PATTERN);
         static const std::regex gesture_swipe_end(swipe_gesture::GESTURE_END_REGEX_PATTERN);
