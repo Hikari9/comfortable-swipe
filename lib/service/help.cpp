@@ -38,7 +38,7 @@ namespace comfortable_swipe::service
         std::puts("autostart  - automatically run on startup (toggleable)");
         std::puts("buffer     - parses output of libinput debug-events");
         std::puts("help       - shows the help dialog");
-        std::puts("config     - locates the config file [/usr/share/comfortable-swipe/comfortable-swipe.conf]");
+        std::puts("config     - locates the config file");
         std::puts("debug      - logs raw output from input events taken from libinput");
         std::puts("status     - checks status of program and autostart");
         std::puts("");

@@ -45,7 +45,7 @@ namespace comfortable_swipe::service
                     << std::endl;
             else
                 std::cout << "Autostart switched off" << std::endl;
-        } 
+        }
         else {
             // file not found, create it
             int result = std::system(("mkdir -p $(dirname " + path + ")").data());
@@ -58,9 +58,7 @@ namespace comfortable_swipe::service
                 fout <<
                     "[Desktop Entry]\n"
                     "Type=Application\n"
-                    "Exec=bash -c \""
-                        __COMFORTABLE_SWIPE__PROGRAM__
-                        " start\"\n"
+                    "Exec=comfortable-swipe start\n"
                     "Hidden=false\n"
                     "NoDisplay=false\n"
                     "X-GNOME-Autostart-enabled=true\n"

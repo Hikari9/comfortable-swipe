@@ -5,10 +5,11 @@ import sys
 from shutil import copyfile
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
+from setuptools.command.develop import develop
 from setuptools.command.install import install
 
 __BIN__ = os.path.dirname(sys.executable)
-_SHARE_ = os.path.join(os.path.dirname(__BIN__), 'share')
+__SHARE__ = os.path.join(sys.prefix, 'local', 'share')
 __CWD__ = os.getcwd()
 __DIR__ = os.path.abspath(os.path.dirname(__file__))
 __URL__ = 'https://github.com/Hikari9/comfortable-swipe-ubuntu'
@@ -16,35 +17,27 @@ __URL__ = 'https://github.com/Hikari9/comfortable-swipe-ubuntu'
 NAME = 'comfortable-swipe'
 PYTHON_NAME = NAME.replace('-', '_')
 VERSION = '1.1.0-beta'
-PROGRAM = os.path.join(__BIN__, NAME)
-CONFIG = os.path.join(
-    _SHARE_
-    if os.path.dirname(os.path.basename(_SHARE_)) == 'local'
-    else os.path.join(
-        os.path.dirname(os.path.dirname(_SHARE_)),
-        'local',
-        'share'
-    ), NAME + '.conf'
-)
-
-# prioritize the higher indices
-conf_paths = [
-    os.path.join(__DIR__, 'defaults.conf'),
-    os.path.join(os.getenv('HOME'), '.config', 'comfortable-swipe', 'comfortable-swipe.conf'),
-    os.path.join('usr', 'local', 'share', 'comfortable-swipe', 'comfortable-swipe.conf'),
-    CONFIG
-]
-
-# for C++ library
-cpp_macros = dict(
-    __COMFORTABLE_SWIPE__PROGRAM__='"{}"'.format(PROGRAM),
-    __COMFORTABLE_SWIPE__VERSION__='"{}"'.format(VERSION),
-    __COMFORTABLE_SWIPE__CONFIG__='"{}"'.format(CONFIG)
-)
 
 try:
     # make sure working directory is here
     os.chdir(__DIR__)
+
+    # assign program variables
+    CONFIG = os.path.join(__SHARE__, NAME, NAME + '.conf')
+
+    # prioritize the higher indices
+    conf_paths = [
+        os.path.join(__DIR__, 'defaults.conf'),
+        os.path.join(os.getenv('HOME'), '.config', 'comfortable-swipe', 'comfortable-swipe.conf'),
+        os.path.join('/usr/local/share', 'comfortable-swipe', 'comfortable-swipe.conf'),
+        CONFIG
+    ]
+
+    # for C++ library
+    cpp_macros = dict(
+        __COMFORTABLE_SWIPE__VERSION__='"{}"'.format(VERSION),
+        __COMFORTABLE_SWIPE__CONFIG__='"{}"'.format(CONFIG)
+    )
 
     # save README as long_description
     with open('README.md', 'r') as README_file:
@@ -64,8 +57,87 @@ try:
         libraries=['xdo']
     ) for extension_name in extension_names]
 
+
+    def pre_install(self):
+        pass
+
+
+    def post_install(self):
+        # create program/config directories
+        if not os.path.exists(os.path.dirname(CONFIG)):
+            os.makedirs(os.path.dirname(CONFIG))
+
+        # copy any of the old config files
+        conf_files = [path for path in conf_paths if os.path.exists(path) and os.path.isfile(path)]
+        print('Using configuration file at', conf_files[-1])
+
+        if conf_files[-1] != CONFIG:
+            # new installation or upgrading from old version, copy to new location
+            copyfile(conf_files[-1], CONFIG)
+
+            if conf_files[-1] == os.path.join(__DIR__, 'defaults.conf'):
+                # new installation - copy default configuration
+                print('Copying configuration file to', CONFIG)
+
+            else:
+                # upgrading - delete the deprecated config file (failsafe)
+                print('warning: depcrecated configuration file at', conf_files[-1])
+                print('         you have to remove this manually')
+
+        # toggle autostart
+        os.chdir(os.getenv('HOME'))
+        from comfortable_swipe import service
+        service.autostart()
+        service.autostart()
+
+        print('\nInstallation successful\nTry running "{} start"'.format(NAME))
+
+
+    def pre_uninstall(self):
+        # remove autostart config
+        from comfortable_swipe import util
+        autostart_filename = str(util.autostart_filename)
+        if os.path.exists(autostart_filename):
+            print('Removing autostart', autostart_filename)
+            os.remove(autostart_filename)
+
+
+    def post_uninstall(self):
+        # provide warning for manual removal of configuration file
+        if os.path.exists(CONFIG) and os.path.isfile(CONFIG):
+            print('You have to manually remove {}'.format(CONFIG))
+        print('Successfully uninstalled', NAME)
+
+
+
+    # add post_install script to install method
+    class Install(install):
+        def run(self):
+            pre_install(self)
+            install.run(self)
+            post_install(self)
+
+
+    class Develop(develop):
+        def run(self):
+
+            if self.uninstall:
+                pre_uninstall(self)
+            else:
+                pre_install(self)
+
+            develop.run(self)
+
+            if self.uninstall:
+                post_uninstall(self)
+            else:
+                post_install(self)
+
+    # Override command classes here
+    cmdclass = dict(install=Install, develop=Develop)
+
     # setup python script
-    setup(
+    setup_script = setup(
         name=NAME,
         version=VERSION,
         description='Comfortable 3-finger and 4-finger swipe gestures',
@@ -74,51 +146,13 @@ try:
         author='Rico Tiongson',
         author_email='thericotiongson@gmail.com',
         url=__URL__,
-        zip_safe=True,
+        zip_safe=False,
         packages=find_packages(),
-        entry_points=dict(console_scripts=['{}=comfortable_swipe:main'.format(NAME)]),
+        entry_points=dict(console_scripts=['{}=comfortable_swipe.__main__:main'.format(NAME)]),
         ext_modules=extensions,
-        # include program to sources so it will be removed on uninstall
+        cmdclass=cmdclass
     )
-
-    class Install(install):
-        def run(self):
-            # perform original run command
-            install.run(self)
-
-            # create program/config directories
-            os.path.exists(os.path.dirname(PROGRAM)) or os.makedirs(os.path.dirname(PROGRAM))
-            os.path.exists(os.path.dirname(CONFIG)) or os.makedirs(os.path.dirname(CONFIG))
-
-            # copy any of the old config files
-            conf_files = [path for path in conf_paths if os.path.exists(path) and os.path.isfile(path)]
-            print('using configuration file at', conf_files[-1])
-
-            if conf_files[-1] != CONFIG:
-                # new installation or upgrading from old version, copy to new location
-                copyfile(conf_files[-1], CONFIG)
-
-                if conf_files[-1] == os.path.join(__DIR__, 'defaults.conf'):
-                    # new installation - copy default configuration
-                    print('copying configuration file to', CONFIG)
-
-                else:
-                    # upgrading - delete the deprecated config file (failsafe)
-                    try:
-                        os.remove(conf_files[-1])
-                        print('moving deprecated configuration file to', CONFIG)
-                    except:
-                        pass
-
-            # toggle autostart
-            os.chdir(os.getenv('HOME'))
-            from comfortable_swipe import service
-            service.autostart()
-            service.autostart()
-
-            print('\nTry running "{} start" to test'.format(NAME))
-
 
 finally:
     # move working directory back to where it was before
-    os.chdir(__DIR__)
+    os.chdir(__CWD__)
