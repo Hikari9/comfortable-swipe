@@ -10,7 +10,7 @@ extern "C"
     {
         namespace service
         {
-            void autostart();
+            // void autostart();
             void buffer();
             void config();
             void debug();

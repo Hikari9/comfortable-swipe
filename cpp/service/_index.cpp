@@ -2,7 +2,7 @@
 #define __COMFORTABLE_SWIPE__service_index_cpp__
 
 #include "_index.hpp"
-#include "autostart.cpp"
+// #include "autostart.cpp"
 #include "buffer.cpp"
 #include "config.cpp"
 #include "debug.cpp"

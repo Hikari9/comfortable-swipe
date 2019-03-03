@@ -20,7 +20,7 @@ namespace comfortable_swipe::service::python
     __comfortable_swipe_void_method(start);
     __comfortable_swipe_void_method(stop);
     __comfortable_swipe_void_method(restart);
-    __comfortable_swipe_void_method(autostart);
+    // __comfortable_swipe_void_method(autostart);
     __comfortable_swipe_void_method(buffer);
     __comfortable_swipe_void_method(help);
     __comfortable_swipe_void_method(config);
@@ -35,7 +35,7 @@ namespace comfortable_swipe::service::python
         { "start", &start, METH_VARARGS , "starts 3/4-finger gesture service" },
         { "stop", &stop, METH_VARARGS , "stops 3/4-finger gesture service" },
         { "restart", &restart, METH_VARARGS , "stops then starts 3/4-finger gesture service" },
-        { "autostart", &autostart, METH_VARARGS , "automatically run on startup (toggleable)" },
+        // { "autostart", &autostart, METH_VARARGS , "automatically run on startup (toggleable)" },
         { "buffer", &buffer, METH_VARARGS , "parses output of libinput debug-events" },
         { "help", &help, METH_VARARGS , "shows the help dialog" },
         { "config", &config, METH_VARARGS , "locates the config file " },

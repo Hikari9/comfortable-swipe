@@ -11,26 +11,29 @@ from setuptools.command.develop import develop
 from setuptools.command.install import install
 from wheel.bdist_wheel import bdist_wheel
 
+NAME = 'comfortable-swipe'
+PYTHON_NAME = NAME.replace('-', '_')
+VERSION = '1.1.0-beta'
+
 __BIN__ = os.path.dirname(sys.executable)
 __SHARE__ = os.path.join(sys.prefix, 'local', 'share')
 __CWD__ = os.getcwd()
 __DIR__ = os.path.abspath(os.path.dirname(__file__))
+__RES__ = os.path.join(__DIR__, PYTHON_NAME, 'res')
 __URL__ = 'https://github.com/Hikari9/comfortable-swipe-ubuntu'
 
-NAME = 'comfortable-swipe'
-PYTHON_NAME = NAME.replace('-', '_')
-VERSION = '1.1.0-beta'
 
 try:
     # make sure working directory is here
     os.chdir(__DIR__)
 
-    # assign program variables
+    # assign config
     CONFIG = os.path.join(__SHARE__, NAME, NAME + '.conf')
+    DEFAULT_CONFIG = os.path.join(__RES__, 'defaults.conf')
 
     # prioritize the higher indices
     conf_paths = [
-        os.path.join(__DIR__, 'defaults.conf'),
+        DEFAULT_CONFIG,
         os.path.join(os.getenv('HOME'), '.config', 'comfortable-swipe', 'comfortable-swipe.conf'),
         os.path.join('/usr/local/share', 'comfortable-swipe', 'comfortable-swipe.conf'),
         CONFIG
@@ -47,11 +50,11 @@ try:
         README = README_file.read()
 
     # read C++ libraries for comfortable swipe
-    extension_names = ['service', 'util']
+    extension_names = ['service']
     extensions = [Extension(
-        name='{}.{}'.format(PYTHON_NAME, extension_name),
+        name='{}.cpp.{}'.format(PYTHON_NAME, extension_name),
         define_macros=list(cpp_macros.items()),
-        sources=[os.path.join(__DIR__, 'lib', '_python.cpp')],
+        sources=[os.path.join('cpp', '_python.cpp')],
         extra_compile_args=['-O2', '-Wno-unused-result'],
         libraries=['xdo']
     ) for extension_name in extension_names]
@@ -74,7 +77,7 @@ try:
             # new installation or upgrading from old version, copy to new location
             copyfile(conf_files[-1], CONFIG)
 
-            if conf_files[-1] == os.path.join(__DIR__, 'defaults.conf'):
+            if conf_files[-1] == DEFAULT_CONFIG:
                 # new installation - copy default configuration
                 print('Copying configuration file to', CONFIG)
 
@@ -94,11 +97,10 @@ try:
 
     def pre_uninstall(self):
         # remove autostart config
-        from comfortable_swipe import util
-        autostart_filename = str(util.autostart_filename)
-        if os.path.exists(autostart_filename):
-            print('Removing autostart', autostart_filename)
-            os.remove(autostart_filename)
+        from comfortable_swipe.util import autostart_path
+        from comfortable_swipe.service import autostart
+        if os.path.exists(autostart_path()):
+            autostart()
 
 
     def post_uninstall(self):
@@ -145,8 +147,9 @@ try:
         author='Rico Tiongson',
         author_email='thericotiongson@gmail.com',
         url=__URL__,
-        # zip_safe=False,
+        zip_safe=False,
         packages=find_packages(),
+        include_package_data=True,
         entry_points=dict(console_scripts=['{}=comfortable_swipe.__main__:main'.format(NAME)]),
         ext_modules=extensions,
         cmdclass=cmdclass
