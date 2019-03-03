@@ -48,11 +48,10 @@ namespace comfortable_swipe::service
             if (config.count("threshold") > 0)
             {
                 auto & threshold = config["threshold"];
-                // check if regex pattern matches threshold
-                std::cmatch matches;
-                bool ok = (std::regex_match(threshold.data(), matches, std::regex("^\\d+(?:\\.\\d+)??$")) != 0);
+                // std::cmatch matches;
+                // bool ok = (std::regex_match(threshold.data(), matches, std::regex("^\\d+(?:\\.\\d+)??$")) != 0);
                 // print status of threshold
-                std::printf("    %9s = %s (%s)\n", "threshold", threshold.data(), ok ? "VALID" : "INVALID");
+                std::printf("    %9s = %s\n", "threshold", threshold.data()); // ok ? "VALID" : "INVALID"
             }
             else
                 std::printf("    %9s is OFF\n", "threshold");

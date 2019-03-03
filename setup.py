@@ -9,6 +9,7 @@ from setuptools import setup, find_packages
 from setuptools.extension import Extension
 from setuptools.command.develop import develop
 from setuptools.command.install import install
+from setuptools.command.easy_install import easy_install
 from wheel.bdist_wheel import bdist_wheel
 
 
@@ -58,16 +59,21 @@ try:
     ) for extension_name in extension_names]
 
 
-    # add post_install script to install method
-    class Install(install):
-        def run(self):
-            self.pre_install()
-            install.run(self)
-            self.post_install()
+    class Command:
+        outer_installer = None
+        outer_uninstaller = None
+
         def pre_install(self):
-            pass
+            # make sure only outer install script will run post_install
+            if self.__class__.outer_installer is not None: return
+            self.__class__.outer_installer = self
+            print('running pre_install')
+
         def post_install(self):
+            # make sure post_install will only run when command is outer installer
+            if self.__class__.outer_installer is not self: return
             print('running post_install')
+
             # create program/config directories
             if not os.path.exists(os.path.dirname(CONFIG)):
                 os.makedirs(os.path.dirname(CONFIG))
@@ -93,23 +99,40 @@ try:
             print('Autostart created at', autostart.target_path())
             print('\nInstallation successful\nTry running: {} start'.format(NAME))
 
-
-    class Develop(develop):
-        def run(self):
-            self.pre_uninstall() if self.uninstall else Install.pre_install(self)
-            develop.run(self)
-            self.post_uninstall() if self.uninstall else Install.post_install(self)
         def pre_uninstall(self):
+            # make sure only outer uninstall script will run post_uninstall
+            if self.__class__.outer_uninstaller is not None: return
+            self.__class__.outer_uninstaller = self
             print('running pre_uninstall')
+
+
+        def post_uninstall(self):
+            # make sure post_uninstall will only run when command is outer uninstaller
+            if self.__class__.outer_uninstaller is not self: return
+            print('running post_uninstall')
             from comfortable_swipe import autostart
             if autostart.get_status() is autostart.ON:
                 print('Removing autostart at', autostart.target_path())
                 autostart.set_status(autostart.OFF)
-        def post_uninstall(self):
-            pass
+
+    # add post_install script to install method
+    def wrap_command(base_cls, uninstall=False):
+        class InstallCommand(Command, base_cls):
+            def run(self):
+                self.pre_uninstall() if uninstall and self.uninstall else self.pre_install()
+                base_cls.run(self)
+                self.post_uninstall() if uninstall and self.uninstall else self.post_install()
+
+        InstallCommand.__name__ = base_cls.__name__
+        return InstallCommand
 
     # Override command classes here
-    cmdclass = dict(Install=Install, develop=Develop, bdist_wheel=bdist_wheel)
+    cmdclass = dict(
+        install=wrap_command(install),
+        easy_install=wrap_command(easy_install),
+        develop=wrap_command(develop, uninstall=True),
+        bdist_wheel=wrap_command(bdist_wheel)
+    )
 
     # setup python script
     setup_script = setup(

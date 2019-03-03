@@ -9,7 +9,7 @@ from comfortable_swipe.constants import NAME, exe
 def print_status():
   service.status()
   print('autostart is', autostart.get_status().upper())
-  print('{} is {}'.format(NAME, 'RUNNING' if is_running() else 'STOPPED'))
+  print('{} program is {}'.format(NAME, 'RUNNING' if is_running() else 'STOPPED'))
 
 
 def is_running():
