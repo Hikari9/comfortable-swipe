@@ -45,8 +45,8 @@ try:
 
     # for C++ library
     cpp_macros = dict(
-        __COMFORTABLE_SWIPE__VERSION__='"{}"'.format(VERSION),
-        __COMFORTABLE_SWIPE__CONFIG__='"{}"'.format(CONFIG)
+        COMFORTABLE_SWIPE_VERSION='"{}"'.format(VERSION),
+        COMFORTABLE_SWIPE_CONFIG='"{}"'.format(CONFIG)
     )
 
     # read C++ libraries for comfortable swipe

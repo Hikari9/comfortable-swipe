@@ -1,12 +1,12 @@
 #ifndef __COMFORTABLE_SWIPE__macro_hpp__
 #define __COMFORTABLE_SWIPE__macro_hpp__
 
-#ifndef __COMFORTABLE_SWIPE__CONFIG__
-#warning "__COMFORTABLE_SWIPE__CONFIG__ must be defined."
-#endif /* __COMFORTABLE_SWIPE__CONFIG__ */
+#ifndef COMFORTABLE_SWIPE_CONFIG
+#error "COMFORTABLE_SWIPE_CONFIG must be defined."
+#endif /* COMFORTABLE_SWIPE_CONFIG */
 
-#ifndef __COMFORTABLE_SWIPE__VERSION__
-#warning "__COMFORTABLE_SWIPE__VERSION__ must be defined."
-#endif /* __COMFORTABLE_SWIPE__VERSION__ */
+#ifndef COMFORTABLE_SWIPE_VERSION
+#warning "COMFORTABLE_SWIPE_VERSION is not defined."
+#endif /* COMFORTABLE_SWIPE_VERSION */
 
 #endif /* __COMFORTABLE_SWIPE__macro_hpp__ */

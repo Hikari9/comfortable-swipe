@@ -32,7 +32,7 @@ namespace comfortable_swipe::service
     void buffer()
     {
         // read config file
-        auto config = comfortable_swipe::util::read_config_file(__COMFORTABLE_SWIPE__CONFIG__);
+        auto config = comfortable_swipe::util::read_config_file(COMFORTABLE_SWIPE_CONFIG);
 
         // initialize swipe gesture handler
         comfortable_swipe::gesture::swipe_gesture swipe_gesture_handler

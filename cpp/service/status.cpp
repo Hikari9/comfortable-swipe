@@ -42,8 +42,8 @@ namespace comfortable_swipe::service
         // check status of configuration file
         try
         {
-            std::puts(__COMFORTABLE_SWIPE__CONFIG__);
-            auto config = comfortable_swipe::util::read_config_file(__COMFORTABLE_SWIPE__CONFIG__);
+            std::puts(COMFORTABLE_SWIPE_CONFIG);
+            auto config = comfortable_swipe::util::read_config_file(COMFORTABLE_SWIPE_CONFIG);
             // print threshold
             if (config.count("threshold") > 0)
             {
