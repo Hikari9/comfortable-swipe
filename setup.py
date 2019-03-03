@@ -2,11 +2,14 @@ from __future__ import print_function
 
 import os
 import sys
+import setuptools
+
 from shutil import copyfile
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
 from setuptools.command.develop import develop
 from setuptools.command.install import install
+from wheel.bdist_wheel import bdist_wheel
 
 __BIN__ = os.path.dirname(sys.executable)
 __SHARE__ = os.path.join(sys.prefix, 'local', 'share')
@@ -42,10 +45,6 @@ try:
     # save README as long_description
     with open('README.md', 'r') as README_file:
         README = README_file.read()
-
-    # save LICENSE as license
-    with open('LICENSE', 'r') as LICENSE_file:
-        LICENSE = LICENSE_file.read()
 
     # read C++ libraries for comfortable swipe
     extension_names = ['service', 'util']
@@ -134,7 +133,7 @@ try:
                 post_install(self)
 
     # Override command classes here
-    cmdclass = dict(install=Install, develop=Develop)
+    cmdclass = dict(Install=Install, develop=Develop, bdist_wheel=bdist_wheel)
 
     # setup python script
     setup_script = setup(
@@ -142,11 +141,11 @@ try:
         version=VERSION,
         description='Comfortable 3-finger and 4-finger swipe gestures',
         long_description=README,
-        license=LICENSE,
+        license='MIT',
         author='Rico Tiongson',
         author_email='thericotiongson@gmail.com',
         url=__URL__,
-        zip_safe=False,
+        # zip_safe=False,
         packages=find_packages(),
         entry_points=dict(console_scripts=['{}=comfortable_swipe.__main__:main'.format(NAME)]),
         ext_modules=extensions,
