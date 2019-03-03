@@ -4,7 +4,7 @@
 #include "_index.hpp"
 // #include "autostart.cpp"
 #include "buffer.cpp"
-#include "config.cpp"
+// #include "config.cpp"
 #include "debug.cpp"
 #include "help.cpp"
 #include "restart.cpp"

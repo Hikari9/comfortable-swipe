@@ -23,7 +23,7 @@ namespace comfortable_swipe::service::python
     // __comfortable_swipe_void_method(autostart);
     __comfortable_swipe_void_method(buffer);
     __comfortable_swipe_void_method(help);
-    __comfortable_swipe_void_method(config);
+    // __comfortable_swipe_void_method(config);
     __comfortable_swipe_void_method(debug);
 
     #undef __comfortable_swipe_void_method
@@ -38,7 +38,7 @@ namespace comfortable_swipe::service::python
         // { "autostart", &autostart, METH_VARARGS , "automatically run on startup (toggleable)" },
         { "buffer", &buffer, METH_VARARGS , "parses output of libinput debug-events" },
         { "help", &help, METH_VARARGS , "shows the help dialog" },
-        { "config", &config, METH_VARARGS , "locates the config file " },
+        // { "config", &config, METH_VARARGS , "locates the config file " },
         { "debug", &debug, METH_VARARGS , "logs raw output from input events taken from libinput" },
         { NULL, NULL, 0, NULL } // sentinel
     };
