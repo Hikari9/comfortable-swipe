@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "__index__.hpp"
+#include "_index.hpp"
 #include <cstdlib> // std::system
 #include <unistd.h> // pipe, fork, perror, exit
 

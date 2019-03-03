@@ -19,8 +19,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../util/__index__.hpp"
-#include "../gesture/__index__.hpp"
+#include "../util/_index.hpp"
+#include "../gesture/_index.hpp"
 #include <stdexcept> // std::runtime_error
 #include <unistd.h> // popen, pclose, getpid, access, F_OK
 #include <memory> // std::unique_ptr

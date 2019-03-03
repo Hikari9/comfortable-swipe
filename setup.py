@@ -51,7 +51,7 @@ try:
     extensions = [Extension(
         name='{}.{}'.format(PYTHON_NAME, extension_name),
         define_macros=list(cpp_macros.items()),
-        sources=[os.path.join(__DIR__, 'lib', '__python__.cpp')],
+        sources=[os.path.join(__DIR__, 'lib', '_python.cpp')],
         extra_compile_args=['-O2', '-Wno-unused-result'],
         libraries=['xdo']
     ) for extension_name in extension_names]
