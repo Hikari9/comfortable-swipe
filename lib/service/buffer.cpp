@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <cstdio> // fgets_unlocked, stdin
+#include <iostream> // std::ios, std::cout, std::cin
 #include "../index.hpp"
 
 /**
@@ -29,6 +30,11 @@ namespace comfortable_swipe::service
 {
     void buffer()
     {
+        std::ios::sync_with_stdio(false);
+        std::cin.tie(0);
+        std::cout.tie(0);
+        std::cout.flush();
+
         // read config file
         auto config = comfortable_swipe::util::read_config_file(comfortable_swipe::util::conf_filename());
 

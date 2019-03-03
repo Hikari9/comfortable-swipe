@@ -50,7 +50,8 @@ namespace comfortable_swipe::gesture
     ):
         comfortable_swipe::gesture::xdo_gesture(),
         threshold_squared(threshold*threshold),
-        commands(new const char*[8]{left3, left4, right3, right4, up3, up4, down3, down4})
+        commands(new const char*[8]{left3, left4, right3, right4, up3, up4, down3, down4}),
+        flag_swiping(false)
     {
         // improve responsiveness of first gesture by pre-empting xdotool runtime
         xdo_get_mouse_location(this->xdo, &this->ix, &this->iy, &this->screen_num);
