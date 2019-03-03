@@ -19,7 +19,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../util/_index.hpp"
 #include <cstdio> // std::puts, std::printf
 
 namespace comfortable_swipe::service
@@ -29,7 +28,6 @@ namespace comfortable_swipe::service
      */
     void help()
     {
-        using comfortable_swipe::util::conf_filename;
         std::puts("comfortable-swipe [start|stop|restart|autostart|buffer|help|config|debug|status]");
         std::puts("");
         std::puts("start      - starts 3/4-finger gesture service");
@@ -41,8 +39,6 @@ namespace comfortable_swipe::service
         std::puts("config     - locates the config file");
         std::puts("debug      - logs raw output from input events taken from libinput");
         std::puts("status     - checks status of program and autostart");
-        std::puts("");
-        std::printf("Configuration file can be found in %s\n", conf_filename());
     }
 }
 

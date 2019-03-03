@@ -10,8 +10,6 @@ extern "C"
     {
         namespace util
         {
-            const char* autostart_filename();
-            constexpr const char* conf_filename();
             std::map<std::string, std::string> read_config_file(const char*);
         }
     }

@@ -2,8 +2,8 @@ from __future__ import print_function
 
 import os
 import sys
-from distutils.spawn import find_executable
-from comfortable_swipe.constants import EXE, RES
+
+from comfortable_swipe.constants import NAME, RES, exe
 
 
 # status enums
@@ -14,15 +14,18 @@ ON = 'on'
 # the target path to the autostart desktop file
 def target_path():
   return os.path.join(
-    os.getenv('XDG_CONFIG_HOME', os.path.join(os.getenv('HOME'), '.config')),
+    os.getenv(
+      'XDG_CONFIG_HOME',
+      os.path.join(os.getenv('HOME'), '.config')
+    ),
     'autostart',
-    EXE + '.desktop'
+    '{}.desktop'.format(NAME)
   )
 
 
 # path to the autostart template file to be copied
 def template_path():
-  return os.path.join(RES, EXE + '.desktop')
+  return os.path.join(RES, '{}.desktop'.format(NAME))
 
 
 # parsed contents of the template file
@@ -31,7 +34,7 @@ def template(raw=False):
     contents = file.read()
   if raw:
     return contents
-  return contents.replace('Exec=' + EXE, 'Exec={} {}'.format(sys.executable, find_executable(EXE)))
+  return contents.replace('Exec=' + NAME, 'Exec={} {}'.format(sys.executable, exe()))
 
 
 # gets the current autostart status
@@ -41,10 +44,10 @@ def get_status():
 
 # sets the autostart status
 def set_status(status=ON):
-  if status is ON:
+  if status == ON:
     with open(target_path(), 'w') as file:
       file.write(template())
-  elif status is OFF:
+  elif status == OFF:
     if os.path.exists(target_path()):
       os.remove(target_path())
   else:
@@ -55,4 +58,4 @@ def set_status(status=ON):
 
 # toggles autostart status
 def toggle_status():
-  return set_status(OFF if get_status() == ON else OFF)
+  return set_status(OFF if get_status() == ON else ON)

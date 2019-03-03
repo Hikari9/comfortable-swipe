@@ -1,9 +1,12 @@
 from __future__ import print_function
 
 import sys
+
 from comfortable_swipe.autostart import toggle_status
-from comfortable_swipe.cpp import service as cpp_service
 from comfortable_swipe.constants import CONFIG
+from comfortable_swipe.status import print_status
+
+from comfortable_swipe.cpp import service as cpp_service
 
 def main():
   if len(sys.argv) <= 1:
@@ -16,7 +19,7 @@ def main():
       buffer=cpp_service.buffer,
       help=cpp_service.help,
       debug=cpp_service.debug,
-      status=cpp_service.status,
+      status=print_status,
       autostart=lambda: print('Autostart switched', toggle_status()),
       config=lambda: print(CONFIG),
     )[sys.argv[1]]()

@@ -19,6 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "../_macro.cpp"
 #include "../util/_index.hpp"
 #include "../gesture/_index.hpp"
 #include <cstdio> // fgets_unlocked, stdin
@@ -31,7 +32,7 @@ namespace comfortable_swipe::service
     void buffer()
     {
         // read config file
-        auto config = comfortable_swipe::util::read_config_file(comfortable_swipe::util::conf_filename());
+        auto config = comfortable_swipe::util::read_config_file(__COMFORTABLE_SWIPE__CONFIG__);
 
         // initialize swipe gesture handler
         comfortable_swipe::gesture::swipe_gesture swipe_gesture_handler
