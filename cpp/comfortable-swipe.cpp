@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__service_restart__
-#define __COMFORTABLE_SWIPE__service_restart__
+#ifndef __COMFORTABLE_SWIPE__
+#define __COMFORTABLE_SWIPE__
 
 /*
 Comfortable Swipe
@@ -19,18 +19,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../index.hpp"
+#include "_macro.cpp"
+#include "_index.hpp"
+#include "_index.cpp"
 
-namespace comfortable_swipe::service
-{
-    /**
-     * Restarts the comfortable-swipe service.
-     */
-    void restart()
-    {
-        comfortable_swipe::service::stop();
-        comfortable_swipe::service::start();
-    }
-}
-
-#endif /* __COMFORTABLE_SWIPE__service_restart__ */
+#endif /* __COMFORTABLE_SWIPE__ */

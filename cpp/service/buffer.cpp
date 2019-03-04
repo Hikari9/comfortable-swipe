@@ -19,9 +19,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "../_macro.cpp"
+#include "../util/_index.hpp"
+#include "../gesture/_index.hpp"
 #include <cstdio> // fgets_unlocked, stdin
-#include <iostream> // std::ios, std::cout, std::cin
-#include "../index.hpp"
 
 /**
  * Starts the comfortable-swipe service by buffering libinput debug-events.
@@ -30,13 +31,8 @@ namespace comfortable_swipe::service
 {
     void buffer()
     {
-        std::ios::sync_with_stdio(false);
-        std::cin.tie(0);
-        std::cout.tie(0);
-        std::cout.flush();
-
         // read config file
-        auto config = comfortable_swipe::util::read_config_file(comfortable_swipe::util::conf_filename());
+        auto config = comfortable_swipe::util::read_config_file(COMFORTABLE_SWIPE_CONFIG);
 
         // initialize swipe gesture handler
         comfortable_swipe::gesture::swipe_gesture swipe_gesture_handler

@@ -19,8 +19,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../index.hpp"
+#include "_index.hpp"
+#include <iostream> // std::cin, std::cout, std::ios
 #include <cstdlib> // std::system
+#include <unistd.h> // pipe, fork, perror, exit
 
 namespace comfortable_swipe::service
 {
@@ -31,7 +33,30 @@ namespace comfortable_swipe::service
      */
     void start()
     {
-        (void) std::system(__COMFORTABLE_SWIPE__PROGRAM__ " debug | " __COMFORTABLE_SWIPE__PROGRAM__ " buffer");
+        std::ios::sync_with_stdio(false);
+        std::cin.tie(0);
+        std::cout.tie(0);
+        std::cout.flush();
+
+        // redirect stdout to stdin
+        int fd[2];
+        pipe(fd); // create the pipes
+
+        int child;
+        if ((child = fork()) == -1) {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        }
+        if (child) {
+            dup2(fd[1], STDOUT_FILENO);
+            comfortable_swipe::service::debug();
+            close(fd[0]);
+        } else {
+            dup2(fd[0], STDIN_FILENO);
+            comfortable_swipe::service::buffer();
+            close(fd[1]);
+        }
+        comfortable_swipe::service::stop();
     }
 }
 
