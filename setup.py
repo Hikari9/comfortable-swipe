@@ -134,6 +134,13 @@ try:
         bdist_wheel=wrap_command(bdist_wheel)
     )
 
+    # install requiremenh open('requirements.txt', 'r') as requirements:
+
+    with open('requirements.txt', 'r') as requirements:
+        install_requires = requirements.read().splitlines()
+
+    print(install_requires)
+
     # setup python script
     setup_script = setup(
         name=NAME,
@@ -150,7 +157,7 @@ try:
         entry_points=dict(console_scripts=['{}={}.__main__:main'.format(NAME, PYTHON_NAME)]),
         ext_modules=extensions,
         cmdclass=cmdclass,
-        install_requires=['psutil']
+        install_requires=install_requires
     )
 
 finally:
