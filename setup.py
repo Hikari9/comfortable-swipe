@@ -49,12 +49,15 @@ try:
         COMFORTABLE_SWIPE_CONFIG='"{}"'.format(CONFIG)
     )
 
+    # make sure to use gnu-gcc
+    os.putenv('CC', 'x86_64-linux-gnu-gcc')
+
     # read C++ libraries for comfortable swipe
     extensions = [Extension(
         name='{}.cpp.{}'.format(PYTHON_NAME, extension_name),
         define_macros=list(cpp_macros.items()),
         sources=[os.path.join('cpp', '_python.cpp')],
-        extra_compile_args=['-O2', '-Wno-unused-result'],
+        extra_compile_args=['-O2', '-Wno-unused-result', '-std=c++11', '-lstdc++'],
         libraries=['xdo']
     ) for extension_name in extension_names]
 
@@ -138,8 +141,6 @@ try:
 
     with open('requirements.txt', 'r') as requirements:
         install_requires = requirements.read().splitlines()
-
-    print(install_requires)
 
     # setup python script
     setup_script = setup(
