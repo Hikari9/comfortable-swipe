@@ -26,21 +26,24 @@ extern "C"
 
 #include "xdo_gesture.h"
 
-namespace comfortable_swipe::gesture
+namespace comfortable_swipe
 {
-    /**
-     * Constructs a new gesture handler with xdo.
-     */
-    xdo_gesture::xdo_gesture():
-        xdo(xdo_new(NULL))
-    { }
-
-    /**
-     * Constructs a new swipe gesture with xdo.
-     */
-    xdo_gesture::~xdo_gesture()
+    namespace gesture
     {
-        xdo_free(this->xdo);
+        /**
+         * Constructs a new gesture handler with xdo.
+         */
+        xdo_gesture::xdo_gesture():
+            xdo(xdo_new(NULL))
+        { }
+
+        /**
+         * Constructs a new swipe gesture with xdo.
+         */
+        xdo_gesture::~xdo_gesture()
+        {
+            xdo_free(this->xdo);
+        }
     }
 }
 

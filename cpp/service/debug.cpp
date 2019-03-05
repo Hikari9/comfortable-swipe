@@ -21,14 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstdlib> // std::system
 
-namespace comfortable_swipe::service
+namespace comfortable_swipe
 {
-    /**
-     * Debugs output from `libinput debug-events`.
-     */
-    void debug()
+    namespace service
     {
-        (void) std::system("bash -c \"stdbuf -oL -e0 libinput debug-events 2> >(grep -v 'double tracking')\"");
+        /**
+         * Debugs output from `libinput debug-events`.
+         */
+        void debug()
+        {
+            (void) std::system("bash -c \"stdbuf -oL -e0 libinput debug-events 2> >(grep -v 'double tracking')\"");
+        }
     }
 }
 

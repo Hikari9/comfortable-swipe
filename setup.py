@@ -49,9 +49,6 @@ try:
         COMFORTABLE_SWIPE_CONFIG='"{}"'.format(CONFIG)
     )
 
-    # make sure to use gnu-gcc
-    os.putenv('CC', 'x86_64-linux-gnu-gcc')
-
     # read C++ libraries for comfortable swipe
     extensions = [Extension(
         name='{}.cpp.{}'.format(PYTHON_NAME, extension_name),
