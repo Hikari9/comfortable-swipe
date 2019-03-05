@@ -45,6 +45,11 @@ def get_status():
 # sets the autostart status
 def set_status(status=ON):
   if status == ON:
+    # make sure dir exists
+    path = target_path()
+    path_dir = os.path.dirname(path)
+    if not os.path.exists(path_dir):
+      os.makedirs(path_dir)
     with open(target_path(), 'w') as file:
       file.write(template())
   elif status == OFF:
