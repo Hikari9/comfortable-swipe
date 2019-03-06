@@ -135,9 +135,24 @@ try:
     )
 
     # install requiremenh open('requirements.txt', 'r') as requirements:
-
     with open('requirements.txt', 'r') as requirements:
         install_requires = requirements.read().splitlines()
+
+    # classifiers
+    # https://pypi.org/classifiers/
+    classifiers = [
+        'Development Status :: 4 - Beta'
+        'Intended Audience :: End Users/Desktop',
+        'Operating System :: POSIX :: Linux',
+        'Operating System :: Unix',
+        'Programming Language :: C++',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Environment :: Console'
+    ]
 
     # setup python script
     setup_script = setup(
@@ -155,7 +170,8 @@ try:
         entry_points=dict(console_scripts=['{}={}.__main__:main'.format(NAME, PYTHON_NAME)]),
         ext_modules=extensions,
         cmdclass=cmdclass,
-        install_requires=install_requires
+        install_requires=install_requires,
+        classifiers=classifiers
     )
 
 finally:
