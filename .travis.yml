@@ -15,9 +15,7 @@ addons:
     packages:
       - libxdo-dev
       - libinput-tools
-      - g++-7
-env:
-  CC: g++-7
+      - build-essential
 install:
   - pip install .
 script:
