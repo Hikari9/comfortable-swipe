@@ -134,6 +134,22 @@ try:
         bdist_wheel=wrap_command(bdist_wheel)
     )
 
+    # classifiers
+    # https://pypi.org/classifiers/
+    classifiers = [
+        'Development Status :: 4 - Beta'
+        'Intended Audience :: End Users/Desktop',
+        'Operating System :: POSIX :: Linux',
+        'Operating System :: Unix',
+        'Programming Language :: C++',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Environment :: Console'
+    ]
+
     # setup python script
     setup_script = setup(
         name=NAME,
@@ -150,7 +166,8 @@ try:
         entry_points=dict(console_scripts=['{}={}.__main__:main'.format(NAME, PYTHON_NAME)]),
         ext_modules=extensions,
         cmdclass=cmdclass,
-        install_requires=['psutil']
+        install_requires=['psutil'],
+        classifiers=classifiers
     )
 
 finally:
