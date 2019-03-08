@@ -1,7 +1,13 @@
-# Comfortable Swipe (Ubuntu)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+# Comfortable Swipe (Debian/Ubuntu)
 
-Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures for Ubuntu 14.04 LTS and beyond. May work for other Linux distros that support `libinput`.
+[![comfortable-swipe: version](https://img.shields.io/github/tag-date/Hikari9/comfortable-swipe.svg?color=informational&label=comfortable-swipe)](https://github.com/Hikari9/comfortable-swipe/releases)
+[![build: master](https://img.shields.io/travis/Hikari9/comfortable-swipe/master.svg?label=master)](https://github.com/Hikari9/comfortable-swipe/commits/master)
+[![build: develop](https://img.shields.io/travis/Hikari9/comfortable-swipe/develop.svg?label=develop)](https://github.com/Hikari9/comfortable-swipe/commits/develop)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-orange.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures. Tested in Ubuntu 14.04 LTS and beyond, for Unity, GNOME, and KDE desktop environments.
+
+> **Note**: May work for other Linux distros that support `libinput` and `libxdo` (untested).
 
 ## Installation
 
