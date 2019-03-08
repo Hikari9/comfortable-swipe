@@ -21,15 +21,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../service/_index.hpp"
 
-namespace comfortable_swipe::service
+namespace comfortable_swipe
 {
-    /**
-     * Restarts the comfortable-swipe service.
-     */
-    void restart()
+    namespace service
     {
-        comfortable_swipe::service::stop();
-        comfortable_swipe::service::start();
+        /**
+         * Restarts the comfortable-swipe service.
+         */
+        void restart()
+        {
+            comfortable_swipe::service::stop();
+            comfortable_swipe::service::start();
+        }
     }
 }
 

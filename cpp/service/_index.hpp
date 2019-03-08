@@ -4,20 +4,17 @@
 #include <map> // std::map
 #include <string> // std::string
 
-extern "C"
+namespace comfortable_swipe
 {
-    namespace comfortable_swipe
+    namespace service
     {
-        namespace service
-        {
-            void buffer();
-            void debug();
-            void help();
-            void restart();
-            void start();
-            void stop();
-            void status();
-        }
+        void buffer();
+        void debug();
+        void help();
+        void restart();
+        void start();
+        void stop();
+        void status();
     }
 }
 

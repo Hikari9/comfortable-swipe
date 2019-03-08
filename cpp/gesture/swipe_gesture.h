@@ -21,70 +21,65 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "xdo_gesture.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-namespace comfortable_swipe::gesture
+namespace comfortable_swipe
 {
-    class swipe_gesture : protected xdo_gesture
+    namespace gesture
     {
-    public:
-        // constructor
-        swipe_gesture(
-            const float threshold,
-            const char* left3   /* 000 */,
-            const char* left4   /* 001 */,
-            const char* right3  /* 010 */,
-            const char* right4  /* 011 */,
-            const char* up3     /* 100 */,
-            const char* up4     /* 101 */,
-            const char* down3   /* 110 */,
-            const char* down4   /* 111 */
-        );
+        class swipe_gesture : protected xdo_gesture
+        {
+        public:
+            // constructor
+            swipe_gesture(
+                const float threshold,
+                const char* left3   /* 000 */,
+                const char* left4   /* 001 */,
+                const char* right3  /* 010 */,
+                const char* right4  /* 011 */,
+                const char* up3     /* 100 */,
+                const char* up4     /* 101 */,
+                const char* down3   /* 110 */,
+                const char* down4   /* 111 */
+            );
 
-        ~swipe_gesture();
+            ~swipe_gesture();
 
-        // fields for xdo
-        int fingers;
-        float dx, dy, udx, udy;
+            // fields for xdo
+            int fingers;
+            float dx, dy, udx, udy;
 
-        void begin() override;
-        void update() override;
-        void end() override;
-        bool parse_line(const char *) override;
+            void begin() override;
+            void update() override;
+            void end() override;
+            bool parse_line(const char *) override;
 
-    protected:
-        // location of mouse
-        int screen_num, ix, iy;
+        protected:
+            // location of mouse
+            int screen_num, ix, iy;
 
-        // current location
-        float x, y, threshold_squared;
-        int previous_gesture;
-        const char ** commands;
+            // current location
+            float x, y, threshold_squared;
+            int previous_gesture;
+            const char ** commands;
 
-        // optimization flag for checking if GESTURE_SWIPE_BEGIN was dispatched
-        bool flag_swiping;
+            // optimization flag for checking if GESTURE_SWIPE_BEGIN was dispatched
+            bool flag_swiping;
 
-    public:
-        // static constants
-        static const int MSK_THREE_FINGERS;
-        static const int MSK_FOUR_FINGERS;
-        static const int MSK_NEGATIVE;
-        static const int MSK_POSITIVE;
-        static const int MSK_HORIZONTAL;
-        static const int MSK_VERTICAL;
-        static const int FRESH;
-        static const char * const command_map[8];
-        // regex patterns
-        static const char* GESTURE_BEGIN_REGEX_PATTERN;
-        static const char* GESTURE_UPDATE_REGEX_PATTERN;
-        static const char* GESTURE_END_REGEX_PATTERN;
-    };
+        public:
+            // static constants
+            static const int MSK_THREE_FINGERS;
+            static const int MSK_FOUR_FINGERS;
+            static const int MSK_NEGATIVE;
+            static const int MSK_POSITIVE;
+            static const int MSK_HORIZONTAL;
+            static const int MSK_VERTICAL;
+            static const int FRESH;
+            static const char * const command_map[8];
+            // regex patterns
+            static const char* GESTURE_BEGIN_REGEX_PATTERN;
+            static const char* GESTURE_UPDATE_REGEX_PATTERN;
+            static const char* GESTURE_END_REGEX_PATTERN;
+        };
+    }
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __COMFORTABLE_SWIPE__gesture_swipe_gesture_h__ */

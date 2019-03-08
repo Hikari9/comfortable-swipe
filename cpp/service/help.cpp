@@ -21,24 +21,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstdio> // std::puts, std::printf
 
-namespace comfortable_swipe::service
+namespace comfortable_swipe
 {
-    /**
-     * Shows the help window.
-     */
-    void help()
+    namespace service
     {
-        std::puts("comfortable-swipe [start|stop|restart|autostart|buffer|help|config|debug|status]");
-        std::puts("");
-        std::puts("start      - starts 3/4-finger gesture service");
-        std::puts("stop       - stops 3/4-finger gesture service");
-        std::puts("restart    - stops then starts 3/4-finger gesture service");
-        std::puts("autostart  - automatically run on startup (toggleable)");
-        std::puts("buffer     - parses output of libinput debug-events");
-        std::puts("help       - shows the help dialog");
-        std::puts("config     - locates the config file");
-        std::puts("debug      - logs raw output from input events taken from libinput");
-        std::puts("status     - checks status of program and autostart");
+        /**
+         * Shows the help window.
+         */
+        void help()
+        {
+            std::puts("comfortable-swipe [start|stop|restart|autostart|buffer|help|config|debug|status]");
+            std::puts("");
+            std::puts("start      - starts 3/4-finger gesture service");
+            std::puts("stop       - stops 3/4-finger gesture service");
+            std::puts("restart    - stops then starts 3/4-finger gesture service");
+            std::puts("autostart  - automatically run on startup (toggleable)");
+            std::puts("buffer     - parses output of libinput debug-events");
+            std::puts("help       - shows the help dialog");
+            std::puts("config     - locates the config file");
+            std::puts("debug      - logs raw output from input events taken from libinput");
+            std::puts("status     - checks status of program and autostart");
+        }
     }
 }
 

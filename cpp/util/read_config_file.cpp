@@ -22,82 +22,86 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <map> // std::map
 #include <string> // std::string
 #include <fstream> // std::ifstream
-#include <sstream> // std::ostringstream
 #include <iostream> // std::endl, std::getline
+#include <sstream> // std::ostringstream
 #include <cstdlib> // exit
 #include <cctype> // std::isspace
 #include <stdexcept> // std::runtime_error
 
-namespace comfortable_swipe::util
+namespace comfortable_swipe
 {
-    /**
-     * A utility method for reading the config file.
-     *
-     * @param filename (const char*) the path of the config file.
-     */
-    std::map<std::string, std::string> read_config_file(const char* filename)
+    namespace util
     {
-
-        std::map<std::string, std::string> conf;
-        std::ifstream fin(filename);
-
-        if (!fin.is_open())
+        /**
+         * A utility method for reading the config file.
+         *
+         * @param filename (const char*) the path of the config file.
+         */
+        std::map<std::string, std::string> read_config_file(const char* filename)
         {
-            throw std::runtime_error("config file does not exist");
-        }
 
-        static std::string line, token[2];
-        int line_number = 0;
+            std::map<std::string, std::string> conf;
+            std::ifstream fin(filename, std::ios::in);
 
-        while (std::getline(fin, line))
-        {
-            ++line_number;
-            token[0].clear();
-            token[1].clear();
-            int length = line.length();
-            int equal_flag = 0;
-
-            // tokenize comfig config
-            for (int i = 0; i < length; ++i)
+            if (!fin.is_open())
             {
-                if (line[i] == '#') // skip comments
-                    break;
-                if (line[i] == '=') // flag equal sign
+                throw std::runtime_error("config file does not exist");
+            }
+
+            static std::string line, token[2];
+            int line_number = 0;
+
+            while (std::getline(fin, line))
+            {
+                ++line_number;
+                token[0].clear();
+                token[1].clear();
+                int length = line.length();
+                int equal_flag = 0;
+
+                // tokenize comfig config
+                for (int i = 0; i < length; ++i)
                 {
-                    if (++equal_flag > 1)
+                    if (line[i] == '#') // skip comments
+                        break;
+                    if (line[i] == '=') // flag equal sign
                     {
-                        std::ostringstream stream;
-                        stream << "error in conf file " << filename << std::endl;
-                        stream << "multiple equal signs in line " << line_number << std::endl;
-                        throw std::runtime_error(stream.str());
+                        if (++equal_flag > 1)
+                        {
+                            std::ostringstream stream;
+                            stream << "error in conf file " << filename << std::endl;
+                            stream << "multiple equal signs in line " << line_number << std::endl;
+                            throw std::runtime_error(stream.str());
+                        }
+                    }
+                    else if (!std::isspace(line[i]))
+                    {
+                        // add to buffer
+                        token[equal_flag].push_back(line[i]);
                     }
                 }
-                else if (!std::isspace(line[i]))
+
+                // ignore empty lines
+                if (equal_flag == 0 && token[0].length() == 0)
+                    continue;
+
+                // no equal sign found in non-empty line
+                if (equal_flag == 0)
                 {
-                    // add to buffer
-                    token[equal_flag].push_back(line[i]);
+                    std::ostringstream stream;
+                    stream << "error in conf file: " << filename << std::endl;
+                    stream << "equal sign expected in line " << line_number << std::endl;
+                    throw std::runtime_error(stream.str());
                 }
+
+                // equal sign found, add to tokens
+                if (token[1].length() > 0)
+                    conf[token[0]] = token[1];
             }
 
-            // ignore empty lines
-            if (equal_flag == 0 && token[0].length() == 0)
-                continue;
-
-            // no equal sign found in non-empty line
-            if (equal_flag == 0)
-            {
-                std::ostringstream stream;
-                stream << "error in conf file: " << filename << std::endl;
-                stream << "equal sign expected in line " << line_number << std::endl;
-                throw std::runtime_error(stream.str());
-            }
-
-            // equal sign found, add to tokens
-            if (token[1].length() > 0)
-                conf[token[0]] = token[1];
+            return conf;
         }
-
-        return conf;
     }
 }
+
 #endif /* __COMFORTABLE_SWIPE__util_read_config_file__ */

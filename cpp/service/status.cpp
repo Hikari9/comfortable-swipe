@@ -30,44 +30,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdio> // FILE, std::feof, std::fgets, std::printf
 #include <regex> // std::cmatch, std::regex, std::regex_match
 
-namespace comfortable_swipe::service
+namespace comfortable_swipe
 {
-    /**
-     * Prints the status of comfortable-swipe.
-     */
-    void status()
+    namespace service
     {
-        // std::printf("autostart is %s\n", autostart_on ? "ON" : "OFF");
-
-        // check status of configuration file
-        try
+        /**
+         * Prints the status of comfortable-swipe.
+         */
+        void status()
         {
-            std::puts(COMFORTABLE_SWIPE_CONFIG);
-            auto config = comfortable_swipe::util::read_config_file(COMFORTABLE_SWIPE_CONFIG);
-            // print threshold
-            if (config.count("threshold") > 0)
-            {
-                auto & threshold = config["threshold"];
-                // std::cmatch matches;
-                // bool ok = (std::regex_match(threshold.data(), matches, std::regex("^\\d+(?:\\.\\d+)??$")) != 0);
-                // print status of threshold
-                std::printf("    %9s = %s\n", "threshold", threshold.data()); // ok ? "VALID" : "INVALID"
-            }
-            else
-                std::printf("    %9s is OFF\n", "threshold");
+            // std::printf("autostart is %s\n", autostart_on ? "ON" : "OFF");
 
-            // print swipe commands
-            for (auto &command : comfortable_swipe::gesture::swipe_gesture::command_map)
+            // check status of configuration file
+            try
             {
-                if (config.count(command) > 0)
-                    std::printf("    %9s = %s\n", command, config[command].data());
+                std::puts(COMFORTABLE_SWIPE_CONFIG);
+                auto config = comfortable_swipe::util::read_config_file(COMFORTABLE_SWIPE_CONFIG);
+                // print threshold
+                if (config.count("threshold") > 0)
+                {
+                    auto & threshold = config["threshold"];
+                    // std::cmatch matches;
+                    // bool ok = (std::regex_match(threshold.data(), matches, std::regex("^\\d+(?:\\.\\d+)??$")) != 0);
+                    // print status of threshold
+                    std::printf("    %9s = %s\n", "threshold", threshold.data()); // ok ? "VALID" : "INVALID"
+                }
                 else
-                    std::printf("    %9s NOT SET\n", command);
+                    std::printf("    %9s is OFF\n", "threshold");
+
+                // print swipe commands
+                for (auto &command : comfortable_swipe::gesture::swipe_gesture::command_map)
+                {
+                    if (config.count(command) > 0)
+                        std::printf("    %9s = %s\n", command, config[command].data());
+                    else
+                        std::printf("    %9s NOT SET\n", command);
+                }
             }
-        }
-        catch (const std::runtime_error& e)
-        {
-            std::printf("config error: %s\n", e.what());
+            catch (const std::runtime_error& e)
+            {
+                std::printf("config error: %s\n", e.what());
+            }
         }
     }
 }

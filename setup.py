@@ -54,7 +54,7 @@ try:
         name='{}.cpp.{}'.format(PYTHON_NAME, extension_name),
         define_macros=list(cpp_macros.items()),
         sources=[os.path.join('cpp', '_python.cpp')],
-        extra_compile_args=['-O2', '-Wno-unused-result'],
+        extra_compile_args=['-O2', '-Wno-unused-result', '-std=c++11', '-lstdc++'],
         libraries=['xdo']
     ) for extension_name in extension_names]
 
@@ -134,6 +134,10 @@ try:
         bdist_wheel=wrap_command(bdist_wheel)
     )
 
+    # install requiremenh open('requirements.txt', 'r') as requirements:
+    with open('requirements.txt', 'r') as requirements:
+        install_requires = requirements.read().splitlines()
+
     # classifiers
     # https://pypi.org/classifiers/
     classifiers = [
@@ -166,7 +170,7 @@ try:
         entry_points=dict(console_scripts=['{}={}.__main__:main'.format(NAME, PYTHON_NAME)]),
         ext_modules=extensions,
         cmdclass=cmdclass,
-        install_requires=['psutil'],
+        install_requires=install_requires,
         classifiers=classifiers
     )
 

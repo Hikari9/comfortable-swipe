@@ -4,14 +4,11 @@
 #include <map> // std::map
 #include <string> // std::string
 
-extern "C"
+namespace comfortable_swipe
 {
-    namespace comfortable_swipe
+    namespace util
     {
-        namespace util
-        {
-            std::map<std::string, std::string> read_config_file(const char*);
-        }
+        std::map<std::string, std::string> read_config_file(const char*);
     }
 }
 

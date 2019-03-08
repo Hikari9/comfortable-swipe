@@ -29,41 +29,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib> // std::atoi
 #include <cstdio> // FILE, std::feof, std::fgets
 
-namespace comfortable_swipe::service
+namespace comfortable_swipe
 {
-    /**
-     * Stops all comfortable-swipe instances.
-     */
-    void stop()
+    namespace service
     {
-
-        // read all service names from process (pgrep)
-        std::array<char, 128> buffer;
-        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("pgrep -f comfortable-swipe", "r"), pclose);
-
-        // make sure pipe exists
-        if (!pipe)
-            throw std::runtime_error("stop command failed");
-
-        // buffer what to kill
-        std::string kill = "kill";
-
-        // read until end of line
-        while (!std::feof(pipe.get()))
+        /**
+         * Stops all comfortable-swipe instances.
+         */
+        void stop()
         {
-            if (std::fgets(buffer.data(), buffer.size(), pipe.get()) != NULL)
+
+            // read all service names from process (pgrep)
+            std::array<char, 128> buffer;
+            std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("pgrep -f comfortable-swipe", "r"), pclose);
+
+            // make sure pipe exists
+            if (!pipe)
+                throw std::runtime_error("stop command failed");
+
+            // buffer what to kill
+            std::string kill = "kill";
+
+            // read until end of line
+            while (!std::feof(pipe.get()))
             {
-                int pid = std::atoi(buffer.data());
-                if (pid != getpid())
+                if (std::fgets(buffer.data(), buffer.size(), pipe.get()) != NULL)
                 {
-                    kill += " ";
-                    kill += std::to_string(pid);
+                    int pid = std::atoi(buffer.data());
+                    if (pid != getpid())
+                    {
+                        kill += " ";
+                        kill += std::to_string(pid);
+                    }
                 }
             }
-        }
 
-        // run "kill {pid1} {pid2}..."
-        (void) std::system(kill.data());
+            // run "kill {pid1} {pid2}..."
+            (void) std::system(kill.data());
+        }
     }
 }
 

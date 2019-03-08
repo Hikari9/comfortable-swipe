@@ -24,39 +24,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib> // std::system
 #include <unistd.h> // pipe, fork, perror, exit
 
-namespace comfortable_swipe::service
+namespace comfortable_swipe
 {
-    /**
-     * Starts the comfortable-swipe service by buffering libinput debug-events.
-     * This method is deferred. Please refer to comfortable_swipe::service::buffer()
-     * for the technical implementation.
-     */
-    void start()
+    namespace service
     {
-        std::ios::sync_with_stdio(false);
-        std::cin.tie(0);
-        std::cout.tie(0);
-        std::cout.flush();
+        /**
+         * Starts the comfortable-swipe service by buffering libinput debug-events.
+         * This method is deferred. Please refer to comfortable_swipe::service::buffer()
+         * for the technical implementation.
+         */
+        void start()
+        {
+            std::ios::sync_with_stdio(false);
+            std::cin.tie(0);
+            std::cout.tie(0);
+            std::cout.flush();
 
-        // redirect stdout to stdin
-        int fd[2];
-        pipe(fd); // create the pipes
+            // redirect stdout to stdin
+            int fd[2];
+            pipe(fd); // create the pipes
 
-        int child;
-        if ((child = fork()) == -1) {
-            perror("fork");
-            exit(EXIT_FAILURE);
+            int child;
+            if ((child = fork()) == -1) {
+                perror("fork");
+                exit(EXIT_FAILURE);
+            }
+            if (child) {
+                dup2(fd[1], STDOUT_FILENO);
+                comfortable_swipe::service::debug();
+                close(fd[0]);
+            } else {
+                dup2(fd[0], STDIN_FILENO);
+                comfortable_swipe::service::buffer();
+                close(fd[1]);
+            }
+            comfortable_swipe::service::stop();
         }
-        if (child) {
-            dup2(fd[1], STDOUT_FILENO);
-            comfortable_swipe::service::debug();
-            close(fd[0]);
-        } else {
-            dup2(fd[0], STDIN_FILENO);
-            comfortable_swipe::service::buffer();
-            close(fd[1]);
-        }
-        comfortable_swipe::service::stop();
     }
 }
 
