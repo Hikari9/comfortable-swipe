@@ -20,7 +20,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 3. You can check status with `comfortable-swipe status`
 
     ```bash
-    $ comfortable-swipe status
+    $> comfortable-swipe status
     usr/local/share/comfortable-swipe/comfortable-swipe.conf
         threshold = 0.0
             left3 = ctrl+alt+Right
@@ -38,7 +38,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 3. You can list down all commands with `comfortable-swipe` or `comfortable-swipe help`
 
     ```bash
-    $ comfortable-swipe
+    $> comfortable-swipe
     comfortable-swipe [start|stop|restart|autostart|buffer|help|config|debug|status]
 
     start      - starts 3/4-finger gesture service
@@ -59,9 +59,17 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
     sudo gpasswd -a $USER $(ls -l /dev/input/event* | awk '{print $4}' | head --line=1)
     ```
 2. ***Important***: After inputing your `sudo` password, log out then log back in
-3. Start
+3. By default, comfortable-swipe should be running. Otherwise, run:
     ```bash
     comfortable-swipe start
+    ```
+    You can see if gestures work correctly if you see `SWIPE xxx` in the output:
+
+    ```bash
+    $> comfortable-swipe start
+    SWIPE left3
+    SWIPE right3
+    ...
     ```
 
 ## How to Upgrade
@@ -73,8 +81,9 @@ pip3 install -U --user git+https://github.com/Hikari9/comfortable-swipe
 ## Uninstall
 
 ```bash
-# Uncomment below to remove configurations (not recommended)
+# Uncomment below to COMPLETELY remove configurations (not recommended)
 # rm $(comfortable-swipe config)
+
 pip3 uninstall comfortable-swipe
 ```
 
@@ -83,20 +92,20 @@ pip3 uninstall comfortable-swipe
 1. `comfortable-swipe config` - outputs location of configuration file
 
     ```bash
-    $ comfortable-swipe config
+    $> comfortable-swipe config
     /usr/local/share/comfortable-swipe/comfortable-swipe.conf
     ```
 
 2. `comfortable-swipe autostart` - Toggles autostart
     ```bash
-    $ comfortable-swipe autostart
+    $> comfortable-swipe autostart
     Autostart switched off
     ```
 
 3. `comfortable-swipe debug` - Debugs input (this is an unbuffered alias of `libinput debug-events`)
 
     ```bash
-    $ comfortable-swipe debug
+    $> comfortable-swipe debug
     ...
     -event9   DEVICE_ADDED     TouchPad                     seat0 default group7  cap:pg  size 70x50mm tap(dl off) left scroll-nat scroll-2fg-edge click-buttonareas-clickfinger dwt-on
     ...
@@ -122,12 +131,12 @@ pip3 uninstall comfortable-swipe
 
 Comfortable swipe makes use of keyboard shortcuts for configurations. Edit by running
 
-```
-nano $(comfortable-swipe config)
+```bash
+gedit $(comfortable-swipe config)
 ```
 
 Make sure to restart after making changes:
-```
+```bash
 comfortable-swipe restart
 ```
 
