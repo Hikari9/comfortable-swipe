@@ -3,22 +3,22 @@ sudo: required
 language: c++
 matrix:
   include:
-    - env: {MATRIX_EVAL: '"CC=gcc-7 && CXX=g++-7"'}
+    - env: {MATRIX_EVAL: '"CC=gcc-7 && CXX=g++-7 && alias g++=g++-7"'}
       addons:
         apt:
           update: true
           sources:
-            - "ubuntu-toolchain-r-test"
+            - ubuntu-toolchain-r-test
           packages:
             - libxdo-dev
             - libinput-tools
             - g++-7
-    - env: {MATRIX_EVAL: '"CC=gcc-8 && CXX=g++-8"'}
+    - env: {MATRIX_EVAL: '"CC=gcc-8 && CXX=g++-8 && alias g++=g+++-8"'}
       addons:
         apt:
           update: true
           sources:
-            - "ubuntu-toolchain-r-test"
+            - ubuntu-toolchain-r-test
           packages:
             - libxdo-dev
             - libinput-tools
