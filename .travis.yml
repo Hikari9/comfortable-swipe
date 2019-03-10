@@ -1,0 +1,23 @@
+dist: xenial
+language: c++
+sudo: required
+git:
+  depth: false
+addons:
+  apt:
+    update: true
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libxdo-dev
+      - libinput-tools
+      - g++-7
+env:
+  CC: gcc-7
+  CXX: g++-7
+install:
+  - bash install
+script:
+  - ./tests/run_tests
+after_script:
+  - bash uninstall
