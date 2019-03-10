@@ -1,5 +1,8 @@
 dist: xenial
 language: c++
+c++:
+  - g++-7
+  - g++-8
 sudo: required
 git:
   depth: false
@@ -11,10 +14,6 @@ addons:
     packages:
       - libxdo-dev
       - libinput-tools
-      - g++-7
-env:
-  CC: gcc-7
-  CXX: g++-7
 install:
   - bash install
 script:
