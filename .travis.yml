@@ -1,9 +1,9 @@
+dist: xenial
 sudo: required
+language: c++
 matrix:
   include:
-    - dist: xenial
-      language: c++
-      env: {MATRIX_EVAL: "CC=gcc-7 && CXX=g++-7"}
+    - env: {MATRIX_EVAL: '"CC=gcc-7 && CXX=g++-7"'}
       addons:
         apt:
           update: true
@@ -13,9 +13,7 @@ matrix:
             - libxdo-dev
             - libinput-tools
             - g++-7
-    - dist: xenial
-      language: c++
-      env: {MATRIX_EVAL: "CC=gcc-8 && CXX=g++-8"}
+    - env: {MATRIX_EVAL: '"CC=gcc-8 && CXX=g++-8"'}
       addons:
         apt:
           update: true
@@ -25,7 +23,9 @@ matrix:
             - libxdo-dev
             - libinput-tools
             - g++-8
-before_install: eval "${MATRIX_EVAL}"
+before_install:
+  - eval "${MATRIX_EVAL}"
+  - g++ --version
 install: bash install
-script: ./tests/run_tests
+script: bash tests/run_tests
 after_script: bash uninstall
