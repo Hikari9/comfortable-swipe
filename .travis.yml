@@ -1,8 +1,11 @@
 dist: xenial
-language: c++
 sudo: required
-git:
-  depth: false
+matrix:
+  include:
+    - addons: {apt: {packages: ["g++-8"]}}
+      env: {MATRIX_EVAL: "CC=gcc-7 && CXX=g++-7"}
+    - addons: {apt: {packages: ["g++-8"]}}
+      env: {MATRIX_EVAL: "CC=gcc-8 && CXX=g++-8"}
 addons:
   apt:
     update: true
@@ -11,13 +14,7 @@ addons:
     packages:
       - libxdo-dev
       - libinput-tools
-      - g++-7
-env:
-  CC: gcc-7
-  CXX: g++-7
-install:
-  - bash install
-script:
-  - ./tests/run_tests
-after_script:
-  - bash uninstall
+before_install: eval "${MATRIX_EVAL}"
+install: bash install
+script: ./tests/run_tests
+after_script: bash uninstall
