@@ -15,7 +15,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
     ```bash
     git clone https://github.com/Hikari9/comfortable-swipe.git --depth 1
-    cd comfortable-swipe-ubuntu
+    cd comfortable-swipe
     ```
 
 3. Install
@@ -24,7 +24,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
     bash install
     ```
 
-4. You may delete the downloaded `comfortable-swipe-ubuntu` folder after installation.
+4. You may delete the downloaded `comfortable-swipe` folder after installation.
 
 ## How to Run
 
@@ -126,4 +126,15 @@ Download the `uninstall` script then run `bash uninstall`
 
 
 ## Bug Reports
-Create an issue [here](https://github.com/Hikari9/comfortable-swipe-ubuntu/issues/new) to report a bug.
+Create an issue [here](https://github.com/Hikari9/comfortable-swipe/issues/new) to report a bug.
+
+Please include the output of the following:
+```
+lsb_release -a
+g++ --version
+xinput list | grep touchpad -i
+lsmod | grep hid
+comfortable-swipe start  # if you can run it
+comfortable-swipe debug  # screenshot / first few lines
+cat $(comfortable-swipe config)
+```
