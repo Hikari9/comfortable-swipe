@@ -14,7 +14,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 2. Clone this repository
 
     ```bash
-    git clone https://github.com/Hikari9/comfortable-swipe-ubuntu.git
+    git clone https://github.com/Hikari9/comfortable-swipe.git --depth 1
     cd comfortable-swipe-ubuntu
     ```
 
