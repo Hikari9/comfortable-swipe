@@ -50,7 +50,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 ## Configurations
 Comfortable swipe makes use of keyboard shortcuts for configurations. Edit by running
 ```
-nano $(comfortable-swipe config)
+gedit $(comfortable-swipe config)
 ```
 
 Make sure to run after making changes:
@@ -130,12 +130,13 @@ Download the `uninstall` script then run `bash uninstall`
 Create an issue [here](https://github.com/Hikari9/comfortable-swipe/issues/new) to report a bug.
 
 Please include the output of the following:
-```
-lsb_release -a
-g++ --version
-xinput list | grep touchpad -i
-lsmod | grep hid
-comfortable-swipe start  # if you can run it
-comfortable-swipe debug  # screenshot / first few lines
-cat $(comfortable-swipe config)
-```
+
+1. `lsb_release -a`
+2. `g++ --version`
+3. `ls -l /dev/input/event*`
+3. `xinput list | grep touchpad -i`
+4. `lsmod | grep hid`
+5. `comfortable-swipe status`
+6. `comfortable-swipe start`  (if you can run it)
+7. `comfortable-swipe debug`  (try swiping if you can see `GESTURE_SWIPE_XXX`)
+8. `cat $(comfortable-swipe config)`

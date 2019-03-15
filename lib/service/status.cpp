@@ -50,18 +50,12 @@ namespace comfortable_swipe::service
         auto autostart_f = comfortable_swipe::util::autostart_filename();
         bool autostart_on = access(autostart_f, F_OK) != -1;
 
-        // print status
-        std::printf("program is %s\n", running ? "ON" : "OFF");
-        std::printf("autostart is %s\n", autostart_on ? "ON" : "OFF");
-        std::printf("config file at %s\n", comfortable_swipe::util::conf_filename());
+        std::puts(comfortable_swipe::util::conf_filename());
 
         // check status of configuration file
         try
         {
             auto config = comfortable_swipe::util::read_config_file(comfortable_swipe::util::conf_filename());
-
-            // print keys and values of config file
-            std::printf("\nConfigurations:\n");
 
             // print threshold
             if (config.count("threshold") > 0)
@@ -91,6 +85,10 @@ namespace comfortable_swipe::service
         {
             std::printf("config error: %s\n", e.what());
         }
+
+        // print status
+        std::printf("autostart is %s\n", autostart_on ? "ON" : "OFF");
+        std::printf("comfortable-swipe program is %s\n", running ? "RUNNING" : "STOPPED");
     }
 }
 

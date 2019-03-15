@@ -1,82 +1,93 @@
 #!/bin/bash
-# prefer running as root
-DIR=$(dirname $0)
-PROGRAM=/usr/local/bin/comfortable-swipe
-COMPILE=$DIR/comfortable-swipe.compile.sh
-CONF_PATH=/usr/local/share/comfortable-swipe/comfortable-swipe.conf
-DCONF_PATH=$DIR/defaults.conf
-OLD_CONF_PATH=${XDG_CONFIG_HOME:-$HOME/.config}/comfortable-swipe.conf
 
-if [ -x "$(command -v $PROGRAM)" ]; then
-    # stop any running comfortable-swipe if it exists
-    $PROGRAM stop
-fi
+function install {
+    # prefer running as root
+    local dir="$(dirname $0)"
+    local program=comfortable-swipe
+    local program_exe=/usr/local/bin/$program
+    local compile_command="$dir/$program.compile.sh"
+    local conf_path=/usr/local/share/$program/$program.conf
+    local dconf_path="$dir/defaults.conf"
+    local old_conf_path="${XDG_CONFIG_HOME:-$HOME/.config}/$program.conf"
 
-#copy config file
-abort () {
-    exec echo "Installation aborted"
-}
-sudo mkdir -p $(dirname $CONF_PATH) || abort
-
-# check if "-y" or "--yes" is passed as an argument
-YES=false
-while test $# -gt 0
-do
-    case "$1" in
-        -y) YES=true
-            ;;
-        --yes) YES=true
-            ;;
-    esac
-    shift
-done
-
-sudo chown $USER $(dirname $CONF_PATH)
-if [ ! -f $CONF_PATH ]; then
-    if [ ! -f $OLD_CONF_PATH ]; then
-        # old config file not found, create from scratch
-        cat $DCONF_PATH > $CONF_PATH || abort
-    else
-        # old config file found, move to the new path
-        cat $OLD_CONF_PATH > $CONF_PATH || abort
-        echo "Configuration copied from $OLD_CONF_PATH to $CONF_PATH"
+    if [ -x "$(command -v $program_exe)" ]; then
+        # stop any running $program if it exists
+        $program_exe stop
     fi
-else
-    # config file found, ask user if overwrite
-    echo "Old conf file found in $CONF_PATH"
-    if [ $YES == false ]; then
-        read -r -p "Keep the old conf file? (default: yes) [Y/n] " response
-        response=${response,,} # tolower
-        if [[ "$response" =~ ^(no|n)$ ]]; then
-            read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
-            response=${response,,}
-            if [[ "$response" =~ ^(yes|y)$ ]]; then
-                cat $DCONF_PATH > $CONF_PATH || abort
-            else
-                abort
+
+    #copy config file
+    abort () {
+        exec echo "Installation aborted"
+    }
+    sudo mkdir -p "$(dirname $conf_path)" || abort
+
+    # check if "-y" or "--yes" is passed as an argument
+    YES=false
+    while test $# -gt 0
+    do
+        case "$1" in
+            -y) YES=true
+                ;;
+            --yes) YES=true
+                ;;
+        esac
+        shift
+    done
+
+    sudo chown $USER "$(dirname $conf_path)"
+    if [ ! -f "$conf_path" ]; then
+        if [ ! -f "$old_conf_path" ]; then
+            # old config file not found, create from scratch
+            cat "$dconf_path" > "$conf_path" || abort
+        else
+            # old config file found, move to the new path
+            cat "$old_conf_path" > "$conf_path" || abort
+            echo "Configuration copied from $old_conf_path to $conf_path"
+        fi
+    else
+        # config file found, ask user if overwrite
+        echo "Old conf file found in $conf_path"
+        if [ "$YES" == false ]; then
+            read -r -p "Keep the old conf file? (default: yes) [Y/n] " response
+            response="${response,,}" # tolower
+            if [[ "$response" =~ ^(no|n)$ ]]; then
+                read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
+                response="${response,,}"
+                if [[ "$response" =~ ^(yes|y)$ ]]; then
+                    cat "$dconf_path" > "$conf_path" || abort
+                else
+                    abort
+                fi
             fi
         fi
     fi
-fi
 
-echo "Installing..."
+    echo "Installing to $program_exe ..."
 
-# remove existing comfortable-swipe
-if [ -x "$(command -v $PROGRAM)" ]; then
-    sudo rm -f $(which comfortable-swipe)
-fi
+    # remove existing $program
+    if [ -x "$(command -v $program_exe)" ]; then
+        sudo rm -f "$(which $program)"
+    fi
 
-# compile library
-sudo $COMPILE $PROGRAM || abort
+    # compile library
+    sudo "$compile_command" "$program_exe" || abort
 
-# add permissions to input group (defer)
-# GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
+    # add permissions to input group (defer)
+    # GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
 
-# toggle autostart twice to refresh any changes
-$PROGRAM autostart > /dev/null || abort
-$PROGRAM autostart > /dev/null || abort
+    # turn on autostart by default
+    local autostart_status="$($program_exe autostart)"
+    if [[ "$autostart_status" == *off* ]]; then
+        autostart_status="$($program_exe autostart)"
+    fi
 
-echo "Successfully installed comfortable-swipe."
-echo "Configuration file is located at $CONF_PATH"
-echo ""
-echo "Try running 'comfortable-swipe start' to test."
+    echo "Successfully installed $program $(cat $dir/VERSION | tr -d '[:space:]')"
+    echo ""
+    echo "$autostart_status"
+    echo "Edit configuration file: gedit \$($program config)"
+    echo ""
+    echo "Try running: $program start"
+}
+
+install
+unset -f install
