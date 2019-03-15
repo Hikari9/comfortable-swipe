@@ -30,7 +30,7 @@ namespace comfortable_swipe::service
     void help()
     {
         using comfortable_swipe::util::conf_filename;
-        std::puts("comfortable-swipe [start|stop|restart|autostart|buffer|help|config|debug|status]");
+        std::puts("comfortable-swipe " COMFORTABLE_SWIPE_VERSION " [start|stop|restart|autostart|buffer|help|config|debug|status]");
         std::puts("");
         std::puts("start      - starts 3/4-finger gesture service");
         std::puts("stop       - stops 3/4-finger gesture service");
