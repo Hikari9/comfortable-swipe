@@ -1,5 +1,5 @@
 # Comfortable Swipe (Ubuntu)
-[![comfortable-swipe version](https://img.shields.io/github/release/Hikari9/comfortable-swipe.svg?label=comfortable-swipe)](https://github.com/Hikari9/comfortable-swipe/releases)
+[![comfortable-swipe version](https://img.shields.io/github/release/Hikari9/comfortable-swipe.svg?label=comfortable-swipe&color=orange)](https://github.com/Hikari9/comfortable-swipe/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures for Ubuntu 14.04 LTS and beyond. May work for other Linux distros that support `libinput`.
@@ -127,7 +127,9 @@ Download the `uninstall` script then run `bash uninstall`
 
 
 ## Bug Reports
-Create an issue [here](https://github.com/Hikari9/comfortable-swipe/issues/new) to report a bug.
+Search in [Issues](https://github.com/Hikari9/comfortable-swipe/issues?utf8=%E2%9C%93&q=is%3Aissue) if the problem has already been solved.
+
+Otherwise, [create a new issue](https://github.com/Hikari9/comfortable-swipe/issues/new) to report your bug.
 
 Please include the output of the following:
 
