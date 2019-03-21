@@ -61,13 +61,13 @@ comfortable-swipe restart
 Property  | Description | Default Value | Default Behavior
 --------- | ----------- | -------------- | -----
 threshold | mouse pixels to activate swipe; higher = less sensitive; floating-point (Note: Sky is the limit! Can be as large as 1000.0) | 0.0
-left3     | 3-finger swipe left | ctrl+shift+Right | switch to right workspace
+left3     | 3-finger swipe left | ctrl+alt+Right | switch to right workspace
 left4     | 4-finger swipe left | ctrl+alt+shift+Right | move window to right workspace
-right3    | 3-finger swipe right | ctrl+shift+Left | switch to left workspace
+right3    | 3-finger swipe right | ctrl+alt+Left | switch to left workspace
 right4    | 4-finger swipe right | ctrl+alt+shift+Left | move window to left workspace
-up3       | 3-finger swipe up | ctrl+shift+Down | switch to bottom workspace
+up3       | 3-finger swipe up | ctrl+alt+Down | switch to bottom workspace
 up4       | 4-finger swipe up | ctrl+alt+shift+Down | move window to bottom workspace
-down3     | 3-finger swipe down | ctrl+shift+Down | switch to above workspace
+down3     | 3-finger swipe down | ctrl+alt+Down | switch to above workspace
 down4     | 4-finger swipe down | ctrl+alt+shift+Up | move window to above workpace
 
 Taken from `man xdotool`:
