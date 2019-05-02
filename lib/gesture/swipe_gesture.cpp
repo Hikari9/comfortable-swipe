@@ -177,7 +177,8 @@ namespace comfortable_swipe::gesture
         else
         {
             // not swiping, check if swipe will begin
-            if (std::regex_match(line, matches, gesture_swipe_begin) != 0)
+            if (std::regex_match(line, matches, gesture_swipe_begin) != 0
+                || std::regex_match(line, matches, gesture_swipe_update) != 0)
             {
                 // assign necessary variables for swipe begin
                 this->flag_swiping = true;

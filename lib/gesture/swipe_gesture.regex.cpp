@@ -34,7 +34,7 @@ namespace comfortable_swipe::gesture
     const char* swipe_gesture::GESTURE_BEGIN_REGEX_PATTERN =
         "^"                        // start of string
         "[ -]event\\d+"            // event
-        "\\s+GESTURE_SWIPE_(?:BEGIN|UPDATE)"  // gesture, (UPDATE: patch for Microsoft Surface Pro Touchpad)
+        "\\s+GESTURE_SWIPE_BEGIN"  // gesture
         "\\s+\\S+"                 // timestamp
         "\\s+(\\d+)"               // fingers
         "\\s*$"                        // end of string
