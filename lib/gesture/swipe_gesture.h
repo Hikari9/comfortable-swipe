@@ -34,7 +34,7 @@ namespace comfortable_swipe::gesture
         swipe_gesture();
 
         // destructor
-        ~swipe_gesture();
+        virtual ~swipe_gesture();
 
         // fields for xdo
         int fingers;

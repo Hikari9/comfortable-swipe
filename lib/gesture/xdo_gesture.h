@@ -39,7 +39,7 @@ namespace comfortable_swipe
 
         public:
             xdo_gesture();
-            ~xdo_gesture();
+            virtual ~xdo_gesture();
         };
     }
 }

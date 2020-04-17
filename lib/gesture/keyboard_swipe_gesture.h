@@ -44,7 +44,7 @@ namespace comfortable_swipe::gesture
         );
 
         // destructor
-        ~keyboard_swipe_gesture();
+        virtual ~keyboard_swipe_gesture();
 
         // hooks that we override
         virtual void begin() override;
