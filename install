@@ -7,7 +7,8 @@ function install {
     local dir="$(dirname "$0")"
     local program=comfortable-swipe
     local program_exe=/usr/local/bin/$program
-    local compile_command="$dir/cpp.compile.sh $dir/command_line.cpp"
+    local compile_command="$dir/cpp.compile.sh"
+    local compile_target="$dir/command_line.cpp"
     local conf_path=/usr/local/share/$program/$program.conf
     local dconf_path="$dir/defaults.conf"
     local old_conf_path="${XDG_CONFIG_HOME:-$HOME/.config}/$program.conf"
@@ -72,7 +73,7 @@ function install {
     fi
 
     # compile library
-    sudo "$compile_command" -o "$program_exe" || abort
+    sudo "$compile_command" "$compile_target" -o "$program_exe" || abort
 
     # add permissions to input group (defer)
     # GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
