@@ -69,8 +69,8 @@ gedit $(comfortable-swipe config)
 | down3     |             3-finger swipe down              | ctrl+alt+Up          | switch to above workspace                                                                                                  |
 | down4     |             4-finger swipe down              | ctrl+alt+shift+Up    | move window to above workpace                                                                                              |
 | threshold |        mouse pixels to activate swipe        | 0.0                  | tweak this if you're having troubles with touchpad sensitivity (higher = less sensitive, values can be as large as 1000.0) |
-| hold3     | holds a mouse button when 3 fingers are down | (none)               | See [Mouse Gestures (Experimental)](#mouse-gestures-experimental)                                                                         |
-| hold4     | holds a mouse button when 4 fingers are down | (none)               | See [Mouse Gestures (Experimental)](#mouse-gestures-experimental)                                                                         |
+| hold3     | holds a mouse button when 3 fingers are down | (none)               | See [Mouse Gestures (Experimental)](#mouse-gestures-experimental)                                                          |
+| hold4     | holds a mouse button when 4 fingers are down | (none)               | See [Mouse Gestures (Experimental)](#mouse-gestures-experimental)                                                          |
 
 After making changes, make sure to restart the program:
 
@@ -154,7 +154,7 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
    # Ubuntu
    down3 = ctrl+super+d
    ```
-   
+
    ```bash
    # GNOME
    down3 = super+d
@@ -198,57 +198,57 @@ We have included simple mouse gestures on swipe by setting `hold3` and `hold4`.
 ```bash
 Possible Values (hold3, hold4):
 
-move            # just move the mouse cursor (no mousedown)  
-button1         # hold left click on finger swipe  
-button2         # hold middle click on finger swipe  
-button3         # hold right click on finger swipe  
-button4         # wheel up on finger swipe (experimental)  
-button5         # wheel down on finger swipe (experimental)  
-scroll          # naive 3/4 finger natural scroll (no acceleration, very experimental)  
-scroll_reverse  # naive 3/4 finger reverse scroll (no acceleration, very experimental)  
+move            # just move the mouse cursor (no mousedown)
+button1         # hold left click on finger swipe
+button2         # hold middle click on finger swipe
+button3         # hold right click on finger swipe
+button4         # wheel up on finger swipe (experimental)
+button5         # wheel down on finger swipe (experimental)
+scroll          # naive 3/4 finger natural scroll (no acceleration, very experimental)
+scroll_reverse  # naive 3/4 finger reverse scroll (no acceleration, very experimental)
 ```
 
 Any value not mentioned above disables the mouse-hold.
 
 Examples:
 
-* 3-finger drag
+- 3-finger drag
 
-   ```bash
-   hold3 = button1
-   ```
+  ```bash
+  hold3 = button1
+  ```
 
-* 4-finger drag (with middle click)
+- 4-finger drag (with middle click)
 
-   ```bash
-   hold4 = button2
-   ```
+  ```bash
+  hold4 = button2
+  ```
 
-* 3-finger natural scroll
+- 3-finger natural scroll
 
-   ```bash
-   hold3 = scroll
-   ```
+  ```bash
+  hold3 = scroll
+  ```
 
-* 4-finger reverse scroll
+- 4-finger reverse scroll
 
-   ```bash
-   hold4 = scroll_reverse
-   ```
+  ```bash
+  hold4 = scroll_reverse
+  ```
 
-* Just move the cursor
+- Just move the cursor
 
-   ```bash
-   hold3 = move
-   hold4 = move
-   ```
+  ```bash
+  hold3 = move
+  hold4 = move
+  ```
 
-* Any other command will disable the mouse hold
+- Any other command will disable the mouse hold
 
-   ```bash
-   hold3 = disabled
-   hold4 = nothing
-   ```
+  ```bash
+  hold3 = disabled
+  hold4 = nothing
+  ```
 
 **Note**: Applying any mouse-hold configuration will disable up/left/right/down behavior to avoid gesture conflicts. The logic of this will be improved in the future.
 
@@ -289,7 +289,9 @@ If you can see `GESTURE_SWIPE_XXX` in your output, that means your touchpad supp
 
 ## Uninstall
 
-Download the `uninstall` script then run `bash uninstall`
+```bash
+wget -qO - https://raw.githubusercontent.com/Hikari9/comfortable-swipe/master/uninstall | bash
+```
 
 ## Bug Reports
 
