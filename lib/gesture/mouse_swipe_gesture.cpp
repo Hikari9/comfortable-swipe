@@ -68,7 +68,7 @@ namespace comfortable_swipe::gesture
     }
 
     /**
-     *
+     * Run mouseup command on hold output.
      */
     void mouse_swipe_gesture::do_mouseup(const char * mouseinput)
     {
@@ -76,6 +76,11 @@ namespace comfortable_swipe::gesture
         if (mouse != -1)
         {
             std::printf("MOUSE UP hold%d %s\n", this->fingers, mouseinput);
+            if (mouse != 0)
+            {
+                // send mouse up to xdo
+            }
+
             this->flag_mousedown = false;
         }
     }
@@ -132,13 +137,10 @@ namespace comfortable_swipe::gesture
         swipe_gesture::update();
         if (this->is_mousedown())
         {
-            // ix, iy: mouse location on begin
-            // ux, uy: integral of mouse accelerations
-            xdo_move_mouse(
+            xdo_move_mouse_relative(
                 this->xdo,
-                this->ix + this->ux,
-                this->iy + this->uy,
-                this->screen_num
+                this->udx,
+                this->udy
             );
         }
 
