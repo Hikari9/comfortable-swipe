@@ -90,7 +90,7 @@ void mouse_hold_gesture::do_mouseup(const char *mouseinput) {
  * Utility method to parse mouse number from input.
  * Returns -1 on failure.
  */
-int mouse_hold_gesture::parse_mouse_button(const char *input) const {
+int mouse_hold_gesture::parse_mouse_button(const char *input) {
   // just move without holding button down
   if (std::strcmp(input, "move") == 0)
     return MOUSE_MOVE;

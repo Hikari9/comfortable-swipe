@@ -56,6 +56,10 @@ void status() {
     auto config = comfortable_swipe::util::read_config_file(
         comfortable_swipe::util::conf_filename());
 
+    // formatting
+    const char *FORMAT_NO_ARGS = "    %9s is %9s\n";
+    const char *FORMAT_ARGS = "    %9s is %9s (%s)\n";
+
     // print threshold
     if (config.count("threshold") > 0) {
       auto &threshold = config["threshold"];
@@ -66,25 +70,55 @@ void status() {
                                   std::regex("^\\d+(?:\\.\\d+)??$")) != 0);
 
       // print status of threshold
-      std::printf("    %9s is %s  (%s)\n", "threshold", ok ? "OK" : "INVALID",
+      std::printf(FORMAT_ARGS, "threshold", ok ? "VALID" : "INVALID",
                   threshold.data());
     } else
-      std::printf("    %9s is OFF\n", "threshold");
+      std::printf(FORMAT_NO_ARGS, "threshold", "NOTSET");
+
+    // print mouse hold commands
+    const char *mouse_hold_commands[] = {"hold3", "hold4"};
+    bool has_mouse_hold[] = {false, false};
+    int index = 0;
+    for (const auto *command : mouse_hold_commands) {
+      if (config.count(command) > 0) {
+        // check if command is valid
+        const auto &input = config[command];
+        int button =
+            comfortable_swipe::gesture::mouse_hold_gesture::parse_mouse_button(
+                input.c_str());
+        if (button != comfortable_swipe::gesture::MOUSE_NONE) {
+          std::printf(FORMAT_ARGS, command, "VALID", input.c_str());
+          has_mouse_hold[index] = button;
+        } else {
+          std::printf(FORMAT_ARGS, command, "INVALID", input.c_str());
+        }
+      } else
+        std::printf(FORMAT_NO_ARGS, command, "NOTSET");
+      index += 1;
+    }
 
     // print swipe commands
     for (auto &command :
          comfortable_swipe::gesture::keyboard_swipe_gesture::command_map) {
-      if (config.count(command) > 0)
-        std::printf("    %9s is OK  (%s)\n", command, config[command].data());
-      else
-        std::printf("    %9s is OFF\n", command);
+      if (config.count(command) > 0) {
+        int fingers = int(command[strlen(command) - 1] - '0');
+        if (has_mouse_hold[fingers - 3]) {
+          // command is disabled because mouse hold exists
+          std::printf(FORMAT_ARGS, command, "DISABLED", config[command].data());
+        } else {
+          // check if it's disabled by checking button
+          std::printf(FORMAT_ARGS, command, "VALID", config[command].data());
+        }
+      } else
+        std::printf(FORMAT_NO_ARGS, command, "NOTSET");
     }
+
   } catch (const std::runtime_error &e) {
     std::printf("config error: %s\n", e.what());
   }
 
   // print status
-  std::printf("autostart is %s\n", autostart_on ? "ON" : "OFF");
+  std::printf("\nautostart is %s\n", autostart_on ? "ON" : "OFF");
   std::printf("comfortable-swipe program is %s\n",
               running ? "RUNNING" : "STOPPED");
 }

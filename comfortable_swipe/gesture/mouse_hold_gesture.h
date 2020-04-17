@@ -52,7 +52,7 @@ namespace comfortable_swipe::gesture
         virtual bool is_mousedown() const;
 
         // utility method to parse mouse input given config characters
-        virtual int parse_mouse_button(const char*) const;
+        static int parse_mouse_button(const char*);
 
     protected:
         // command holders
