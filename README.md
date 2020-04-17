@@ -3,7 +3,7 @@
 [![comfortable-swipe version](https://img.shields.io/github/release/Hikari9/comfortable-swipe.svg?label=comfortable-swipe&color=orange)](https://github.com/Hikari9/comfortable-swipe/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-> **_New in Version 1.1.0!_** Added mouse move gestures (eg. `hold3 = button1`)
+> **_New in Version 1.1.0!_** Added mouse gestures, see [#mouse-gestures-experimental](#mouse-gestures-experimental)
 
 Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures for Ubuntu 14.04 LTS and beyond. May work for other Linux distros that support `libinput`.
 
@@ -74,8 +74,8 @@ gedit $(comfortable-swipe config)
 | down3     |             3-finger swipe down              | ctrl+alt+Up          | switch to above workspace                                                                                                  |
 | down4     |             4-finger swipe down              | ctrl+alt+shift+Up    | move window to above workpace                                                                                              |
 | threshold |        mouse pixels to activate swipe        | 0.0                  | tweak this if you're having troubles with touchpad sensitivity (higher = less sensitive, values can be as large as 1000.0) |
-| hold3     | holds a mouse button when 3 fingers are down | (none)               | See [Mouse Gestures](#mouse-gestures-experimental)                                                                         |
-| hold4     | holds a mouse button when 4 fingers are down | (none)               | See [Mouse Gestures](#mouse-gestures-experimental)                                                                         |
+| hold3     | holds a mouse button when 3 fingers are down | (none)               | See [Mouse Gestures (Experimental)](#mouse-gestures-experimental)                                                                         |
+| hold4     | holds a mouse button when 4 fingers are down | (none)               | See [Mouse Gestures (Experimental)](#mouse-gestures-experimental)                                                                         |
 
 After making changes, make sure to restart the program:
 
@@ -108,7 +108,7 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 
 1. Switching workspaces
 
-   ```conf
+   ```bash
    # Unity, KDE
    left3 = ctrl+alt+Right
    right3 = ctrl+alt+Left
@@ -116,7 +116,7 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
    down3 = ctrl+alt+Up
    ```
 
-   ```conf
+   ```bash
    # GNOME
    up3 = super+PgDown
    down3 = super+PgUp
@@ -124,7 +124,7 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 
 1. Move window to workspace
 
-   ```conf
+   ```bash
    # Unity, KDE
    left4 = ctrl+alt+shift+Right
    right4 = ctrl+alt+shift+Left
@@ -132,7 +132,7 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
    down4 = ctrl+alt+shift+Up
    ```
 
-   ```conf
+   ```bash
    # GNOME
    up4 = super+shift+PgDown
    down4 = super+shift+PgUp
@@ -140,7 +140,7 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 
 1. Move window to other monitor
 
-   ```conf
+   ```bash
    # GNOME
    left4 = super+shift+Right
    right4 = super+shift+Left
@@ -148,44 +148,44 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 
 1. Toggle workspace overview
 
-   ```conf
+   ```bash
    up3 = super+s
    ```
 
 1. Show desktop ([setup](https://www.itsupportguides.com/knowledge-base/ubuntu/ubuntu-how-to-make-windows-d-show-desktop/))
 
-   ```conf
+   ```bash
    # Ubuntu, KDE, Gnome
    down3 = super+d
    ```
 
-   ```conf
+   ```bash
    # Linux Mint
    down3 = ctrl+alt+d
    ```
 
 1. Snap windows to the left/right
 
-   ```conf
+   ```bash
    left3 = super+Left
    right3 = super+Right
    ```
 
 1. Toggle maximize
 
-   ```conf
+   ```bash
    up3 = super+Up
    ```
 
 1. Toggle minimize
 
-   ```conf
+   ```bash
    down3 = super+Down
    ```
 
 1. Alt+Tab switch application (experimental)
 
-   ```conf
+   ```bash
    left3 = alt+Tab
    right3 = alt+shift+Tab
    ```
@@ -211,38 +211,38 @@ Examples:
 
 1. 3-finger drag
 
-   ```conf
+   ```bash
    hold3 = button1
    ```
 
 1. 4-finger drag (with middle click)
 
-   ```conf
+   ```bash
    hold4 = button2
    ```
 
 1. 3-finger natural scroll
 
-   ```conf
+   ```bash
    hold3 = scroll
    ```
 
 1. 4-finger reverse scroll
 
-   ```conf
+   ```bash
    hold4 = scroll_reverse
    ```
 
 1. Just move the cursor
 
-   ```conf
+   ```bash
    hold3 = move
    hold4 = move
    ```
 
 1. Any other command will disable the mouse hold
 
-   ```conf
+   ```bash
    hold3 = disabled
    hold4 = nothing
    ```
@@ -289,8 +289,6 @@ If you can see `GESTURE_SWIPE_XXX` in your output, that means your touchpad supp
 Download the `uninstall` script then run `bash uninstall`
 
 ## Bug Reports
-
-Create an issue [here](https://github.com/Hikari9/comfortable-swipe-ubuntu/issues/new) to report a bug.
 
 Search in [Issues](https://github.com/Hikari9/comfortable-swipe/issues?utf8=%E2%9C%93&q=is%3Aissue) if the problem has already been solved.
 
