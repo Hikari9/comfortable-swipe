@@ -19,20 +19,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cstdio> // std::puts
 #include "../all_headers.hpp"
+#include <cstdio> // std::puts
 
-namespace comfortable_swipe::service
-{
-    /**
-     * Prints where the config file of comfortable swipe is located.
-     *
-     * Usage: nano $(comfortable-swipe config)
-     */
-    void config()
-    {
-        std::puts(comfortable_swipe::util::conf_filename());
-    }
-}
+namespace comfortable_swipe::service {
+/**
+ * Prints where the config file of comfortable swipe is located.
+ *
+ * Usage: nano $(comfortable-swipe config)
+ */
+void config() { std::puts(comfortable_swipe::util::conf_filename()); }
+} // namespace comfortable_swipe::service
 
 #endif /* __COMFORTABLE_SWIPE__service_config__ */

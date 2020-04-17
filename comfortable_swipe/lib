@@ -25,11 +25,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Add all cpp files below to be ready for export.
  */
 
-#include "gesture/xdo_gesture.cpp"
-#include "gesture/swipe_gesture.cpp"
-#include "gesture/swipe_gesture.regex.cpp"
+#include "driver.cpp"
 #include "gesture/keyboard_swipe_gesture.cpp"
 #include "gesture/mouse_hold_gesture.cpp"
+#include "gesture/swipe_gesture.cpp"
+#include "gesture/swipe_gesture.regex.cpp"
+#include "gesture/xdo_gesture.cpp"
 #include "service/autostart.cpp"
 #include "service/buffer.cpp"
 #include "service/config.cpp"
@@ -42,6 +43,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "util/autostart_filename.cpp"
 #include "util/conf_filename.cpp"
 #include "util/read_config_file.cpp"
-#include "driver.cpp"
 
 #endif /* __COMFORTABLE_SWIPE__ */

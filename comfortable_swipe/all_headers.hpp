@@ -32,7 +32,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif /* __COMFORTABLE_SWIPE__PROGRAM__ */
 
 #ifndef __COMFORTABLE_SWIPE__CONFIG__
-#define __COMFORTABLE_SWIPE__CONFIG__ "/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
+#define __COMFORTABLE_SWIPE__CONFIG__                                          \
+  "/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
 #endif /* __COMFORTABLE_SWIPE__CONFIG__ */
 
 #ifndef COMFORTABLE_SWIPE_VERSION
@@ -40,42 +41,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define COMFORTABLE_SWIPE_VERSION "v(UNKNOWN)"
 #endif /* COMFORTABLE_SWIPE_VERSION */
 
-#include <map> // std::map
+#include <map>    // std::map
 #include <string> // std::string
 
-extern "C"
-{
-    namespace comfortable_swipe
-    {
-        // driver method
-        int driver();
-        // this is found in the util/ folder
-        namespace util
-        {
-            const char* autostart_filename();
-            constexpr const char* conf_filename();
-            std::map<std::string, std::string> read_config_file(const char*);
-        }
-        // this is found in the service/ folder
-        namespace service
-        {
-            void autostart();
-            void buffer();
-            void config();
-            void debug();
-            void help();
-            void restart();
-            void start();
-            void status();
-            void stop();
-        }
-    }
+extern "C" {
+namespace comfortable_swipe {
+// driver method
+int driver();
+// this is found in the util/ folder
+namespace util {
+const char *autostart_filename();
+constexpr const char *conf_filename();
+std::map<std::string, std::string> read_config_file(const char *);
+} // namespace util
+// this is found in the service/ folder
+namespace service {
+void autostart();
+void buffer();
+void config();
+void debug();
+void help();
+void restart();
+void start();
+void status();
+void stop();
+} // namespace service
+} // namespace comfortable_swipe
 }
 
 // add headers for classes here so it can be imported during include
-#include "gesture/xdo_gesture.h"
-#include "gesture/swipe_gesture.h"
 #include "gesture/keyboard_swipe_gesture.h"
 #include "gesture/mouse_hold_gesture.h"
+#include "gesture/swipe_gesture.h"
+#include "gesture/xdo_gesture.h"
 
 #endif /* __COMFORTABLE_SWIPE__all_headers_hpp__ */

@@ -19,29 +19,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern "C"
-{
-    #include <xdo.h> // xdo, xdo_new
+extern "C" {
+#include <xdo.h> // xdo, xdo_new
 }
 
 #include "xdo_gesture.h"
 
-namespace comfortable_swipe::gesture
-{
-    /**
-     * Constructs a new gesture handler with xdo.
-     */
-    xdo_gesture::xdo_gesture():
-        xdo(xdo_new(NULL))
-    { }
+namespace comfortable_swipe::gesture {
+/**
+ * Constructs a new gesture handler with xdo.
+ */
+xdo_gesture::xdo_gesture() : xdo(xdo_new(NULL)) {}
 
-    /**
-     * Constructs a new swipe gesture with xdo.
-     */
-    xdo_gesture::~xdo_gesture()
-    {
-        xdo_free(this->xdo);
-    }
-}
+/**
+ * Constructs a new swipe gesture with xdo.
+ */
+xdo_gesture::~xdo_gesture() { xdo_free(this->xdo); }
+} // namespace comfortable_swipe::gesture
 
 #endif /* __COMFORTABLE_SWIPE__xdo_gesture__ */

@@ -21,15 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../all_headers.hpp"
 
-namespace comfortable_swipe::util
-{
-    /**
-     * The path where the configuration file is located.
-     */
-    constexpr const char* conf_filename()
-    {
-        return __COMFORTABLE_SWIPE__CONFIG__;
-    }
-}
+namespace comfortable_swipe::util {
+/**
+ * The path where the configuration file is located.
+ */
+constexpr const char *conf_filename() { return __COMFORTABLE_SWIPE__CONFIG__; }
+} // namespace comfortable_swipe::util
 
 #endif /* __COMFORTABLE_SWIPE__util_conf_filename__ */

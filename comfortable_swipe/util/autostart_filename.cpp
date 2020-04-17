@@ -19,28 +19,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <string> // std::string
+#include <string>   // std::string
 #include <unistd.h> // getenv
 
-namespace comfortable_swipe::util
-{
-    /**
-     * The path where the autostart configuration is located.
-     */
-    const char* autostart_filename()
-    {
-        static std::string filename;
-        if (filename.empty()) {
-            const char* xdg_config = getenv("XDG_CONFIG_HOME");
-            std::string config(
-                xdg_config == NULL
-                    ? std::string(getenv("HOME")) + "/.config"
-                    : xdg_config
-            );
-            filename = config + "/autostart/comfortable-swipe.desktop";
-        }
-        return filename.data();
-    }
+namespace comfortable_swipe::util {
+/**
+ * The path where the autostart configuration is located.
+ */
+const char *autostart_filename() {
+  static std::string filename;
+  if (filename.empty()) {
+    const char *xdg_config = getenv("XDG_CONFIG_HOME");
+    std::string config(xdg_config == NULL
+                           ? std::string(getenv("HOME")) + "/.config"
+                           : xdg_config);
+    filename = config + "/autostart/comfortable-swipe.desktop";
+  }
+  return filename.data();
 }
+} // namespace comfortable_swipe::util
 
 #endif /* __COMFORTABLE_SWIPE__util_autostart_filename__ */

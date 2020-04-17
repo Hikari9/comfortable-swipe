@@ -19,25 +19,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#include <cstdio> // freopen, stdout
 #include "../all_headers.hpp"
+#include <cstdio> // freopen, stdout
 
-namespace comfortable_swipe::service
-{
-    /**
-     * Restarts the comfortable-swipe service.
-     */
-    void restart()
-    {
-        // dont show stdout on stop
-        freopen("/dev/null", "a", stdout);
-        comfortable_swipe::service::stop();
+namespace comfortable_swipe::service {
+/**
+ * Restarts the comfortable-swipe service.
+ */
+void restart() {
+  // dont show stdout on stop
+  freopen("/dev/null", "a", stdout);
+  comfortable_swipe::service::stop();
 
-        // show back on start
-        freopen ("/dev/tty", "a", stdout);
-        comfortable_swipe::service::start();
-    }
+  // show back on start
+  freopen("/dev/tty", "a", stdout);
+  comfortable_swipe::service::start();
 }
+} // namespace comfortable_swipe::service
 
 #endif /* __COMFORTABLE_SWIPE__service_restart__ */

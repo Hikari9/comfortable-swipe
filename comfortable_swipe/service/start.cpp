@@ -19,20 +19,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cstdlib> // std::system
 #include "../all_headers.hpp"
+#include <cstdlib> // std::system
 
-namespace comfortable_swipe::service
-{
-    /**
-     * Starts the comfortable-swipe service by buffering libinput debug-events.
-     * This method is deferred. Please refer to comfortable_swipe::service::buffer()
-     * for the technical implementation.
-     */
-    void start()
-    {
-        (void) std::system(__COMFORTABLE_SWIPE__PROGRAM__ " debug | " __COMFORTABLE_SWIPE__PROGRAM__ " buffer");
-    }
+namespace comfortable_swipe::service {
+/**
+ * Starts the comfortable-swipe service by buffering libinput debug-events.
+ * This method is deferred. Please refer to comfortable_swipe::service::buffer()
+ * for the technical implementation.
+ */
+void start() {
+  (void)std::system(__COMFORTABLE_SWIPE__PROGRAM__
+                    " debug | " __COMFORTABLE_SWIPE__PROGRAM__ " buffer");
 }
+} // namespace comfortable_swipe::service
 
 #endif /* __COMFORTABLE_SWIPE__service_start__ */

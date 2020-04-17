@@ -19,31 +19,32 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cstdio> // std::puts, std::printf
 #include "../all_headers.hpp"
+#include <cstdio> // std::puts, std::printf
 
-namespace comfortable_swipe::service
-{
-    /**
-     * Shows the help window.
-     */
-    void help()
-    {
-        using comfortable_swipe::util::conf_filename;
-        std::puts("comfortable-swipe " COMFORTABLE_SWIPE_VERSION " [start|stop|restart|autostart|buffer|help|config|debug|status]");
-        std::puts("");
-        std::puts("start      - starts 3/4-finger gesture service");
-        std::puts("stop       - stops 3/4-finger gesture service");
-        std::puts("restart    - stops then starts 3/4-finger gesture service");
-        std::puts("autostart  - automatically run on startup (toggleable)");
-        std::puts("buffer     - parses output of libinput debug-events");
-        std::puts("help       - shows the help dialog");
-        std::puts("config     - locates the config file [/usr/share/comfortable-swipe/comfortable-swipe.conf]");
-        std::puts("debug      - logs raw output from input events taken from libinput");
-        std::puts("status     - checks status of program and autostart");
-        std::puts("");
-        std::printf("Configuration file can be found in %s\n", conf_filename());
-    }
+namespace comfortable_swipe::service {
+/**
+ * Shows the help window.
+ */
+void help() {
+  using comfortable_swipe::util::conf_filename;
+  std::puts("comfortable-swipe " COMFORTABLE_SWIPE_VERSION
+            " [start|stop|restart|autostart|buffer|help|config|debug|status]");
+  std::puts("");
+  std::puts("start      - starts 3/4-finger gesture service");
+  std::puts("stop       - stops 3/4-finger gesture service");
+  std::puts("restart    - stops then starts 3/4-finger gesture service");
+  std::puts("autostart  - automatically run on startup (toggleable)");
+  std::puts("buffer     - parses output of libinput debug-events");
+  std::puts("help       - shows the help dialog");
+  std::puts("config     - locates the config file "
+            "[/usr/share/comfortable-swipe/comfortable-swipe.conf]");
+  std::puts(
+      "debug      - logs raw output from input events taken from libinput");
+  std::puts("status     - checks status of program and autostart");
+  std::puts("");
+  std::printf("Configuration file can be found in %s\n", conf_filename());
 }
+} // namespace comfortable_swipe::service
 
 #endif /* __COMFORTABLE_SWIPE__service_help__ */

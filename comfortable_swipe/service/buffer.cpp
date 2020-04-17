@@ -19,18 +19,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cstdlib> // std::exit
 #include "../all_headers.hpp"
+#include <cstdlib> // std::exit
 
 /**
  * Starts the comfortable-swipe service by buffering libinput debug-events.
  */
-namespace comfortable_swipe::service
-{
-    void buffer()
-    {
-        std::exit(comfortable_swipe::driver());
-    }
-}
+namespace comfortable_swipe::service {
+void buffer() { std::exit(comfortable_swipe::driver()); }
+} // namespace comfortable_swipe::service
 
 #endif /* __COMFORTABLE_SWIPE__service_buffer__ */
