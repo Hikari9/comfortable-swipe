@@ -195,53 +195,55 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 
 We have included simple mouse gestures on swipe by setting `hold3` and `hold4`.
 
-**Possible Values**:
+```bash
+Possible Values (hold3, hold4):
 
-- `move` - just move the mouse cursor (no mousedown)
-- `button1` - hold left click on finger swipe
-- `button2` - hold middle click on finger swipe
-- `button3` - hold right click on finger swipe
-- `button4` - wheel up on finger swipe (experimental)
-- `button5` - wheel down on finger swipe (experimental)
-- `scroll` - naive 3/4 finger natural scroll (no acceleration, very experimental)
-- `scroll_reverse` - naive 3/4 finger reverse scroll (no acceleration, very experimental)
+move            # just move the mouse cursor (no mousedown)  
+button1         # hold left click on finger swipe  
+button2         # hold middle click on finger swipe  
+button3         # hold right click on finger swipe  
+button4         # wheel up on finger swipe (experimental)  
+button5         # wheel down on finger swipe (experimental)  
+scroll          # naive 3/4 finger natural scroll (no acceleration, very experimental)  
+scroll_reverse  # naive 3/4 finger reverse scroll (no acceleration, very experimental)  
+```
 
 Any value not mentioned above disables the mouse-hold.
 
 Examples:
 
-1. 3-finger drag
+* 3-finger drag
 
    ```bash
    hold3 = button1
    ```
 
-1. 4-finger drag (with middle click)
+* 4-finger drag (with middle click)
 
    ```bash
    hold4 = button2
    ```
 
-1. 3-finger natural scroll
+* 3-finger natural scroll
 
    ```bash
    hold3 = scroll
    ```
 
-1. 4-finger reverse scroll
+* 4-finger reverse scroll
 
    ```bash
    hold4 = scroll_reverse
    ```
 
-1. Just move the cursor
+* Just move the cursor
 
    ```bash
    hold3 = move
    hold4 = move
    ```
 
-1. Any other command will disable the mouse hold
+* Any other command will disable the mouse hold
 
    ```bash
    hold3 = disabled
