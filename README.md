@@ -101,8 +101,9 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 
 **Keyboard Shortcuts**:
 
+- Unity: https://cheatography.com/sapemeg/cheat-sheets/ubuntu-unity-16-04/
 - GNOME: https://wiki.gnome.org/Design/OS/KeyboardShortcuts
-- Linux Mint: https://community.linuxmint.com/tutorial/view/47
+- KDE: https://community.linuxmint.com/tutorial/view/47
 
 ## Swipe Gesture Templates
 
@@ -152,15 +153,20 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
    up3 = super+s
    ```
 
-1. Show desktop ([setup](https://www.itsupportguides.com/knowledge-base/ubuntu/ubuntu-how-to-make-windows-d-show-desktop/))
+1. Show desktop ([setup manually](https://www.itsupportguides.com/knowledge-base/ubuntu/ubuntu-how-to-make-windows-d-show-desktop/))
 
    ```bash
-   # Ubuntu, KDE, Gnome
+   # Ubuntu
+   down3 = ctrl+super+d
+   ```
+   
+   ```bash
+   # GNOME
    down3 = super+d
    ```
 
    ```bash
-   # Linux Mint
+   # KDE
    down3 = ctrl+alt+d
    ```
 
