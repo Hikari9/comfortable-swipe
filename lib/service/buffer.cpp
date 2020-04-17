@@ -36,10 +36,12 @@ namespace comfortable_swipe::service
         std::cout.flush();
 
         // read config file
-        auto config = comfortable_swipe::util::read_config_file(comfortable_swipe::util::conf_filename());
+        auto config = comfortable_swipe::util::read_config_file(
+            comfortable_swipe::util::conf_filename()
+        );
 
         // initialize swipe gesture handler
-        comfortable_swipe::gesture::swipe_gesture swipe_gesture_handler
+        comfortable_swipe::gesture::keyboard_swipe_gesture keyboard_swipe
         (
             config.count("threshold") ? std::stof(config["threshold"]) : 0.0,
             config["left3"].c_str(),
@@ -59,7 +61,7 @@ namespace comfortable_swipe::service
         while (fgets_unlocked(line.data(), line.size(), stdin) != NULL)
         {
             // attempt to parse swipe gestures
-            swipe_gesture_handler.parse_line(line.data());
+            keyboard_swipe.parse_line(line.data());
         }
     }
 }

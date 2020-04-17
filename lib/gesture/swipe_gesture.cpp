@@ -34,100 +34,47 @@ extern "C"
 namespace comfortable_swipe::gesture
 {
     /**
-     * Constructs a new swipe gesture, given configurations for certain swipe events.
+     * Constructs a new fresh swipe gesture container.
      */
     swipe_gesture::swipe_gesture
-    (
-        const float threshold,
-        const char* left3   /* 000 */,
-        const char* left4   /* 001 */,
-        const char* right3  /* 010 */,
-        const char* right4  /* 011 */,
-        const char* up3     /* 100 */,
-        const char* up4     /* 101 */,
-        const char* down3   /* 110 */,
-        const char* down4   /* 111 */
-    ):
+    ():
+        // construct our superclass
         comfortable_swipe::gesture::xdo_gesture(),
-        threshold_squared(threshold*threshold),
-        commands(new const char*[8]{left3, left4, right3, right4, up3, up4, down3, down4}),
         flag_swiping(false)
     {
-        // improve responsiveness of first gesture by pre-empting xdotool runtime
-        xdo_get_mouse_location(this->xdo, &this->ix, &this->iy, &this->screen_num);
+        // improve responsiveness of first gesture by pre-empting xdotool
+        xdo_get_mouse_location(this->xdo, &this->ix, &this->iy,
+            &this->screen_num);
     }
 
     /**
      * Destructs this swipe gesture.
      */
     swipe_gesture::~swipe_gesture()
-    {
-        delete[] commands;
-    }
+    { }
 
     /**
-     * Hook on begin of swipe gesture.
+     * Hook on begin of swipe gesture (you can override this).
      */
     void swipe_gesture::begin()
     {
-        xdo_get_mouse_location(this->xdo, &this->ix, &this->iy, &this->screen_num);
-        this->previous_gesture = swipe_gesture::FRESH;
+        xdo_get_mouse_location(this->xdo, &this->ix, &this->iy,
+            &this->screen_num);
         this->x = 0;
         this->y = 0;
     }
 
     /**
-     * Hook on update of swipe gesture.
+     * Hook on update of swipe gesture (you can override this).
      */
     void swipe_gesture::update()
     {
         this->x += this->dx;
         this->y += this->dy;
-        // scale threshold to 1/10 when gesture is not fresh
-        float scale = this->previous_gesture == swipe_gesture::FRESH
-            ? 1.00f
-            : 0.01f; // square root of 1/10
-        static const float EPSILON = 1e-6f;
-        if (this->x * this->x + this->y * this->y
-            > this->threshold_squared * scale + EPSILON)
-        {
-            int mask = 0;
-            if (this->fingers == 3) mask |= swipe_gesture::MSK_THREE_FINGERS;
-            else if (this->fingers == 4) mask |= swipe_gesture::MSK_FOUR_FINGERS;
-
-            const float absx = x >= 0 ? x : -x;
-            const float absy = y >= 0 ? y : -y;
-            if (absx > absy)
-            { // horizontal
-                mask |= swipe_gesture::MSK_HORIZONTAL;
-                if (x < 0)
-                    mask |= swipe_gesture::MSK_NEGATIVE;
-                else
-                    mask |= swipe_gesture::MSK_POSITIVE;
-            }
-            else /* std::abs(x) <= std::abs(y) */
-            { // vertical
-                mask |= swipe_gesture::MSK_VERTICAL;
-                if (y < 0)
-                    mask |= swipe_gesture::MSK_NEGATIVE;
-                else
-                    mask |= swipe_gesture::MSK_POSITIVE;
-            }
-
-            // send command on fresh OR opposite gesture
-            if (this->previous_gesture == swipe_gesture::FRESH
-                || this->previous_gesture == (mask ^ swipe_gesture::MSK_POSITIVE))
-            {
-                xdo_send_keysequence_window(this->xdo, CURRENTWINDOW, swipe_gesture::commands[mask], 0);
-                this->x = this->y = 0;
-                this->previous_gesture = mask;
-                std::cout << "SWIPE " << swipe_gesture::command_map[mask] << std::endl;
-            }
-        }
     }
 
     /**
-     * Hook on end of swipe gesture.
+     * Hook on end of swipe gesture (you can override this).
      */
     void swipe_gesture::end()
     { }
@@ -141,10 +88,11 @@ namespace comfortable_swipe::gesture
     bool swipe_gesture::parse_line(const char * line)
     {
 
-        // prepare regex matchers (will only load at most once)
-        static const std::regex gesture_swipe_begin(swipe_gesture::GESTURE_BEGIN_REGEX_PATTERN);
-        static const std::regex gesture_swipe_update(swipe_gesture::GESTURE_UPDATE_REGEX_PATTERN);
-        static const std::regex gesture_swipe_end(swipe_gesture::GESTURE_END_REGEX_PATTERN);
+        // prepare regex matchers statically (will only load at most once)
+        static const std::regex
+            gesture_swipe_begin(swipe_gesture::GESTURE_BEGIN_REGEX_PATTERN),
+            gesture_swipe_update(swipe_gesture::GESTURE_UPDATE_REGEX_PATTERN),
+            gesture_swipe_end(swipe_gesture::GESTURE_END_REGEX_PATTERN);
 
         // prepare holder for regex matches
         static std::cmatch matches;
@@ -191,25 +139,6 @@ namespace comfortable_swipe::gesture
 
         return false;
     }
-
-    /* STATICS DEFINITIONS */
-    const int swipe_gesture::MSK_THREE_FINGERS = 0;
-    const int swipe_gesture::MSK_FOUR_FINGERS = 1;
-    const int swipe_gesture::MSK_NEGATIVE = 0;
-    const int swipe_gesture::MSK_POSITIVE = 2;
-    const int swipe_gesture::MSK_HORIZONTAL = 0;
-    const int swipe_gesture::MSK_VERTICAL = 4;
-    const int swipe_gesture::FRESH = -1;
-    const char * const swipe_gesture::command_map[8] = {
-        "left3",
-        "left4",
-        "right3",
-        "right4",
-        "up3",
-        "up4",
-        "down3",
-        "down4"
-    };
 }
 
 #endif /* __COMFORTABLE_SWIPE__gesture_swipe_gesture__ */
