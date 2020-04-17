@@ -48,6 +48,9 @@ namespace comfortable_swipe::gesture
         virtual void do_mouseup(const char*);
         virtual bool is_mousedown();
 
+        // utility method to parse mouse input given config characters
+        virtual int parse_mouse_input(const char*);
+
     protected:
         // command holders
         const char * hold3;
@@ -55,10 +58,6 @@ namespace comfortable_swipe::gesture
 
         // flag we can use to check if mouse is down
         bool flag_mousedown;
-
-    private:
-        // utility method to parse mouse input given config characters
-        int parse_mouse_input(const char*);
     };
 }
 

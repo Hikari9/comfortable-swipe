@@ -58,10 +58,13 @@ namespace comfortable_swipe::gesture
      */
     void swipe_gesture::begin()
     {
+        // save current screen location for gestured mouse movement
         xdo_get_mouse_location(this->xdo, &this->ix, &this->iy,
             &this->screen_num);
         this->x = 0;
         this->y = 0;
+        this->ux = 0;
+        this->uy = 0;
     }
 
     /**
@@ -71,6 +74,8 @@ namespace comfortable_swipe::gesture
     {
         this->x += this->dx;
         this->y += this->dy;
+        this->ux += this->udx;
+        this->uy += this->udy;
     }
 
     /**

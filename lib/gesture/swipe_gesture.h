@@ -38,7 +38,12 @@ namespace comfortable_swipe::gesture
 
         // fields for xdo
         int fingers;
-        float x, y, dx, dy, udx, udy;
+
+        // normal values (for touchpad mapping)
+        float x, y, dx, dy;
+
+        // unaccelerated values (for screen mapping)
+        float ux, uy, udx, udy;
 
         // hooks that we can override (mark as virtual)
         virtual void begin();

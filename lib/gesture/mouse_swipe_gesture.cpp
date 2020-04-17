@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream> // std::cout, std::endl
 #include <cstdio> // std::sscanf
+#include <cstdlib> // strncmp
 #include "mouse_swipe_gesture.h"
 
 extern "C"
@@ -60,7 +61,8 @@ namespace comfortable_swipe::gesture
         int mouse = this->parse_mouse_input(mouseinput);
         if (mouse != -1)
         {
-            std::cout << "MOUSE DOWN " << mouse << std::endl;
+            // eg. MOUSE DOWN hold3 mouse1
+            std::printf("MOUSE DOWN hold%d %s\n", this->fingers, mouseinput);
             this->flag_mousedown = true;
         }
     }
@@ -73,7 +75,7 @@ namespace comfortable_swipe::gesture
         int mouse = this->parse_mouse_input(mouseinput);
         if (mouse != -1)
         {
-            std::cout << "MOUSE UP " << mouse << std::endl;
+            std::printf("MOUSE UP hold%d %s\n", this->fingers, mouseinput);
             this->flag_mousedown = false;
         }
     }
@@ -84,12 +86,22 @@ namespace comfortable_swipe::gesture
      */
     int mouse_swipe_gesture::parse_mouse_input(const char *input)
     {
-        // parse mouse number
-        int mouseno;
-        if (std::sscanf(input, "mouse%d", &mouseno) == 1)
+        // check if "mouse" is prefix
+        if (strncmp(input, "mouse", 5) == 0)
         {
-            return mouseno;
+            if (input[5] == '\0')
+            {
+                // just "mouse" without a number
+                return 0;
+            }
+            int mouseno;
+            if (std::sscanf(input + 5, "%d", &mouseno) == 1)
+            {
+                // parse the number after "mouse"
+                return mouseno;
+            }
         }
+
         return -1;
     }
 
@@ -120,8 +132,14 @@ namespace comfortable_swipe::gesture
         swipe_gesture::update();
         if (this->is_mousedown())
         {
-            // TODO: drag mouse while it's updating
-            std::cout << this->dx << " " << this->dy << std::endl;
+            // ix, iy: mouse location on begin
+            // ux, uy: integral of mouse accelerations
+            xdo_move_mouse(
+                this->xdo,
+                this->ix + this->ux,
+                this->iy + this->uy,
+                this->screen_num
+            );
         }
 
     }
