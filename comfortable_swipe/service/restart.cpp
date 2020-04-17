@@ -20,9 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-#include <unistd.h> // popen, pclose
-#include <memory> // std::unique_ptr
-#include <cstdlib> // std::system
+#include <cstdio> // freopen, stdout
 #include "../all_headers.hpp"
 
 namespace comfortable_swipe::service
@@ -32,10 +30,12 @@ namespace comfortable_swipe::service
      */
     void restart()
     {
-        // stop, while redirecting stdout to pipe
-        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(__COMFORTABLE_SWIPE__PROGRAM__ " stop", "r"), pclose);
+        // dont show stdout on stop
+        freopen("/dev/null", "a", stdout);
+        comfortable_swipe::service::stop();
 
-        // restart service
+        // show back on start
+        freopen ("/dev/tty", "a", stdout);
         comfortable_swipe::service::start();
     }
 }
