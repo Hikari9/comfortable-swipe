@@ -1,4 +1,39 @@
+<<<<<<< Updated upstream
 v1.1.0
 * Added mouse hold gestures
 * Added `hold3` configuration
 * Added `hold4` configuration
+=======
+v1.1.0 (2020-04-18)
+* Add mouse hold gestures
+* Add experimental `hold3` configuration
+* Add experimental `hold4` configuration
+* Add linker tests
+* Add `driver.cpp`
+* Add `mouse_hold_gestures.cpp`
+* Bugfix `comfortable-swipe stop`
+* Bugfix `comfortable-swipe restart`
+* Rename `index.hpp` to `all_headers.hpp`
+* Rename source directory `lib` to `comfortable_swipe`
+* Separate `swipe_gesture.cpp` from `keyboard_swipe_gesture.cpp`
+* Update compiler scripts
+* Update configurations
+* Update README
+* Bump to version 1.1.0
+
+v1.0.4
+* Bugfixes
+
+v1.0.3
+* Bugfixes
+
+v1.0.2
+* Change directory structure
+* Bugfixes
+
+v1.0.1
+* Bugfixes
+
+v1.0.0
+* Initial version
+>>>>>>> Stashed changes
