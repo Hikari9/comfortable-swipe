@@ -1,0 +1,9 @@
+
+[Desktop Entry]
+Type=Application
+Exec=comfortable-swipe start
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=Comfortable Swipe
+Comment=3/4-finger touchpad gestures

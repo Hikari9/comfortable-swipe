@@ -1,6 +1,30 @@
 # C++ generated headers
 *.gch
+.out
+
+# Generated library
+comfortable-swipe
+libcomfortableswipe.a
 
 # IDE-specific
 .idea
 .vscode
+
+# CMake
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# CPack
+CPack*
+
+# Library
+.lib
