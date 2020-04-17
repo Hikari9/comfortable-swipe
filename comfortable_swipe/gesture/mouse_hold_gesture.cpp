@@ -33,6 +33,18 @@ extern "C"
 
 namespace comfortable_swipe::gesture
 {
+    enum {
+        MOUSE_NONE = -1,
+        MOUSE_MOVE = 0,
+        MOUSE_LEFT_CLICK = 1,
+        MOUSE_MIDDLE_CLICK = 2,
+        MOUSE_RIGHT_CLICK = 3,
+        MOUSE_WHEEL_UP = 4,
+        MOUSE_WHEEL_DOWN = 5,
+        MOUSE_SCROLL = 6,
+        MOUSE_SCROLL_REVERSE = 7
+    };
+
     /**
      * Constructs a new mouse gesture, given "hold3" and "hold4" configurations.
      */
@@ -42,7 +54,7 @@ namespace comfortable_swipe::gesture
         const char* hold4
     ):
         comfortable_swipe::gesture::swipe_gesture(),
-        button(-1),
+        button(MOUSE_NONE),
         hold3(hold3),
         hold4(hold4),
         flag_mousedown(false)
@@ -60,11 +72,11 @@ namespace comfortable_swipe::gesture
     void mouse_hold_gesture::do_mousedown(const char * mouseinput)
     {
         const int button = this->button = this->parse_mouse_button(mouseinput);
-        if (button != -1)
+        if (button != MOUSE_NONE)
         {
             // eg. MOUSE DOWN hold3 mouse1
             std::printf("MOUSE DOWN hold%d %s\n", this->fingers, mouseinput);
-            if (1 <= button && button <= 3)
+            if (MOUSE_LEFT_CLICK <= button && button <= MOUSE_RIGHT_CLICK)
             {
                 // send mouse down on associated button
                 xdo_mouse_down(this->xdo, CURRENTWINDOW, button);
@@ -79,10 +91,10 @@ namespace comfortable_swipe::gesture
     void mouse_hold_gesture::do_mouseup(const char * mouseinput)
     {
         const int button = this->button = this->parse_mouse_button(mouseinput);
-        if (button != -1)
+        if (button != MOUSE_NONE)
         {
             std::printf("MOUSE UP hold%d %s\n", this->fingers, mouseinput);
-            if (1 <= button && button <= 5)
+            if (MOUSE_LEFT_CLICK <= button && button <= MOUSE_RIGHT_CLICK)
             {
                 // send mouse up on associated button
                 xdo_mouse_up(this->xdo, CURRENTWINDOW, button);
@@ -99,16 +111,25 @@ namespace comfortable_swipe::gesture
     {
         // just move without holding button down
         if (std::strcmp(input, "move") == 0)
-            return 0;
+            return MOUSE_MOVE;
+
+        if (std::strcmp(input, "scroll") == 0)
+            return MOUSE_SCROLL;
+
+        if (std::strcmp(input, "scroll_reverse") == 0)
+            return MOUSE_SCROLL_REVERSE;
+
         // get button number
         int button;
         if (std::sscanf(input, "button%d", &button) == 1)
         {
-            // parse the number after "mouse"
-            return button;
+            if (1 <= button && button <= 6)
+            {
+                return button;
+            }
         }
 
-        return -1;
+        return MOUSE_NONE;
     }
 
     /**
@@ -147,10 +168,22 @@ namespace comfortable_swipe::gesture
                     this->udy
                 );
             }
-            else if (4 <= this->button && this->button <= 5)
+            else if (this->button == MOUSE_SCROLL || this->button == MOUSE_SCROLL_REVERSE)
             {
-                // perform wheel during update
+                // perform naive scroll depending on vertical direction
+                int wheel = MOUSE_WHEEL_DOWN;
+                if ((this->udy > 0) == (this->button == MOUSE_SCROLL))
+                    wheel = MOUSE_WHEEL_UP;
+
+                // click wheel on update (note: this is not precise)
+                xdo_mouse_down(this->xdo, CURRENTWINDOW, wheel);
+                xdo_mouse_up(this->xdo, CURRENTWINDOW, wheel);
+            }
+            else if (this->button == MOUSE_WHEEL_UP || this->button == MOUSE_WHEEL_DOWN)
+            {
+                // click wheel button on 4 or 5
                 xdo_mouse_down(this->xdo, CURRENTWINDOW, this->button);
+                xdo_mouse_up(this->xdo, CURRENTWINDOW, this->button);
             }
         }
 

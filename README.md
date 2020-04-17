@@ -109,6 +109,8 @@ We have included simple mouse gestures on swipe by setting `hold3` and `hold4`.
 * button3 - right click
 * button4 - wheel up (experimental)
 * button5 - wheel down (experimental)
+* scroll - natural scrolling (experimental)
+* scroll_reverse - reverse scrolling (experimental)
 
 ## Example Configuration
 
@@ -136,6 +138,10 @@ right4 = ctrl+alt+shift+Left
 
 # three-finger middle click (experimental)
 # hold3 = button2
+
+# three-finger scroll (experimental)
+# hold3 = scroll
+# hold3 = scroll_reverse
 ```
 
 
