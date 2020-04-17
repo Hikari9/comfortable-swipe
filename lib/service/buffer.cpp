@@ -40,7 +40,7 @@ namespace comfortable_swipe::service
             comfortable_swipe::util::conf_filename()
         );
 
-        // initialize swipe gesture handler
+        // initialize keyboard swipe gesture handler
         comfortable_swipe::gesture::keyboard_swipe_gesture keyboard_swipe
         (
             config.count("threshold") ? std::stof(config["threshold"]) : 0.0,
@@ -54,14 +54,28 @@ namespace comfortable_swipe::service
             config["down4"].c_str()
         );
 
+        // initialize mouse swipe gesture handler
+        comfortable_swipe::gesture::mouse_swipe_gesture mouse_hold
+        (
+            "",
+            "mouse1"
+        );
+
         // prepare data containers
         std::array<char, 256> line;
 
         // start reading lines from input one by one
         while (fgets_unlocked(line.data(), line.size(), stdin) != NULL)
         {
-            // attempt to parse swipe gestures
-            keyboard_swipe.parse_line(line.data());
+            // prioritize mouse hold gesture first
+            mouse_hold.parse_line(line.data());
+
+            // if mouse hold fails, try keyboard hold
+            if (!mouse_hold.is_mousedown())
+            {
+                // attempt to parse keyboard gestures
+                keyboard_swipe.parse_line(line.data());
+            }
         }
     }
 }

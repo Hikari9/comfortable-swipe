@@ -20,8 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <iostream> // std::cout, std::endl
-#include <string> // std::stoi, std::stof
-#include <regex> // std::regex, std::regex_match, std::cmatch
 #include "keyboard_swipe_gesture.h"
 
 extern "C"
