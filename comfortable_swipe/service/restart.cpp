@@ -19,6 +19,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+#include <unistd.h> // popen, pclose
+#include <memory> // std::unique_ptr
+#include <cstdlib> // std::system
 #include "../all_headers.hpp"
 
 namespace comfortable_swipe::service
@@ -28,7 +32,10 @@ namespace comfortable_swipe::service
      */
     void restart()
     {
-        comfortable_swipe::service::stop();
+        // stop, while redirecting stdout to pipe
+        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(__COMFORTABLE_SWIPE__PROGRAM__ " stop", "r"), pclose);
+
+        // restart service
         comfortable_swipe::service::start();
     }
 }

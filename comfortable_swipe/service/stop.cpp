@@ -68,7 +68,7 @@ namespace comfortable_swipe::service
         }
         else
         {
-            std::puts("No program to stop");
+            std::printf("No program to stop\n");
         }
     }
 }
