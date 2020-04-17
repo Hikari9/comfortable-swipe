@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__gesture_mouse_swipe_gesture__
-#define __COMFORTABLE_SWIPE__gesture_mouse_swipe_gesture__
+#ifndef __COMFORTABLE_SWIPE__gesture_mouse_hold_gesture__
+#define __COMFORTABLE_SWIPE__gesture_mouse_hold_gesture__
 
 /*
 Comfortable Swipe
@@ -21,8 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream> // std::cout, std::endl
 #include <cstdio> // std::sscanf
-#include <cstdlib> // strncmp
-#include "mouse_swipe_gesture.h"
+#include <cstring> // strncmp
+#include "mouse_hold_gesture.h"
 
 extern "C"
 {
@@ -36,7 +36,7 @@ namespace comfortable_swipe::gesture
     /**
      * Constructs a new mouse gesture, given "hold3" and "hold4" configurations.
      */
-    mouse_swipe_gesture::mouse_swipe_gesture
+    mouse_hold_gesture::mouse_hold_gesture
     (
         const char* hold3,
         const char* hold4
@@ -50,19 +50,24 @@ namespace comfortable_swipe::gesture
     /**
      * Destructs this mouse swipe gesture.
      */
-    mouse_swipe_gesture::~mouse_swipe_gesture()
+    mouse_hold_gesture::~mouse_hold_gesture()
     { }
 
     /**
      * Run mousedown command on hold input.
      */
-    void mouse_swipe_gesture::do_mousedown(const char * mouseinput)
+    void mouse_hold_gesture::do_mousedown(const char * mouseinput)
     {
-        int mouse = this->parse_mouse_input(mouseinput);
-        if (mouse != -1)
+        int button = this->parse_mouse_button(mouseinput);
+        if (button != -1)
         {
             // eg. MOUSE DOWN hold3 mouse1
             std::printf("MOUSE DOWN hold%d %s\n", this->fingers, mouseinput);
+            if (button != 0)
+            {
+                // send mouse down on associated button
+                xdo_mouse_down(this->xdo, CURRENTWINDOW, button);
+            }
             this->flag_mousedown = true;
         }
     }
@@ -70,17 +75,17 @@ namespace comfortable_swipe::gesture
     /**
      * Run mouseup command on hold output.
      */
-    void mouse_swipe_gesture::do_mouseup(const char * mouseinput)
+    void mouse_hold_gesture::do_mouseup(const char * mouseinput)
     {
-        int mouse = this->parse_mouse_input(mouseinput);
-        if (mouse != -1)
+        int button = this->parse_mouse_button(mouseinput);
+        if (button != -1)
         {
             std::printf("MOUSE UP hold%d %s\n", this->fingers, mouseinput);
-            if (mouse != 0)
+            if (button != 0)
             {
-                // send mouse up to xdo
+                // send mouse up on associated button
+                xdo_mouse_up(this->xdo, CURRENTWINDOW, button);
             }
-
             this->flag_mousedown = false;
         }
     }
@@ -89,22 +94,17 @@ namespace comfortable_swipe::gesture
      * Utility method to parse mouse number from input.
      * Returns -1 on failure.
      */
-    int mouse_swipe_gesture::parse_mouse_input(const char *input)
+    int mouse_hold_gesture::parse_mouse_button(const char *input)
     {
-        // check if "mouse" is prefix
-        if (strncmp(input, "mouse", 5) == 0)
+        // just move without holding button down
+        if (std::strcmp(input, "move") == 0)
+            return 0;
+        // get button number
+        int button;
+        if (std::sscanf(input, "button%d", &button) == 1)
         {
-            if (input[5] == '\0')
-            {
-                // just "mouse" without a number
-                return 0;
-            }
-            int mouseno;
-            if (std::sscanf(input + 5, "%d", &mouseno) == 1)
-            {
-                // parse the number after "mouse"
-                return mouseno;
-            }
+            // parse the number after "mouse"
+            return button;
         }
 
         return -1;
@@ -113,7 +113,7 @@ namespace comfortable_swipe::gesture
     /**
      * Hook on begin of mouse swipe gesture.
      */
-    void mouse_swipe_gesture::begin()
+    void mouse_hold_gesture::begin()
     {
         // call superclass method
         swipe_gesture::begin();
@@ -131,7 +131,7 @@ namespace comfortable_swipe::gesture
     /**
      * Hook on end of mouse swipe gesture.
      */
-    void mouse_swipe_gesture::update()
+    void mouse_hold_gesture::update()
     {
         // call superclass method
         swipe_gesture::update();
@@ -149,7 +149,7 @@ namespace comfortable_swipe::gesture
     /**
      * Hook on end of swipe gesture.
      */
-    void mouse_swipe_gesture::end()
+    void mouse_hold_gesture::end()
     {
         if (this->is_mousedown())
         {
@@ -170,10 +170,10 @@ namespace comfortable_swipe::gesture
     /**
      * Utility method to check if mouse is current held.
      */
-    bool mouse_swipe_gesture::is_mousedown()
+    bool mouse_hold_gesture::is_mousedown()
     {
         return this->flag_mousedown;
     }
 }
 
-#endif /* __COMFORTABLE_SWIPE__gesture_mouse_swipe_gesture__ */
+#endif /* __COMFORTABLE_SWIPE__gesture_mouse_hold_gesture__ */

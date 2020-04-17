@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__gesture_mouse_swipe_gesture_h__
-#define __COMFORTABLE_SWIPE__gesture_mouse_swipe_gesture_h__
+#ifndef __COMFORTABLE_SWIPE__gesture_mouse_hold_gesture_h__
+#define __COMFORTABLE_SWIPE__gesture_mouse_hold_gesture_h__
 
 /*
 Comfortable Swipe
@@ -27,16 +27,16 @@ extern "C" {
 
 namespace comfortable_swipe::gesture
 {
-    class mouse_swipe_gesture : public swipe_gesture
+    class mouse_hold_gesture : public swipe_gesture
     {
     public:
         // constructor
-        mouse_swipe_gesture(
+        mouse_hold_gesture(
             const char* hold3, // 3 finger mouse down
             const char* hold4  // 4 finger mouse down
         );
 
-        virtual ~mouse_swipe_gesture();
+        virtual ~mouse_hold_gesture();
 
         // override begin and end for mousedown
         virtual void begin() override;
@@ -49,7 +49,7 @@ namespace comfortable_swipe::gesture
         virtual bool is_mousedown();
 
         // utility method to parse mouse input given config characters
-        virtual int parse_mouse_input(const char*);
+        virtual int parse_mouse_button(const char*);
 
     protected:
         // command holders
@@ -65,4 +65,4 @@ namespace comfortable_swipe::gesture
 }
 #endif
 
-#endif /* __COMFORTABLE_SWIPE__gesture_mouse_swipe_gesture_h__ */
+#endif /* __COMFORTABLE_SWIPE__gesture_mouse_hold_gesture_h__ */

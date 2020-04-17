@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__service_start__
-#define __COMFORTABLE_SWIPE__service_start__
+#ifndef __COMFORTABLE_SWIPE__util_conf_filename__
+#define __COMFORTABLE_SWIPE__util_conf_filename__
 
 /*
 Comfortable Swipe
@@ -19,20 +19,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../index.hpp"
-#include <cstdlib> // std::system
+#include "../all_headers.hpp"
 
-namespace comfortable_swipe::service
+namespace comfortable_swipe::util
 {
     /**
-     * Starts the comfortable-swipe service by buffering libinput debug-events.
-     * This method is deferred. Please refer to comfortable_swipe::service::buffer()
-     * for the technical implementation.
+     * The path where the configuration file is located.
      */
-    void start()
+    constexpr const char* conf_filename()
     {
-        (void) std::system(__COMFORTABLE_SWIPE__PROGRAM__ " debug | " __COMFORTABLE_SWIPE__PROGRAM__ " buffer");
+        return __COMFORTABLE_SWIPE__CONFIG__;
     }
 }
 
-#endif /* __COMFORTABLE_SWIPE__service_start__ */
+#endif /* __COMFORTABLE_SWIPE__util_conf_filename__ */

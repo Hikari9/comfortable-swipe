@@ -19,7 +19,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../index.hpp"
 #include <stdexcept> // std::runtime_error
 #include <unistd.h> // popen, pclose, getpid, access, F_OK
 #include <memory> // std::unique_ptr
@@ -27,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdlib> // std::atoi
 #include <cstdio> // FILE, std::feof, std::fgets, std::printf
 #include <regex> // std::cmatch, std::regex, std::regex_match
+#include "../all_headers.hpp"
 
 namespace comfortable_swipe::service
 {

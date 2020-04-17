@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__util_conf_filename__
-#define __COMFORTABLE_SWIPE__util_conf_filename__
+#ifndef __COMFORTABLE_SWIPE__service_restart__
+#define __COMFORTABLE_SWIPE__service_restart__
 
 /*
 Comfortable Swipe
@@ -19,17 +19,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../index.hpp"
+#include "../all_headers.hpp"
 
-namespace comfortable_swipe::util
+namespace comfortable_swipe::service
 {
     /**
-     * The path where the configuration file is located.
+     * Restarts the comfortable-swipe service.
      */
-    constexpr const char* conf_filename()
+    void restart()
     {
-        return __COMFORTABLE_SWIPE__CONFIG__;
+        comfortable_swipe::service::stop();
+        comfortable_swipe::service::start();
     }
 }
 
-#endif /* __COMFORTABLE_SWIPE__util_conf_filename__ */
+#endif /* __COMFORTABLE_SWIPE__service_restart__ */

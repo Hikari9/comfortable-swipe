@@ -1,6 +1,24 @@
-#!/bin/sh
+#!/bin/bash
 
-DIR=$(dirname $0)
-g++ -std=c++11 -O2 $DIR/test_regex.cpp -lxdo -o test.out || exec "Test aborted"
-./test.out || rm test.out
-rm test.out
+set -e
+
+DIR="$(dirname "$0")"
+
+# just call abort on error
+tempout="$(mktemp)"
+abort () {
+    rm "$tempout"
+    echo "Test aborted"
+    exit 1
+}
+
+# run all shell files in this directory
+for sh in "$DIR/test_"*.sh; do
+    /bin/bash "$sh" || abort
+done
+
+# run all cpp files in this directory
+for cpp in "$DIR/test_"*.cpp; do
+    g++ -std=c++11 -O2 "$cpp" -lxdo -o "$tempout" || abort
+    "$tempout" || abort
+done

@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string> // std::string
 #include <cstdio> // std::remove
 #include <cstdlib> // std::system
-#include "../index.hpp"
+#include "../all_headers.hpp"
 
 namespace comfortable_swipe::service
 {
@@ -45,7 +45,7 @@ namespace comfortable_swipe::service
                     << std::endl;
             else
                 std::cout << "Autostart switched off" << std::endl;
-        } 
+        }
         else {
             // file not found, create it
             int result = std::system(("mkdir -p $(dirname " + path + ")").data());

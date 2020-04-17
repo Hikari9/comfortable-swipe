@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <cstdio> // std::puts, std::printf
-#include "../index.hpp"
+#include "../all_headers.hpp"
 
 namespace comfortable_swipe::service
 {

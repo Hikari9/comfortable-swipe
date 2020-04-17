@@ -19,9 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <ios> // std::ios
 #include <iostream> // std::cin, std::cout, std::cerr
 #include <string> // std::string
-#include "lib/comfortable_swipe"
+#include "comfortable_swipe/lib"
 
-/* MAIN DRIVER FUNCTION */
+/* Command-line function. */
 
 int main(int argc, char** args)
 {

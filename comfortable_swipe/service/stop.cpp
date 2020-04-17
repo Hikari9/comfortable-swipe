@@ -1,9 +1,6 @@
 #ifndef __COMFORTABLE_SWIPE__service_stop__
 #define __COMFORTABLE_SWIPE__service_stop__
 
-#include <cstdio> // std::FILE, std::feof, std::fgets
-#include <cstdlib> // std::atoi, std::system
-#include <string> // std::string, std::to_string
 /*
 Comfortable Swipe
 by Rico Tiongson
@@ -26,8 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <unistd.h> // popen, pclose, getpid
 #include <memory> // std::unique_ptr
 #include <array> // std::array
-#include <cstdlib> // std::atoi
-#include <cstdio> // FILE, std::feof, std::fgets
+#include <cstdio> // std::FILE, std::feof, std::fgets
+#include <cstdlib> // std::atoi, std::system
+#include <string> // std::string, std::to_string
 
 namespace comfortable_swipe::service
 {

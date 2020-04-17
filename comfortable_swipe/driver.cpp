@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__service_buffer__
-#define __COMFORTABLE_SWIPE__service_buffer__
+#ifndef __COMFORTABLE_SWIPE__driver__
+#define __COMFORTABLE_SWIPE__driver__
 
 /*
 Comfortable Swipe
@@ -21,15 +21,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstdio> // fgets_unlocked, stdin
 #include <iostream> // std::ios, std::cout, std::cin
-#include "../index.hpp"
+#include "all_headers.hpp"
 
 /**
- * Starts the comfortable-swipe service by buffering libinput debug-events.
+ * The main driver program.
  */
-namespace comfortable_swipe::service
+namespace comfortable_swipe
 {
-    void buffer()
+    int driver()
     {
+        // unsync for faster IO
         std::ios::sync_with_stdio(false);
         std::cin.tie(0);
         std::cout.tie(0);
@@ -38,6 +39,19 @@ namespace comfortable_swipe::service
         // read config file
         auto config = comfortable_swipe::util::read_config_file(
             comfortable_swipe::util::conf_filename()
+        );
+
+        // initialize mouse hold gesture handler
+        // for now, this supports 3-finger and 4-finger hold
+        // Examples:
+        //   hold3=move     move mouse on 3 fingers
+        //   hold3=button1  hold button 1 on 3 fingers
+        //   hold4=button3  hold button 3 (right click) on 3 fingers
+        //   hold3=ignore   <do nothing>
+        comfortable_swipe::gesture::mouse_hold_gesture mouse_hold
+        (
+            config["hold3"].c_str(),
+            config["hold4"].c_str()
         );
 
         // initialize keyboard swipe gesture handler
@@ -52,13 +66,6 @@ namespace comfortable_swipe::service
             config["up4"].c_str(),
             config["down3"].c_str(),
             config["down4"].c_str()
-        );
-
-        // initialize mouse swipe gesture handler
-        comfortable_swipe::gesture::mouse_swipe_gesture mouse_hold
-        (
-            "",
-            "mouse1"
         );
 
         // prepare data containers
@@ -77,7 +84,9 @@ namespace comfortable_swipe::service
                 keyboard_swipe.parse_line(line.data());
             }
         }
+
+        return 0;
     }
 }
 
-#endif /* __COMFORTABLE_SWIPE__service_buffer__ */
+#endif /* __COMFORTABLE_SWIPE__driver__ */
