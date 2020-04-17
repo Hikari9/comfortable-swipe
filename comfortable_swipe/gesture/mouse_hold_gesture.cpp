@@ -63,7 +63,7 @@ namespace comfortable_swipe::gesture
         {
             // eg. MOUSE DOWN hold3 mouse1
             std::printf("MOUSE DOWN hold%d %s\n", this->fingers, mouseinput);
-            if (button != 0)
+            if (1 <= button && button <= 3)
             {
                 // send mouse down on associated button
                 xdo_mouse_down(this->xdo, CURRENTWINDOW, button);
@@ -81,7 +81,7 @@ namespace comfortable_swipe::gesture
         if (button != -1)
         {
             std::printf("MOUSE UP hold%d %s\n", this->fingers, mouseinput);
-            if (button != 0)
+            if (1 <= button && button <= 3)
             {
                 // send mouse up on associated button
                 xdo_mouse_up(this->xdo, CURRENTWINDOW, button);
