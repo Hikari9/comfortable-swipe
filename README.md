@@ -102,15 +102,53 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 
 We have included simple mouse gestures on swipe by setting `hold3` and `hold4`.
 
-**Possible values**:
-* move - just move the mouse
-* button1 - left click
-* button2 - middle click
-* button3 - right click
-* button4 - wheel up (experimental)
-* button5 - wheel down (experimental)
-* scroll - natural scrolling (experimental)
-* scroll_reverse - reverse scrolling (experimental)
+**Possible Values**:
+* `move` - just move the mouse cursor (no mousedown)
+* `button1` - hold left click on finger swipe
+* `button2` - hold middle click on finger swipe
+* `button3` - hold right click on finger swipe
+* `button4` - wheel up on finger swipe (experimental)
+* `button5` - wheel down on finger swipe (experimental)
+* `scroll` - naive 3/4 finger natural scroll (no acceleration, very experimental)
+* `scroll_reverse` - naive 3/4 finger reverse scroll (no acceleration, very experimental)
+
+Any value not mentioned above disables the mouse-hold.
+
+ **Note**: Applying any mouse-hold configuration will disable up/left/right/down behavior to avoid gesture conflicts. The logic of this will be improved in the future.
+
+## Example Usage
+
+3-finger drag
+```conf
+hold3 = button1
+```
+
+4-finger drag (with middle click)
+```conf
+hold4 = button2
+```
+
+3-finger natural scroll
+```conf
+hold3 = scroll
+```
+
+4-finger reverse scroll
+```conf
+hold4 = scroll_reverse
+```
+
+Just move the cursor
+```conf
+hold3 = move
+hold4 = move
+```
+
+Any other command will disable the mouse hold
+```conf
+hold3 = disabled
+hold4 = nothing
+```
 
 ## Example Configuration
 
@@ -122,28 +160,12 @@ Edit with `gedit $(comfortable-swipe config)`:
 # four-finger drag
 hold4 = button1
 
-# show desktop
+# show desktop and switch workspaces
 down3 = super+d
-
-# show workspaces
 up3 = super+s
-
-# switch workspace
 left3 = ctrl+alt+Right
 right3 = ctrl+alt+Left
-
-# disabled because of hold4
-left4 = ctrl+alt+shift+Right
-right4 = ctrl+alt+shift+Left
-
-# three-finger middle click (experimental)
-# hold3 = button2
-
-# three-finger scroll (experimental)
-# hold3 = scroll
-# hold3 = scroll_reverse
 ```
-
 
 ## Debugging
 
