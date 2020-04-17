@@ -1,9 +1,6 @@
 #ifndef __COMFORTABLE_SWIPE__service_stop__
 #define __COMFORTABLE_SWIPE__service_stop__
 
-#include <cstdio> // std::FILE, std::feof, std::fgets
-#include <cstdlib> // std::atoi, std::system
-#include <string> // std::string, std::to_string
 /*
 Comfortable Swipe
 by Rico Tiongson
@@ -26,8 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <unistd.h> // popen, pclose, getpid
 #include <memory> // std::unique_ptr
 #include <array> // std::array
-#include <cstdlib> // std::atoi
-#include <cstdio> // FILE, std::feof, std::fgets
+#include <cstdio> // std::FILE, std::feof, std::fgets
+#include <cstdlib> // std::atoi, std::system
+#include <string> // std::string, std::to_string
 
 namespace comfortable_swipe::service
 {
@@ -39,14 +37,14 @@ namespace comfortable_swipe::service
 
         // read all service names from process (pgrep)
         std::array<char, 128> buffer;
-        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("pgrep -f comfortable-swipe", "r"), pclose);
+        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("pgrep -f \"$(which comfortable-swipe)\"", "r"), pclose);
 
         // make sure pipe exists
         if (!pipe)
             throw std::runtime_error("stop command failed");
 
         // buffer what to kill
-        std::string kill = "kill";
+        std::string kill = "";
 
         // read until end of line
         while (!std::feof(pipe.get()))
@@ -63,7 +61,15 @@ namespace comfortable_swipe::service
         }
 
         // run "kill {pid1} {pid2}..."
-        (void) std::system(kill.data());
+        if (kill.length())
+        {
+            std::printf("Stopped%s\n", kill.c_str());
+            (void) std::system(("kill" + kill).c_str());
+        }
+        else
+        {
+            std::printf("No program to stop\n");
+        }
     }
 }
 

@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__service_config__
-#define __COMFORTABLE_SWIPE__service_config__
+#ifndef __COMFORTABLE_SWIPE__util_conf_filename__
+#define __COMFORTABLE_SWIPE__util_conf_filename__
 
 /*
 Comfortable Swipe
@@ -19,20 +19,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../index.hpp"
-#include <cstdio> // std::puts
+#include "../all_headers.hpp"
 
-namespace comfortable_swipe::service
+namespace comfortable_swipe::util
 {
     /**
-     * Prints where the config file of comfortable swipe is located.
-     *
-     * Usage: nano $(comfortable-swipe config)
+     * The path where the configuration file is located.
      */
-    void config()
+    constexpr const char* conf_filename()
     {
-        std::puts(comfortable_swipe::util::conf_filename());
+        return __COMFORTABLE_SWIPE__CONFIG__;
     }
 }
 
-#endif /* __COMFORTABLE_SWIPE__service_config__ */
+#endif /* __COMFORTABLE_SWIPE__util_conf_filename__ */

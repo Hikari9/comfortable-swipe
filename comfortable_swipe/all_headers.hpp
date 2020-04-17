@@ -1,5 +1,12 @@
-#ifndef __COMFORTABLE_SWIPE__index_hpp__
-#define __COMFORTABLE_SWIPE__index_hpp__
+/**
+ * Add header files will be imported here.
+ * You can import this as a shorthand:
+ *
+ *    #include "../all_headers.hpp"
+ */
+
+#ifndef __COMFORTABLE_SWIPE__all_headers_hpp__
+#define __COMFORTABLE_SWIPE__all_headers_hpp__
 
 /*
 Comfortable Swipe
@@ -36,21 +43,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <map> // std::map
 #include <string> // std::string
 
-/**
- * Make sure to include your header files here so that they can be imported by other modules.
- */
-#include "gesture/xdo_gesture.h"
-#include "gesture/swipe_gesture.h"
 extern "C"
 {
     namespace comfortable_swipe
     {
+        // driver method
+        int driver();
+        // this is found in the util/ folder
         namespace util
         {
             const char* autostart_filename();
             constexpr const char* conf_filename();
             std::map<std::string, std::string> read_config_file(const char*);
         }
+        // this is found in the service/ folder
         namespace service
         {
             void autostart();
@@ -66,4 +72,10 @@ extern "C"
     }
 }
 
-#endif /* __COMFORTABLE_SWIPE__index_hpp__ */
+// add headers for classes here so it can be imported during include
+#include "gesture/xdo_gesture.h"
+#include "gesture/swipe_gesture.h"
+#include "gesture/keyboard_swipe_gesture.h"
+#include "gesture/mouse_hold_gesture.h"
+
+#endif /* __COMFORTABLE_SWIPE__all_headers_hpp__ */

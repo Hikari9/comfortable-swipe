@@ -2,7 +2,10 @@
 [![comfortable-swipe version](https://img.shields.io/github/release/Hikari9/comfortable-swipe.svg?label=comfortable-swipe&color=orange)](https://github.com/Hikari9/comfortable-swipe/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+> **_New in Version 1.1.0!_** Added mouse move gestures (eg. `hold3 = button1`)
+
 Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures for Ubuntu 14.04 LTS and beyond. May work for other Linux distros that support `libinput`.
+
 
 ## Installation
 
@@ -47,28 +50,35 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
     comfortable-swipe status
     ```
 
-## Configurations
-Comfortable swipe makes use of keyboard shortcuts for configurations. Edit by running
-```
-gedit $(comfortable-swipe config)
-```
+## Swipe Configurations
 
-Make sure to run after making changes:
-```
-comfortable-swipe restart
-```
+Comfortable swipe makes use of keyboard shortcuts for configurations.
 
-Property  | Description | Default Value | Default Behavior
---------- | ----------- | -------------- | -----
-threshold | mouse pixels to activate swipe; higher = less sensitive; floating-point (Note: Sky is the limit! Can be as large as 1000.0) | 0.0
-left3     | 3-finger swipe left | ctrl+alt+Right | switch to right workspace
-left4     | 4-finger swipe left | ctrl+alt+shift+Right | move window to right workspace
-right3    | 3-finger swipe right | ctrl+alt+Left | switch to left workspace
-right4    | 4-finger swipe right | ctrl+alt+shift+Left | move window to left workspace
-up3       | 3-finger swipe up | ctrl+alt+Down | switch to bottom workspace
-up4       | 4-finger swipe up | ctrl+alt+shift+Down | move window to bottom workspace
-down3     | 3-finger swipe down | ctrl+alt+Down | switch to above workspace
-down4     | 4-finger swipe down | ctrl+alt+shift+Up | move window to above workpace
+1. Edit by running
+    ```
+    gedit $(comfortable-swipe config)
+    ```
+
+1. List of possible configurations:
+
+    Property  | Description | Default Value | Default Behavior
+    --------- | :-----------: | -------------- | -----
+    left3     | 3-finger swipe left | ctrl+alt+Right | switch to right workspace
+    left4     | 4-finger swipe left | ctrl+alt+shift+Right | move window to right workspace
+    right3    | 3-finger swipe right | ctrl+alt+Left | switch to left workspace
+    right4    | 4-finger swipe right | ctrl+alt+shift+Left | move window to left workspace
+    up3       | 3-finger swipe up | ctrl+alt+Down | switch to bottom workspace
+    up4       | 4-finger swipe up | ctrl+alt+shift+Down | move window to bottom workspace
+    down3     | 3-finger swipe down | ctrl+alt+Down | switch to above workspace
+    down4     | 4-finger swipe down | ctrl+alt+shift+Up | move window to above workpace
+    threshold | mouse pixels to activate swipe | 0.0 | tweak this if you're having troubles with touchpad sensitivity (higher = less sensitive, values can be as large as 1000.0)
+    hold3     | holds a mouse button when 3 fingers are down | (none) | See [Mouse Gestures](#mouse-configurations)
+    hold4     | holds a mouse button when 4 fingers are down | (none) | See [Mouse Gestures](#mouse-configurations)
+
+1. After making changes, make sure to restart the program:
+    ```
+    comfortable-swipe restart
+    ```
 
 Taken from `man xdotool`:
 
@@ -85,6 +95,54 @@ Taken from `man xdotool`:
 > that to type the key.
 
 Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete list of keycodes you can use.
+
+## Mouse Gestures
+
+> **Note**: Setting hold3 or hold4 will ignore its corresponding up/right/down/left command.
+
+We have included simple mouse gestures on swipe by setting `hold3` and `hold4`.
+
+**Possible values**:
+* move - just move the mouse
+* button1 - left click
+* button2 - middle click
+* button3 - right click
+* button4 - wheel up (experimental)
+* button5 - wheel down (experimental)
+* scroll - natural scrolling (experimental)
+* scroll_reverse - reverse scrolling (experimental)
+
+## Example Configuration
+
+Edit with `gedit $(comfortable-swipe config)`:
+
+```conf
+# File: comfortable-swipe.conf
+
+# four-finger drag
+hold4 = button1
+
+# show desktop
+down3 = super+d
+
+# show workspaces
+up3 = super+s
+
+# switch workspace
+left3 = ctrl+alt+Right
+right3 = ctrl+alt+Left
+
+# disabled because of hold4
+left4 = ctrl+alt+shift+Right
+right4 = ctrl+alt+shift+Left
+
+# three-finger middle click (experimental)
+# hold3 = button2
+
+# three-finger scroll (experimental)
+# hold3 = scroll
+# hold3 = scroll_reverse
+```
 
 
 ## Debugging

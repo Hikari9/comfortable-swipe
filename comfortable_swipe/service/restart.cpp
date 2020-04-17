@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__xdo_gesture_h__
-#define __COMFORTABLE_SWIPE__xdo_gesture_h__
+#ifndef __COMFORTABLE_SWIPE__service_restart__
+#define __COMFORTABLE_SWIPE__service_restart__
 
 /*
 Comfortable Swipe
@@ -19,39 +19,25 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern "C"
-{
-    #include <xdo.h> // xdo_t
-}
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <cstdio> // freopen, stdout
+#include "../all_headers.hpp"
 
-namespace comfortable_swipe
+namespace comfortable_swipe::service
 {
-    namespace gesture
+    /**
+     * Restarts the comfortable-swipe service.
+     */
+    void restart()
     {
-        class xdo_gesture
-        {
-        protected:
-            xdo_t * xdo;
+        // dont show stdout on stop
+        freopen("/dev/null", "a", stdout);
+        comfortable_swipe::service::stop();
 
-        public:
-            xdo_gesture();
-            ~xdo_gesture();
-
-            // hooks
-            virtual void begin() = 0;
-            virtual void update() = 0;
-            virtual void end() = 0;
-            virtual bool parse_line(const char *) = 0;
-        };
+        // show back on start
+        freopen ("/dev/tty", "a", stdout);
+        comfortable_swipe::service::start();
     }
 }
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* __COMFORTABLE_SWIPE__xdo_gesture_h__ */
+#endif /* __COMFORTABLE_SWIPE__service_restart__ */
