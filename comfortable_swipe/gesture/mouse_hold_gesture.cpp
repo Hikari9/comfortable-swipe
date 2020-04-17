@@ -42,6 +42,7 @@ namespace comfortable_swipe::gesture
         const char* hold4
     ):
         comfortable_swipe::gesture::swipe_gesture(),
+        button(-1),
         hold3(hold3),
         hold4(hold4),
         flag_mousedown(false)
@@ -58,7 +59,7 @@ namespace comfortable_swipe::gesture
      */
     void mouse_hold_gesture::do_mousedown(const char * mouseinput)
     {
-        int button = this->parse_mouse_button(mouseinput);
+        const int button = this->button = this->parse_mouse_button(mouseinput);
         if (button != -1)
         {
             // eg. MOUSE DOWN hold3 mouse1
@@ -77,11 +78,11 @@ namespace comfortable_swipe::gesture
      */
     void mouse_hold_gesture::do_mouseup(const char * mouseinput)
     {
-        int button = this->parse_mouse_button(mouseinput);
+        const int button = this->button = this->parse_mouse_button(mouseinput);
         if (button != -1)
         {
             std::printf("MOUSE UP hold%d %s\n", this->fingers, mouseinput);
-            if (1 <= button && button <= 3)
+            if (1 <= button && button <= 5)
             {
                 // send mouse up on associated button
                 xdo_mouse_up(this->xdo, CURRENTWINDOW, button);
@@ -94,7 +95,7 @@ namespace comfortable_swipe::gesture
      * Utility method to parse mouse number from input.
      * Returns -1 on failure.
      */
-    int mouse_hold_gesture::parse_mouse_button(const char *input)
+    int mouse_hold_gesture::parse_mouse_button(const char * input) const
     {
         // just move without holding button down
         if (std::strcmp(input, "move") == 0)
@@ -137,11 +138,20 @@ namespace comfortable_swipe::gesture
         swipe_gesture::update();
         if (this->is_mousedown())
         {
-            xdo_move_mouse_relative(
-                this->xdo,
-                this->udx,
-                this->udy
-            );
+            if (0 <= this->button && this->button <= 3)
+            {
+                // drag mouse with pointer during update
+                xdo_move_mouse_relative(
+                    this->xdo,
+                    this->udx,
+                    this->udy
+                );
+            }
+            else if (4 <= this->button && this->button <= 5)
+            {
+                // perform wheel during update
+                xdo_mouse_down(this->xdo, CURRENTWINDOW, this->button);
+            }
         }
 
     }
@@ -170,7 +180,7 @@ namespace comfortable_swipe::gesture
     /**
      * Utility method to check if mouse is current held.
      */
-    bool mouse_hold_gesture::is_mousedown()
+    bool mouse_hold_gesture::is_mousedown() const
     {
         return this->flag_mousedown;
     }

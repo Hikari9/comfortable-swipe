@@ -37,14 +37,14 @@ namespace comfortable_swipe::service
 
         // read all service names from process (pgrep)
         std::array<char, 128> buffer;
-        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("pgrep -f comfortable-swipe", "r"), pclose);
+        std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("pgrep -f \"$(which comfortable-swipe)\"", "r"), pclose);
 
         // make sure pipe exists
         if (!pipe)
             throw std::runtime_error("stop command failed");
 
         // buffer what to kill
-        std::string kill = "kill";
+        std::string kill = "";
 
         // read until end of line
         while (!std::feof(pipe.get()))
@@ -61,7 +61,15 @@ namespace comfortable_swipe::service
         }
 
         // run "kill {pid1} {pid2}..."
-        (void) std::system(kill.data());
+        if (kill.length())
+        {
+            std::printf("Stopped%s\n", kill.c_str());
+            (void) std::system(("kill" + kill).c_str());
+        }
+        else
+        {
+            std::puts("No program to stop");
+        }
     }
 }
 

@@ -36,6 +36,9 @@ namespace comfortable_swipe::gesture
             const char* hold4  // 4 finger mouse down
         );
 
+        // the button being clicked
+        int button;
+
         virtual ~mouse_hold_gesture();
 
         // override begin and end for mousedown
@@ -46,10 +49,10 @@ namespace comfortable_swipe::gesture
         // provide our own mouse functions
         virtual void do_mousedown(const char*);
         virtual void do_mouseup(const char*);
-        virtual bool is_mousedown();
+        virtual bool is_mousedown() const;
 
         // utility method to parse mouse input given config characters
-        virtual int parse_mouse_button(const char*);
+        virtual int parse_mouse_button(const char*) const;
 
     protected:
         // command holders
