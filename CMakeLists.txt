@@ -1,17 +1,11 @@
-# HEADER: versions
+# Run with: cmake . && make && make install
 cmake_minimum_required(VERSION 3.10.2)
+
 project(comfortable-swipe)
+set(CMAKE_PROJECT_NAME "Comfortable Swipe")
+set(CMAKE_PROJECT_DESCRIPTION "Comfortable 3/4-finger swipe gestures")
 
-# link external C++ libraries here
-find_library(XDO_LIB libxdo.a)
-
-# CMAKE variables
-set(CMAKE_INSTALL_PREFIX "/home/rico/Git/comfortable-swipe-ubuntu/dist")
-set(CMAKE_PROJECT_NAME "comfortable-swipe")
-set(CMAKE_PROJECT_DESCRIPTION "3/4-finger comfortableswipe gestures")
-# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+# creat project properties
 
 # set flags to use C++ 11
 set(CMAKE_CXX_STANDARD 11)
@@ -19,38 +13,36 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O2")
 
 # set main directories
-set(comfortable_swipe_bin "${CMAKE_CURRENT_BINARY_DIR}/bin")
-set(comfortable_swipe_lib "${CMAKE_CURRENT_BINARY_DIR}/lib")
-set(comfortable_swipe_share "${CMAKE_CURRENT_BINARY_DIR}/share")
-set(comfortable_swipe_include "${CMAKE_CURRENT_BINARY_DIR}/include")
+set(comfortable_swipe_bin "${CMAKE_INSTALL_PREFIX}/bin")
+set(comfortable_swipe_lib "${CMAKE_INSTALL_PREFIX}/lib")
+set(comfortable_swipe_share "${CMAKE_INSTALL_PREFIX}/share")
+set(comfortable_swipe_include "${CMAKE_INSTALL_PREFIX}/include")
 
 # set version from VERSION file
 file(STRINGS "VERSION" comfortable_swipe_version)
 
 # set project variables
-set(comfortable_swipe_exe_source "${CMAKE_CURRENT_SOURCE_DIR}/comfortable-swipe.cpp")
 set(comfortable_swipe_exe_path "${comfortable_swipe_bin}/comfortable-swipe")
 set(comfortable_swipe_conf_path "/usr/local/share/comfortable-swipe/comfortable-swipe.conf")
 
 # C++ definitions
 add_definitions(
-  -DCMAKE_BUILD 1
   -DCOMFORTABLE_SWIPE_VERSION="${comfortable_swipe_version}"
   -DCOMFORTABLE_SWIPE_PROGRAM="${comfortable_swipe_exe_path}"
   -DCOMFORTABLE_SWIPE_CONFIG="${comfortable_swipe_conf_path}"
 )
 
-# add our own comfortable-swipe library
-add_library(comfortable-swipe.a STATIC "${CMAKE_CURRENT_SOURCE_DIR}/src/comfortable_swipe.cpp")
-target_include_directories(comfortable-swipe.a PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set_target_properties(comfortable-swipe.a PROPERTIES OUTPUT_NAME "comfortable-swipe")
+# add our build-time only static library
+add_library(comfortable-swipe.lib STATIC "src/comfortable_swipe.cpp")
+target_include_directories(comfortable-swipe.lib PUBLIC "src")
 
 # register comfortable-swipe command line program
-add_executable("comfortable-swipe" "${comfortable_swipe_exe_source}")
+add_executable("comfortable-swipe" "comfortable-swipe.cpp")
 
-# add libraries to target
-target_link_libraries(comfortable-swipe.a "${XDO_LIB}")
-target_link_libraries(comfortable-swipe comfortable-swipe.a)
+# link libraries here
+find_library(XDO libxdo.so)
+target_link_libraries(comfortable-swipe.lib "${XDO}")
+target_link_libraries(comfortable-swipe comfortable-swipe.lib)
 
 # perform installation
 install(TARGETS comfortable-swipe DESTINATION bin)
