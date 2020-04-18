@@ -25,46 +25,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-namespace comfortable_swipe::gesture
-{
-    class swipe_gesture : public xdo_gesture
-    {
-    public:
-        // constructor
-        swipe_gesture();
+namespace comfortable_swipe::gesture {
+class swipe_gesture : public xdo_gesture {
+public:
+  // constructor
+  swipe_gesture();
 
-        // destructor
-        virtual ~swipe_gesture();
+  // destructor
+  virtual ~swipe_gesture();
 
-        // fields for xdo
-        int fingers;
+  // fields for xdo
+  int fingers;
 
-        // normal values (for touchpad mapping)
-        float x, y, dx, dy;
+  // normal values (for touchpad mapping)
+  float x, y, dx, dy;
 
-        // unaccelerated values (for screen mapping)
-        float ux, uy, udx, udy;
+  // unaccelerated values (for screen mapping)
+  float ux, uy, udx, udy;
 
-        // hooks that we can override (mark as virtual)
-        virtual void begin();
-        virtual void update();
-        virtual void end();
-        virtual bool parse_line(const char *);
+  // hooks that we can override (mark as virtual)
+  virtual void begin();
+  virtual void update();
+  virtual void end();
+  virtual bool parse_line(const char *);
 
-    protected:
-        // location of mouse
-        int screen_num, ix, iy;
+protected:
+  // location of mouse
+  int screen_num, ix, iy;
 
-        // optimization flag for checking if GESTURE_SWIPE_BEGIN was dispatched
-        bool flag_swiping;
+  // optimization flag for checking if GESTURE_SWIPE_BEGIN was dispatched
+  bool flag_swiping;
 
-    public:
-        // regex patterns
-        static const char* GESTURE_BEGIN_REGEX_PATTERN;
-        static const char* GESTURE_UPDATE_REGEX_PATTERN;
-        static const char* GESTURE_END_REGEX_PATTERN;
-    };
-}
+public:
+  // regex patterns
+  static const char *GESTURE_BEGIN_REGEX_PATTERN;
+  static const char *GESTURE_UPDATE_REGEX_PATTERN;
+  static const char *GESTURE_END_REGEX_PATTERN;
+};
+} // namespace comfortable_swipe::gesture
 
 #ifdef __cplusplus
 }

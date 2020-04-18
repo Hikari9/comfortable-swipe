@@ -39,9 +39,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "service/start.cpp"
 #include "service/status.cpp"
 #include "service/stop.cpp"
+#include "start.cpp"
 #include "util/autostart_filename.cpp"
 #include "util/conf_filename.cpp"
 #include "util/read_config_file.cpp"
-#include "start.cpp"
 
 #endif /* __COMFORTABLE_SWIPE__ */

@@ -16,10 +16,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "src/comfortable_swipe.cpp"
 #include <ios>      // std::ios
 #include <iostream> // std::cin, std::cout, std::cerr
 #include <string>   // std::string
-#include "src/comfortable_swipe.cpp"
 
 /* Command-line function. */
 

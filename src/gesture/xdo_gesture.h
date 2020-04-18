@@ -19,30 +19,26 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern "C"
-{
-    #include <xdo.h> // xdo_t
+extern "C" {
+#include <xdo.h> // xdo_t
 }
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-namespace comfortable_swipe
-{
-    namespace gesture
-    {
-        class xdo_gesture
-        {
-        protected:
-            xdo_t * xdo;
+namespace comfortable_swipe {
+namespace gesture {
+class xdo_gesture {
+protected:
+  xdo_t *xdo;
 
-        public:
-            xdo_gesture();
-            virtual ~xdo_gesture();
-        };
-    }
-}
+public:
+  xdo_gesture();
+  virtual ~xdo_gesture();
+};
+} // namespace gesture
+} // namespace comfortable_swipe
 
 #ifdef __cplusplus
 }

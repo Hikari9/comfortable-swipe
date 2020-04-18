@@ -45,31 +45,23 @@ void start() {
   //   hold3=button1  hold button 1 on 3 fingers
   //   hold4=button3  hold button 3 (right click) on 3 fingers
   //   hold3=ignore   <do nothing>
-  const char * const hold3 = config["hold3"].c_str();
-  const char * const hold4 = config["hold4"].c_str();
+  const char *const hold3 = config["hold3"].c_str();
+  const char *const hold4 = config["hold4"].c_str();
   comfortable_swipe::gesture::mouse_hold_gesture mouse_hold(hold3, hold4);
 
   // initialize keyboard swipe gesture handler
-  const float threshold = config.count("threshold") ? std::stof(config["threshold"]) : 0.0;
-  const char * const left3 = config["left3"].c_str();
-  const char * const left4 = config["left4"].c_str();
-  const char * const right3 = config["right3"].c_str();
-  const char * const right4 = config["right4"].c_str();
-  const char * const up3 = config["up3"].c_str();
-  const char * const up4 = config["up4"].c_str();
-  const char * const down3 = config["down3"].c_str();
-  const char * const down4 = config["down4"].c_str();
+  const float threshold =
+      config.count("threshold") ? std::stof(config["threshold"]) : 0.0;
+  const char *const left3 = config["left3"].c_str();
+  const char *const left4 = config["left4"].c_str();
+  const char *const right3 = config["right3"].c_str();
+  const char *const right4 = config["right4"].c_str();
+  const char *const up3 = config["up3"].c_str();
+  const char *const up4 = config["up4"].c_str();
+  const char *const down3 = config["down3"].c_str();
+  const char *const down4 = config["down4"].c_str();
   comfortable_swipe::gesture::keyboard_swipe_gesture keyboard_swipe(
-      threshold,
-      left3,
-      left4,
-      right3,
-      right4,
-      up3,
-      up4,
-      down3,
-      down4
-  );
+      threshold, left3, left4, right3, right4, up3, up4, down3, down4);
 
   // prepare data containers
   std::array<char, 256> line;

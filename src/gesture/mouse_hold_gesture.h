@@ -25,44 +25,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-namespace comfortable_swipe::gesture
-{
-    class mouse_hold_gesture : public swipe_gesture
-    {
-    public:
-        // constructor
-        mouse_hold_gesture(
-            const char* hold3, // 3 finger mouse down
-            const char* hold4  // 4 finger mouse down
-        );
+namespace comfortable_swipe::gesture {
+class mouse_hold_gesture : public swipe_gesture {
+public:
+  // constructor
+  mouse_hold_gesture(const char *hold3, // 3 finger mouse down
+                     const char *hold4  // 4 finger mouse down
+  );
 
-        // the button being clicked
-        int button;
+  // the button being clicked
+  int button;
 
-        virtual ~mouse_hold_gesture();
+  virtual ~mouse_hold_gesture();
 
-        // override begin and end for mousedown
-        virtual void begin() override;
-        virtual void update() override;
-        virtual void end() override;
+  // override begin and end for mousedown
+  virtual void begin() override;
+  virtual void update() override;
+  virtual void end() override;
 
-        // provide our own mouse functions
-        virtual void do_mousedown(const char*);
-        virtual void do_mouseup(const char*);
-        virtual bool is_mousedown() const;
+  // provide our own mouse functions
+  virtual void do_mousedown(const char *);
+  virtual void do_mouseup(const char *);
+  virtual bool is_mousedown() const;
 
-        // utility method to parse mouse input given config characters
-        static int parse_mouse_button(const char*);
+  // utility method to parse mouse input given config characters
+  static int parse_mouse_button(const char *);
 
-    protected:
-        // command holders
-        const char * hold3;
-        const char * hold4;
+protected:
+  // command holders
+  const char *hold3;
+  const char *hold4;
 
-        // flag we can use to check if mouse is down
-        bool flag_mousedown;
-    };
-}
+  // flag we can use to check if mouse is down
+  bool flag_mousedown;
+};
+} // namespace comfortable_swipe::gesture
 
 #ifdef __cplusplus
 }

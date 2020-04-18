@@ -2,7 +2,7 @@
 #define __COMFORTABLE_SWIPE__start_h__
 
 namespace comfortable_swipe {
-    void start();
+void start();
 }
 
 #endif /* __COMFORTABLE_SWIPE__start_h__ */

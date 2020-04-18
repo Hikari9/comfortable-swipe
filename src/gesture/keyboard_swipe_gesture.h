@@ -25,57 +25,52 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-namespace comfortable_swipe::gesture
-{
-    class keyboard_swipe_gesture : public swipe_gesture
-    {
-    public:
-        // constructor
-        keyboard_swipe_gesture(
-            const float threshold,
-            const char* left3   /* 000 */,
-            const char* left4   /* 001 */,
-            const char* right3  /* 010 */,
-            const char* right4  /* 011 */,
-            const char* up3     /* 100 */,
-            const char* up4     /* 101 */,
-            const char* down3   /* 110 */,
-            const char* down4   /* 111 */
-        );
+namespace comfortable_swipe::gesture {
+class keyboard_swipe_gesture : public swipe_gesture {
+public:
+  // constructor
+  keyboard_swipe_gesture(const float threshold, const char *left3 /* 000 */,
+                         const char *left4 /* 001 */,
+                         const char *right3 /* 010 */,
+                         const char *right4 /* 011 */,
+                         const char *up3 /* 100 */, const char *up4 /* 101 */,
+                         const char *down3 /* 110 */,
+                         const char *down4 /* 111 */
+  );
 
-        // destructor
-        virtual ~keyboard_swipe_gesture();
+  // destructor
+  virtual ~keyboard_swipe_gesture();
 
-        // hooks that we override
-        virtual void begin() override;
-        virtual void update() override;
-        virtual void end() override;
+  // hooks that we override
+  virtual void begin() override;
+  virtual void update() override;
+  virtual void end() override;
 
-        // override this when keyboard gesture is to be performed
-        virtual void do_keyboard_gesture(int mask);
+  // override this when keyboard gesture is to be performed
+  virtual void do_keyboard_gesture(int mask);
 
-    protected:
-        // stores square of threshold so we can compute faster
-        float threshold_squared;
+protected:
+  // stores square of threshold so we can compute faster
+  float threshold_squared;
 
-        // stores previous gesture so we don't repeat action
-        int previous_gesture;
+  // stores previous gesture so we don't repeat action
+  int previous_gesture;
 
-        // stores all command strings for xdo to execute
-        const char ** commands;
+  // stores all command strings for xdo to execute
+  const char **commands;
 
-    public:
-        // static enums we will use for gesture matching
-        static const int FRESH;
-        static const int MSK_THREE_FINGERS;
-        static const int MSK_FOUR_FINGERS;
-        static const int MSK_NEGATIVE;
-        static const int MSK_POSITIVE;
-        static const int MSK_HORIZONTAL;
-        static const int MSK_VERTICAL;
-        static const char * const command_map[8];
-    };
-}
+public:
+  // static enums we will use for gesture matching
+  static const int FRESH;
+  static const int MSK_THREE_FINGERS;
+  static const int MSK_FOUR_FINGERS;
+  static const int MSK_NEGATIVE;
+  static const int MSK_POSITIVE;
+  static const int MSK_HORIZONTAL;
+  static const int MSK_VERTICAL;
+  static const char *const command_map[8];
+};
+} // namespace comfortable_swipe::gesture
 
 #ifdef __cplusplus
 }

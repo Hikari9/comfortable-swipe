@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif /* COMFORTABLE_SWIPE_PROGRAM */
 
 #ifndef COMFORTABLE_SWIPE_CONFIG
-#define COMFORTABLE_SWIPE_CONFIG                                          \
+#define COMFORTABLE_SWIPE_CONFIG                                               \
   "/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
 #endif /* COMFORTABLE_SWIPE_CONFIG */
 
