@@ -5,8 +5,6 @@ project(comfortable-swipe)
 set(CMAKE_PROJECT_NAME "Comfortable Swipe")
 set(CMAKE_PROJECT_DESCRIPTION "Comfortable 3/4-finger swipe gestures")
 
-# creat project properties
-
 # set flags to use C++ 11
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -17,6 +15,7 @@ set(comfortable_swipe_bin "${CMAKE_INSTALL_PREFIX}/bin")
 set(comfortable_swipe_lib "${CMAKE_INSTALL_PREFIX}/lib")
 set(comfortable_swipe_share "${CMAKE_INSTALL_PREFIX}/share")
 set(comfortable_swipe_include "${CMAKE_INSTALL_PREFIX}/include")
+
 
 # set version from VERSION file
 file(STRINGS "VERSION" comfortable_swipe_version)
@@ -47,7 +46,13 @@ target_link_libraries(comfortable-swipe comfortable-swipe.lib)
 # perform installation
 install(TARGETS comfortable-swipe DESTINATION bin)
 
-# set platform-specific tasks
-set(CPACK_GENERATOR "DEB")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Rico Tiongson <thericotiongson@gmail.com>") #required
-include(CPack)
+# set where .desktop file should be installed
+if (DEFINED ENV{XDG_CONFIG_HOME})
+  set (comfortable_swipe_desktop "$ENV{XDG_CONFIG_HOME}/autostart/")
+else()
+  set(comfortable_swipe_desktop "$ENV{HOME}/.config/autostart/")
+endif()
+install(FILES "share/comfortable-swipe.desktop" DESTINATION "${comfortable_swipe_desktop}")
+
+# set platform-specific info
+include(cmake/cpack.cmake)
