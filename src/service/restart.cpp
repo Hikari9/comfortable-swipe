@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__util_conf_filename__
-#define __COMFORTABLE_SWIPE__util_conf_filename__
+#ifndef __COMFORTABLE_SWIPE__service_restart__
+#define __COMFORTABLE_SWIPE__service_restart__
 
 /*
 Comfortable Swipe
@@ -19,13 +19,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../all_headers.hpp"
+#include "../comfortable_swipe.h"
+#include <cstdio> // freopen, stdout
 
-namespace comfortable_swipe::util {
+namespace comfortable_swipe::service {
 /**
- * The path where the configuration file is located.
+ * Restarts the comfortable-swipe service.
  */
-constexpr const char *conf_filename() { return __COMFORTABLE_SWIPE__CONFIG__; }
-} // namespace comfortable_swipe::util
+void restart() {
+  // dont show stdout on stop
+  freopen("/dev/null", "a", stdout);
+  comfortable_swipe::service::stop();
 
-#endif /* __COMFORTABLE_SWIPE__util_conf_filename__ */
+  // show back on start
+  freopen("/dev/tty", "a", stdout);
+  comfortable_swipe::service::start();
+}
+} // namespace comfortable_swipe::service
+
+#endif /* __COMFORTABLE_SWIPE__service_restart__ */

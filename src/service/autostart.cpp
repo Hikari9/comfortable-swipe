@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../all_headers.hpp"
+#include "../comfortable_swipe.h"
 #include <cstdio>   // std::remove
 #include <cstdlib>  // std::system
 #include <fstream>  // std::ifstream, std::ofstream
@@ -51,7 +51,7 @@ void autostart() {
     else {
       fout << "[Desktop Entry]\n"
               "Type=Application\n"
-              "Exec=bash -c \"" __COMFORTABLE_SWIPE__PROGRAM__ " start\"\n"
+              "Exec=bash -c \"" COMFORTABLE_SWIPE_PROGRAM " start\"\n"
               "Hidden=false\n"
               "NoDisplay=false\n"
               "X-GNOME-Autostart-enabled=true\n"

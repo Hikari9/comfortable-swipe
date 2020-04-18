@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__driver__
-#define __COMFORTABLE_SWIPE__driver__
+#ifndef __COMFORTABLE_SWIPE__start__
+#define __COMFORTABLE_SWIPE__start__
 
 /*
 Comfortable Swipe
@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "all_headers.hpp"
+#include "comfortable_swipe.h"
 #include <cstdio>   // fgets_unlocked, stdin
 #include <iostream> // std::ios, std::cout, std::cin
 
@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * The main driver program.
  */
 namespace comfortable_swipe {
-int driver() {
+void start() {
   // unsync for faster IO
   std::ios::sync_with_stdio(false);
   std::cin.tie(0);
@@ -45,15 +45,31 @@ int driver() {
   //   hold3=button1  hold button 1 on 3 fingers
   //   hold4=button3  hold button 3 (right click) on 3 fingers
   //   hold3=ignore   <do nothing>
-  comfortable_swipe::gesture::mouse_hold_gesture mouse_hold(
-      config["hold3"].c_str(), config["hold4"].c_str());
+  const char * const hold3 = config["hold3"].c_str();
+  const char * const hold4 = config["hold4"].c_str();
+  comfortable_swipe::gesture::mouse_hold_gesture mouse_hold(hold3, hold4);
 
   // initialize keyboard swipe gesture handler
+  const float threshold = config.count("threshold") ? std::stof(config["threshold"]) : 0.0;
+  const char * const left3 = config["left3"].c_str();
+  const char * const left4 = config["left4"].c_str();
+  const char * const right3 = config["right3"].c_str();
+  const char * const right4 = config["right4"].c_str();
+  const char * const up3 = config["up3"].c_str();
+  const char * const up4 = config["up4"].c_str();
+  const char * const down3 = config["down3"].c_str();
+  const char * const down4 = config["down4"].c_str();
   comfortable_swipe::gesture::keyboard_swipe_gesture keyboard_swipe(
-      config.count("threshold") ? std::stof(config["threshold"]) : 0.0,
-      config["left3"].c_str(), config["left4"].c_str(),
-      config["right3"].c_str(), config["right4"].c_str(), config["up3"].c_str(),
-      config["up4"].c_str(), config["down3"].c_str(), config["down4"].c_str());
+      threshold,
+      left3,
+      left4,
+      right3,
+      right4,
+      up3,
+      up4,
+      down3,
+      down4
+  );
 
   // prepare data containers
   std::array<char, 256> line;
@@ -62,16 +78,13 @@ int driver() {
   while (fgets_unlocked(line.data(), line.size(), stdin) != NULL) {
     // prioritize mouse hold gesture first
     mouse_hold.parse_line(line.data());
-
-    // if mouse hold fails, try keyboard hold
     if (!mouse_hold.is_mousedown()) {
-      // attempt to parse keyboard gestures
+      // if mouse hold fails, try keyboard swipe
+      // attempt to parse keyboard gestures with the same line data
       keyboard_swipe.parse_line(line.data());
     }
   }
-
-  return 0;
 }
 } // namespace comfortable_swipe
 
-#endif /* __COMFORTABLE_SWIPE__driver__ */
+#endif /* __COMFORTABLE_SWIPE__start__ */

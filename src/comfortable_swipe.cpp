@@ -1,3 +1,7 @@
+/**
+ * Add all cpp implementation files are registered here.
+ */
+
 #ifndef __COMFORTABLE_SWIPE__
 #define __COMFORTABLE_SWIPE__
 
@@ -19,13 +23,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "all_headers.hpp"
+#include "comfortable_swipe.h"
 
-/**
- * Add all cpp files below to be ready for export.
- */
-
-#include "driver.cpp"
 #include "gesture/keyboard_swipe_gesture.cpp"
 #include "gesture/mouse_hold_gesture.cpp"
 #include "gesture/swipe_gesture.cpp"
@@ -43,5 +42,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "util/autostart_filename.cpp"
 #include "util/conf_filename.cpp"
 #include "util/read_config_file.cpp"
+#include "start.cpp"
 
 #endif /* __COMFORTABLE_SWIPE__ */

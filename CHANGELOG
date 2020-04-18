@@ -7,7 +7,7 @@ v1.1.0 (2020-04-18)
 * Add `mouse_hold_gestures.cpp`
 * Bugfix `comfortable-swipe stop`
 * Bugfix `comfortable-swipe restart`
-* Rename `index.hpp` to `all_headers.hpp`
+* Rename `index.hpp` to `comfortable_swipe.h`
 * Rename source directory `lib` to `comfortable_swipe`
 * Separate `swipe_gesture.cpp` from `keyboard_swipe_gesture.cpp`
 * Update compiler scripts

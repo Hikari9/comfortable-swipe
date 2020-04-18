@@ -1,5 +1,5 @@
-#ifndef __COMFORTABLE_SWIPE__service_restart__
-#define __COMFORTABLE_SWIPE__service_restart__
+#ifndef __COMFORTABLE_SWIPE__service_buffer__
+#define __COMFORTABLE_SWIPE__service_buffer__
 
 /*
 Comfortable Swipe
@@ -19,22 +19,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../all_headers.hpp"
-#include <cstdio> // freopen, stdout
+#include "../start.h"
 
-namespace comfortable_swipe::service {
 /**
- * Restarts the comfortable-swipe service.
+ * Starts the comfortable-swipe service by buffering libinput debug-events.
  */
-void restart() {
-  // dont show stdout on stop
-  freopen("/dev/null", "a", stdout);
-  comfortable_swipe::service::stop();
-
-  // show back on start
-  freopen("/dev/tty", "a", stdout);
-  comfortable_swipe::service::start();
-}
+namespace comfortable_swipe::service {
+void buffer() { comfortable_swipe::start(); }
 } // namespace comfortable_swipe::service
 
-#endif /* __COMFORTABLE_SWIPE__service_restart__ */
+#endif /* __COMFORTABLE_SWIPE__service_buffer__ */

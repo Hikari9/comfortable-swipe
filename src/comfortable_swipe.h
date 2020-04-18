@@ -2,11 +2,11 @@
  * Add header files will be imported here.
  * You can import this as a shorthand:
  *
- *    #include "../all_headers.hpp"
+ *    #include "comfortable_swipe.h"
  */
 
-#ifndef __COMFORTABLE_SWIPE__all_headers_hpp__
-#define __COMFORTABLE_SWIPE__all_headers_hpp__
+#ifndef __COMFORTABLE_SWIPE__comfortable_swipe_h__
+#define __COMFORTABLE_SWIPE__comfortable_swipe_h__
 
 /*
 Comfortable Swipe
@@ -27,14 +27,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // global defines
-#ifndef __COMFORTABLE_SWIPE__PROGRAM__
-#define __COMFORTABLE_SWIPE__PROGRAM__ "/usr/local/bin/comfortable-swipe"
-#endif /* __COMFORTABLE_SWIPE__PROGRAM__ */
+#ifndef COMFORTABLE_SWIPE_PROGRAM
+#define COMFORTABLE_SWIPE_PROGRAM "/usr/local/bin/comfortable-swipe"
+#endif /* COMFORTABLE_SWIPE_PROGRAM */
 
-#ifndef __COMFORTABLE_SWIPE__CONFIG__
-#define __COMFORTABLE_SWIPE__CONFIG__                                          \
+#ifndef COMFORTABLE_SWIPE_CONFIG
+#define COMFORTABLE_SWIPE_CONFIG                                          \
   "/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
-#endif /* __COMFORTABLE_SWIPE__CONFIG__ */
+#endif /* COMFORTABLE_SWIPE_CONFIG */
 
 #ifndef COMFORTABLE_SWIPE_VERSION
 #warning COMFORTABLE_SWIPE_VERSION is not defined
@@ -46,8 +46,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern "C" {
 namespace comfortable_swipe {
-// driver method
-int driver();
 // this is found in the util/ folder
 namespace util {
 const char *autostart_filename();
@@ -74,5 +72,6 @@ void stop();
 #include "gesture/mouse_hold_gesture.h"
 #include "gesture/swipe_gesture.h"
 #include "gesture/xdo_gesture.h"
+#include "start.h"
 
-#endif /* __COMFORTABLE_SWIPE__all_headers_hpp__ */
+#endif /* __COMFORTABLE_SWIPE__comfortable_swipe_h__ */
