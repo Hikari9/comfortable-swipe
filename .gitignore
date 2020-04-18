@@ -2,6 +2,9 @@
 .idea
 .vscode
 
+# Generated binary
+/comfortable-swipe
+
 # CMake
 CMakeLists.txt.user
 CMakeCache.txt
