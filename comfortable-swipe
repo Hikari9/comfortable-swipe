@@ -1,0 +1,122 @@
+#!/bin/bash
+## Comfortable Swipe (comfortable-swipe)
+
+# turn on errors per line
+set -e
+
+
+# start comfortable-swipe
+# internally pipes debug text to the buffer
+function start {
+  debug | buffer
+}
+
+
+# stop running comfortable-swipe commands (except self)
+function stop {
+  kill -- -$(pgrep -f comfortable-swipe | fgrep -v $$)
+}
+
+
+# restart comfortable swipe
+function restart {
+  stop > /dev/null 2>&1
+  start
+}
+
+
+# parse input from a buffer
+# internally calls comfortable-swipe-buffer (make sure installed)
+function buffer {
+  exec comfortable-swipe-buffer "$@"
+}
+
+
+# get location of configuration file
+function config {
+  # TODO: invoke subcommands
+  echo "$HOME/.config/comfortable-swipe.conf"
+}
+
+
+# show debug text
+# internally just calls libinput debug-events
+function debug {
+  if command -v libinput-debug-events > /dev/null 2>&1; then
+    local DEBUGEVENTS="libinput-debug-events"
+  else
+    local DEBUGEVENTS="libinput debug-events"
+  fi
+  stdbuf -oL -e0 $DEBUGEVENTS 2> >(fgrep -v 'double tracking')
+}
+
+
+# enable or disable autostart
+# you can also set manually by running: gnome-session-properties
+function autostart {
+  local AUTOSTART="$HOME/.config/autostart/comfortable-swipe.desktop"
+  local ENABLED="X-GNOME-Autostart-enabled"
+  # show autostart file path
+  function path {
+    echo "$AUTOSTART"
+  }
+  # echo autostart status: ON, OFF, MISSING, INVALID
+  function status {
+    if [[ ! -f "$AUTOSTART" ]]; then
+      echo "MISSING"
+    elif fgrep "$ENABLED=true" < "$AUTOSTART" > /dev/null; then
+      echo "ON"
+    elif fgrep "$ENABLED=false" < "$AUTOSTART" > /dev/null; then
+      echo "OFF"
+    else
+      echo "INVALID"
+    fi
+  }
+  # enable autostart
+  function on {
+    sed -i "s/$ENABLED=false/$ENABLED=true/" "$AUTOSTART"
+    echo "Autostart switched on"
+  }
+  # disable autostart
+  function off {
+    sed -i "s/$ENABLED=true/$ENABLED=false/" "$AUTOSTART"
+    echo "Autostart switched off"
+  }
+  # toggle to opposite autostart status
+  function toggle {
+    [[ $(status) = ON ]] && off || on
+  }
+  if [[ $# -eq 0 ]]; then
+    # default behavior is to toggle
+    toggle
+  elif declare -f "$1" >/dev/null 2>&1; then
+    # invoke subcommand function, passing arguments through
+    "$@" # same as "$1" "$2" "$3" ... for full argument list
+  else
+    echo "Function $1 not recognized" >&2
+    echo "Usage: comfortable-swipe autostart [on|off|toggle|status|path]" >&2
+    exit 1
+  fi
+}
+
+
+# verbosely show comfortable-swipe status
+function status {
+  # TODO: show configuration status as well
+  echo "autostart is $(autostart status)"
+  if pgrep -f comfortable-swipe | fgrep -v $$ > /dev/null 2>&1; then
+    echo "comfortable-swipe program is RUNNING"
+  else
+    echo "comfortable-swipe program is STOPPED"
+  fi
+}
+
+
+# make sure we actually pass a valid function name
+if declare -f "$1" >/dev/null 2>&1; then
+  # invoke that function, passing arguments through
+  "$@" # same as "$1" "$2" "$3" ... for full argument list
+else
+  echo "Function $1 not recognized" >&2
+  exit 1
+fi
