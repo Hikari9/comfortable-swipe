@@ -14,7 +14,19 @@ function start {
 
 # stop running comfortable-swipe commands (except self)
 function stop {
-  kill -- -$(pgrep -f comfortable-swipe | fgrep -v $$)
+  local pids="$(pgrep -f comfortable-swipe | fgrep -v $$)"
+  local stopped=""
+  for pid in "$pids"; do
+    # stop process tree
+    if kill -- -$pid 2> /dev/null; then
+      stopped=" $(echo $pid)"
+    fi
+  done
+  if [[ ! -z "$stopped" ]]; then
+    echo "comfortable-swipe stopped"
+  else
+    echo "comfortable-swipe is not running"
+  fi
 }
 
 
