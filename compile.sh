@@ -2,8 +2,12 @@
 
 dir="$(dirname $0)"
 version="$(cat "$dir/VERSION" | tr -d '[:space:]')"
+libraries=-lxdo -lconfig++
 
 exec g++ $@ \
-    -std=c++11 \
-    -O2 -lxdo -Wno-unused-result \
+    -std=c++14 \
+    -O2 \
+    -lxdo \
+    -lconfig++ \
+    -Wno-unused-result \
     -DCOMFORTABLE_SWIPE_VERSION="\"$version\""

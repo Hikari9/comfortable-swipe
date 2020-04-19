@@ -9,10 +9,16 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
 ## Installation
 
-1. Install git, libinput, and g++
+1. Install git and g++
 
    ```bash
-   sudo apt-get install git libinput-tools libxdo-dev g++
+   sudo apt install git g++
+   ```
+
+1. Install libinput-tools and C libraries
+
+   ```bash
+   sudo apt install libinput-tools libconfig-dev libxdo-dev
    ```
 
 2. Clone this repository

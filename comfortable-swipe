@@ -180,7 +180,7 @@ case $i in
     exit 0
   ;;
   -v | --version) # eagerly print version
-    echo "$version"
+    echo "comfortable-swipe $version"
     exit 0
   ;;
   *) # unknown option
