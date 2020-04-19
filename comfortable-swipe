@@ -1,8 +1,54 @@
 #!/bin/bash
 ## Comfortable Swipe (comfortable-swipe)
+basename="$(basename "$0")"
+version="$(cat VERSION)"  # this will be hardcoded upon install
+
 
 # turn on errors per line
 set -e
+
+usage=
+
+
+# show help
+function help {
+cat <<EOF
+Usage: $basename [--help|--version] <command> [<args>]
+
+    -h, --help        show this help text
+    -v, --version     print the program version
+
+Commands:
+    start
+      starts 3/4-finger gesture service
+
+    stop
+      stops 3/4-finger gesture service
+
+    restart
+      restarts 3/4-finger gesture service
+
+    autostart [on|off|toggle|status|path]
+      toggle to automatically run on startup automatically run on startup (toggleable)
+
+    buffer
+      parses output of libinput debug-events
+
+    help
+      shows the help dialog
+
+    config
+      shows the location of the config file
+
+    debug
+      logs raw output from input events taken from libinput
+
+    status
+      checks status of program and autostart
+
+Report bugs to https://github.com/Hikari9/comfortable-swipe/issues/new
+EOF
+}
 
 
 # start comfortable-swipe
@@ -124,11 +170,38 @@ function status {
 }
 
 
-# make sure we actually pass a valid function name
-if declare -f "$1" >/dev/null 2>&1; then
-  # invoke that function, passing arguments through
+####################
+# COMMAND OPTIONS  #
+####################
+for i in "$@"; do
+case $i in
+  -h | --help) # eagerly show help
+    help
+    exit 0
+  ;;
+  -v | --version) # eagerly print version
+    echo "$version"
+    exit 0
+  ;;
+  *) # unknown option
+    echo "Unknown option: $i" >&2
+    exit 1
+  ;;
+esac
+done
+
+############
+# DISPATCH #
+############
+
+if [[ $# -eq 0 ]]; then
+  # no options; just show help
+  help
+elif declare -f "$1" >/dev/null 2>&1; then
+  # invoke subcommand function, passing arguments through
   "$@" # same as "$1" "$2" "$3" ... for full argument list
 else
-  echo "Function $1 not recognized" >&2
+  echo "error: function $1 not recognized" >&2
+  echo "full usage: comfortable-swipe --help" >&2
   exit 1
 fi
