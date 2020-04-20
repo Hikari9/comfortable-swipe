@@ -86,7 +86,6 @@ protected:
   // command holders
   const char *mouse3;
   const char *mouse4;
-
 };
 /**
  * Constructs a new mouse gesture, given "mouse3" and "mouse4" configurations.
@@ -166,8 +165,7 @@ void gesture_swipe_xdomouse::update() {
     if (0 <= button && button <= 3) {
       // drag mouse with pointer during update
       xdo_move_mouse_relative(xdo, udx, udy);
-    } else if (button == MOUSE_SCROLL ||
-               button == MOUSE_SCROLL_REVERSE) {
+    } else if (button == MOUSE_SCROLL || button == MOUSE_SCROLL_REVERSE) {
       // perform naive scroll depending on vertical direction
       int wheel = MOUSE_WHEEL_DOWN;
       if ((udy > 0) == (button == MOUSE_SCROLL))
@@ -175,8 +173,7 @@ void gesture_swipe_xdomouse::update() {
       // click wheel on update (note: this is not precise)
       xdo_mouse_down(xdo, CURRENTWINDOW, wheel);
       xdo_mouse_up(xdo, CURRENTWINDOW, wheel);
-    } else if (button == MOUSE_WHEEL_UP ||
-               button == MOUSE_WHEEL_DOWN) {
+    } else if (button == MOUSE_WHEEL_UP || button == MOUSE_WHEEL_DOWN) {
       // click wheel button on 4 or 5
       xdo_mouse_down(xdo, CURRENTWINDOW, button);
       xdo_mouse_up(xdo, CURRENTWINDOW, button);
@@ -192,7 +189,8 @@ void gesture_swipe_xdomouse::end() {
     // map fingers to gesture command
     // perform mouseup on the button and print to console
     do_mouseup(button, fingers);
-    std::printf("MOUSE UP mouse%d %s\n", fingers, fingers == 3 ? mouse3 : mouse4);
+    std::printf("MOUSE UP mouse%d %s\n", fingers,
+                fingers == 3 ? mouse3 : mouse4);
   }
   // reset button
   button = MOUSE_NONE;

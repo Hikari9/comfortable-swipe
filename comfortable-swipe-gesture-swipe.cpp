@@ -69,9 +69,7 @@ public:
   virtual void end();
   virtual bool run(const char *);
   // public check if currently swiping
-  virtual bool is_swiping() const {
-    return this->flag_swiping;
-  }
+  virtual bool is_swiping() const { return this->flag_swiping; }
 
 protected:
   // xdo container

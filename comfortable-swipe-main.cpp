@@ -88,9 +88,11 @@ int main() {
   //   mouse4=button3  hold button 3 (right click) on 3 fingers
   // warn user that hold3 is deprecated
   if (config.count("hold3"))
-    std::cerr << "WARNING: hold3 is deprecated. Use mouse3 instead." << std:: endl;
+    std::cerr << "WARNING: hold3 is deprecated. Use mouse3 instead."
+              << std::endl;
   if (config.count("hold4"))
-    std::cerr << "WARNING: hold4 is deprecated. Use mouse4 instead." << std::endl;
+    std::cerr << "WARNING: hold4 is deprecated. Use mouse4 instead."
+              << std::endl;
   // get input values
   string mouse3 = config.count("mouse3") ? config["mouse3"] : config["hold3"];
   string mouse4 = config.count("mouse4") ? config["mouse4"] : config["hold4"];

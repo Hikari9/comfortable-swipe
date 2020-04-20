@@ -55,12 +55,8 @@ public:
   // override this when keyboard gesture is to be performed
   virtual void do_keyboard_gesture(int mask);
   // public accessors
-  virtual int get_previous_gesture() const {
-      return this->previous_gesture;
-  }
-  virtual int get_current_mask() const {
-      return this->current_mask;
-  }
+  virtual int get_previous_gesture() const { return this->previous_gesture; }
+  virtual int get_current_mask() const { return this->current_mask; }
 
 protected:
   // stores square of threshold so we can compute faster
@@ -112,12 +108,10 @@ decltype(
  */
 gesture_swipe_xdokey::gesture_swipe_xdokey(
     const decltype(gesture_swipe_xdokey::commands) &commands, float threshold)
-    : gesture_swipe(),
-      commands(commands),
+    : gesture_swipe(), commands(commands),
       threshold_squared(threshold * threshold),
       previous_gesture(gesture_swipe_xdokey::FRESH),
-      current_mask(gesture_swipe_xdokey::FRESH)
-    {}
+      current_mask(gesture_swipe_xdokey::FRESH) {}
 /**
  * Destructs this keyboard swipe gesture.
  */
@@ -172,15 +166,15 @@ void gesture_swipe_xdokey::update() {
     // update our mask
     current_mask = mask;
     // send command on fresh OR opposite gesture
-    if (previous_gesture == FRESH || previous_gesture == (mask ^ MSK_POSITIVE)) {
+    if (previous_gesture == FRESH ||
+        previous_gesture == (mask ^ MSK_POSITIVE)) {
       // do keyboard gesture
       do_keyboard_gesture(mask);
       // reset our location variables
       x = y = 0;
       previous_gesture = mask;
     }
-  }
-  else { // not in threshold, set mask to fresh
+  } else { // not in threshold, set mask to fresh
     current_mask = FRESH;
   }
 }

@@ -23,20 +23,20 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    sudo apt install libinput-tools libconfuse-dev libxdo-dev
    ```
 
-2. Clone this repository
+1. Clone this repository
 
    ```bash
    git clone https://github.com/Hikari9/comfortable-swipe.git --depth 1
    cd comfortable-swipe
    ```
 
-3. Install
+1. Install
 
    ```bash
    bash install
    ```
 
-4. You may delete the downloaded `comfortable-swipe` folder after installation.
+1. You may delete the downloaded `comfortable-swipe` folder after installation.
 
 ## How to Run
 
@@ -61,6 +61,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    ```
 
 1. You can check general program status
+
    ```basha
    $> comfortable-swipe status
 
@@ -71,6 +72,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 ## List of Commands
 
 1. Run / stop the program
+
    ```
    comfortable-swipe start
    comfortable-swipe stop
@@ -78,6 +80,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    ```
 
 1. Show help / version
+
    ```
    comfortable-swipe --help
    comfortable-swipe --version
@@ -95,8 +98,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    comfortable-swipe autostart [on|off|toggle|status|path]
    ```
 
-
-1. (Advanced) Run program buffer
+1) (Advanced) Run program buffer
 
    ```bash
    comfortable-swipe buffer
@@ -135,7 +137,6 @@ After making changes, make sure to restart the program:
 comfortable-swipe restart
 ```
 
-
 > **Note**: For v1.1.0 below, the configuration file is located at
 > `/usr/local/share/comfortable-swipe/comfortable-swipe.conf`
 
@@ -143,19 +144,19 @@ comfortable-swipe restart
 
 ## Configuration Reference
 
-| Key  |                 Value                  | Examples   |
-| --------- | :------------------------------------------: | -------------------- |
-| left3     |             3-finger swipe left              | ctrl+alt+Right       |
-| left4     |             4-finger swipe left              | ctrl+alt+shift+Right |
-| right3    |             3-finger swipe right             | ctrl+alt+Left        |
-| right4    |             4-finger swipe right             | ctrl+alt+shift+Left  |
-| up3       |              3-finger swipe up               | ctrl+alt+Down        |
-| up4       |              4-finger swipe up               | ctrl+alt+shift+Down  |
-| down3     |             3-finger swipe down              | ctrl+alt+Up          |
-| down4     |             4-finger swipe down              | ctrl+alt+shift+Up    |
-| threshold | mouse movement pixels that trigger a swipe (can be as large as 1000.0)  | 0.0, 240.0, 1000.0 |
-| mouse3    | holds a mouse button when 3 fingers are down | button1 (see [Mouse Gestures](#mouse-gestures-experimental)) |                                                         |
-| mouse4     | holds a mouse button when 4 fingers are down | button1 (see [Mouse Gestures](#mouse-gestures-experimental)  |
+| Key       |                                 Value                                  | Examples                                                     |
+| --------- | :--------------------------------------------------------------------: | ------------------------------------------------------------ |
+| left3     |                          3-finger swipe left                           | ctrl+alt+Right                                               |
+| left4     |                          4-finger swipe left                           | ctrl+alt+shift+Right                                         |
+| right3    |                          3-finger swipe right                          | ctrl+alt+Left                                                |
+| right4    |                          4-finger swipe right                          | ctrl+alt+shift+Left                                          |
+| up3       |                           3-finger swipe up                            | ctrl+alt+Down                                                |
+| up4       |                           4-finger swipe up                            | ctrl+alt+shift+Down                                          |
+| down3     |                          3-finger swipe down                           | ctrl+alt+Up                                                  |
+| down4     |                          4-finger swipe down                           | ctrl+alt+shift+Up                                            |
+| threshold | mouse movement pixels that trigger a swipe (can be as large as 1000.0) | 0.0, 240.0, 1000.0                                           |
+| mouse3    |              holds a mouse button when 3 fingers are down              | button1 (see [Mouse Gestures](#mouse-gestures-experimental)) |  |
+| mouse4    |              holds a mouse button when 4 fingers are down              | button1 (see [Mouse Gestures](#mouse-gestures-experimental)  |
 
 Taken from `man xdotool`:
 
@@ -282,22 +283,24 @@ You can also play around with mouse gestures during swipe.
 This enables certain mouse behaviour to trigger along with a 3/4-finger swipe.
 
 Keys:
-* mouse3 - for 3-finger mouse gestures
-* mouse4 - for 4-finger mosue gestures
-* hold3 (deprecated) - old equivalent of mouse3
-* hold4 (deprecated) - old equivalent of mouse4
+
+- mouse3 - for 3-finger mouse gestures
+- mouse4 - for 4-finger mosue gestures
+- hold3 (deprecated) - old equivalent of mouse3
+- hold4 (deprecated) - old equivalent of mouse4
 
 We have included simple mouse gestures on swipe by setting `hold3` and `hold4`.
 
 Possible Values:
-* button1 - hold left click on finger swipe
-* button2 - hold middle click on finger swipe
-* button3 - hold right click on finger swipe
-* button4 - wheel up on finger swipe (experimental)
-* button5 - wheel down on finger swipe (experimental)
-* move - just move the mouse cursor with the fingers
-* scroll - 3/4 finger natural scroll (no acceleration, very experimental)
-* scroll_reverse - 3/4 finger reverse scroll (no acceleration, very experimental)
+
+- button1 - hold left click on finger swipe
+- button2 - hold middle click on finger swipe
+- button3 - hold right click on finger swipe
+- button4 - wheel up on finger swipe (experimental)
+- button5 - wheel down on finger swipe (experimental)
+- move - just move the mouse cursor with the fingers
+- scroll - 3/4 finger natural scroll (no acceleration, very experimental)
+- scroll_reverse - 3/4 finger reverse scroll (no acceleration, very experimental)
 
 Examples:
 
