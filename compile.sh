@@ -1,13 +1,9 @@
 #!/bin/bash
+# main compile script
+# usage: ./compile.sh *.cpp
+set -e
 
-dir="$(dirname $0)"
-version="$(cat "$dir/VERSION" | tr -d '[:space:]')"
-libraries=-lxdo -lconfig++
+DIR="$(dirname $0)"
+VERSION="$(cat "$DIR/VERSION" | tr -d '[:space:]')"
 
-exec g++ $@ \
-    -std=c++14 \
-    -O2 \
-    -lxdo \
-    -lconfig++ \
-    -Wno-unused-result \
-    -DCOMFORTABLE_SWIPE_VERSION="\"$version\""
+g++ "$@" -std=c++14 -O2 -Wall -lxdo -linih -DCOMFORTABLE_SWIPE_VERSION="\"$VERSION\""

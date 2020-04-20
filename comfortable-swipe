@@ -1,19 +1,19 @@
 #!/bin/bash
-## Comfortable Swipe (comfortable-swipe)
-basename="$(basename "$0")"
-version="$(cat VERSION)"  # this will be hardcoded upon install
-
+# Comfortable Swipe
 
 # turn on errors per line
 set -e
 
-usage=
+DIR="$(dirname "$0")"
+BASENAME="$(basename "$0")"
+VERSION="$(cat "$DIR/VERSION" | tr -d '[:space:]')"  # note: this will be hardcoded upon install
+
 
 
 # show help
 function help {
 cat <<EOF
-Usage: $basename [--help|--version] <command> [<args>]
+Usage: $BASENAME [--help|--version] <command> [<args>]
 
     -h, --help        show this help text
     -v, --version     print the program version
@@ -84,7 +84,8 @@ function restart {
 
 
 # parse input from a buffer
-# internally calls comfortable-swipe-buffer (make sure installed)
+# internally calls comfortable-swipe-main.cpp, which is
+# installed as: comfortable-swipe-buffer
 function buffer {
   exec comfortable-swipe-buffer "$@"
 }
@@ -180,12 +181,14 @@ case $i in
     exit 0
   ;;
   -v | --version) # eagerly print version
-    echo "comfortable-swipe $version"
+    echo "comfortable-swipe $VERSION"
     exit 0
   ;;
   *) # unknown option
-    echo "Unknown option: $i" >&2
-    exit 1
+    if [[ "$i" == -* ]]; then
+      echo "Unknown option: $i" >&2
+      exit 1
+    fi
   ;;
 esac
 done

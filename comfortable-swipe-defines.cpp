@@ -1,9 +1,8 @@
 #ifndef __comfortable_swipe_defines__
 #define __comfortable_swipe_defines__
-// Place #define statements here
-
+/** All global #define statements go here */
 /*
-Comfortable Swipe (as of v1.2.0)
+Comfortable Swipe
 by Rico Tiongson
 
 This program is free software: you can redistribute it and/or modify
@@ -19,19 +18,35 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+/**
+ * COMFORTABLE_SWIPE_CONFIG
+ *
+ * This definition points to the location of the configuration file.
+ * A warning will be issued to the compiler if you do not define this at compile time.
+ */
 #ifndef COMFORTABLE_SWIPE_CONFIG
-#warning Please define COMFORTABLE_SWIPE_CONFIG during compilation!\
-    (g++ -DCOMFORTABLE_SWIPE_CONFIG="\"/home/$USER/.config/comfortable-swipe.conf\"")
+#pragma message "Please define COMFORTABLE_SWIPE_CONFIG during compilation!"
+// just point to config from source directory
+#define COMFORTABLE_SWIPE_CONFIG "/dev/null"
 #endif /* COMFORTABLE_SWIPE_CONFIG */
-
+/**
+ * COMFORTABLE_SWIPE_AUTOSTART
+ *
+ * This definition points to the location of the autostart (.desktop) file.
+ * A warning will be issued to the compiler if you do not define this at compile time.
+ */
 #ifndef COMFORTABLE_SWIPE_AUTOSTART
-#warning Please define COMFORTABLE_SWIPE_AUTOSTART during compilation!\
-    (g++ -DCOMFORTABLE_SWIPE_AUTOSTART="\"/home/$USER/.config/autostart/comfortable-swipe.desktop\"")
+#pragma message "Please define COMFORTABLE_SWIPE_AUTOSTART during compilation!"
+// just point to autostart from source directory
+#define COMFORTABLE_SWIPE_AUTOSTART "/dev/null"
 #endif /* COMFORTABLE_SWIPE_AUTOSTART */
-
+/**
+ * COMFORTABLE_SWIPE_VERSION
+ *
+ * This is an optional definition for the version string of comfortable-swipe.
+ */
 #ifndef COMFORTABLE_SWIPE_VERSION
-#warning COMFORTABLE_SWIPE_VERSION is not defined
+#pragma message "Please define COMFORTABLE_SWIPE_VERSION during compilation!"
 #define COMFORTABLE_SWIPE_VERSION "v(UNKNOWN)"
 #endif /* COMFORTABLE_SWIPE_VERSION */
 
