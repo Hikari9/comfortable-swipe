@@ -7,13 +7,27 @@ set -e
 DIR="$(dirname "$0")"
 BASENAME="$(basename "$0")"
 VERSION="$(cat "$DIR/VERSION" | tr -d '[:space:]')"  # note: this will be hardcoded upon install
+KEYS="left3|left4|right3|right4|up3|up4|down3|down4|threshold|mouse3|mouse4"
+DEPRECATED="hold3|hold4"
 
 
+function usage {
+cat <<EOF
+Usage:  $BASENAME [--help|--version] [start|stop|restart|config|autostart|buffer|debug|status] [<args>]
 
+Configuration:
+
+    $BASENAME <PROPERTY>                 gets configuration property
+    $BASENAME <PROPERTY> [=] <VALUE>     sets configuration to a value
+
+EOF
+}
 # show help
 function help {
+  usage
 cat <<EOF
-Usage: $BASENAME [--help|--version] <command> [<args>]
+
+Global Options:
 
     -h, --help        show this help text
     -v, --version     print the program version
@@ -28,16 +42,16 @@ Commands:
     restart
       restarts 3/4-finger gesture service
 
-    autostart [<on|off|toggle|status|path>]
+    edit
+      edits the configuration file with gedit
+
+    autostart <[on|off|toggle|status|path]>
       toggle to automatically run on startup automatically run on startup (toggleable)
 
     buffer
       parses output of libinput debug-events
 
-    help
-      shows the help dialog
-
-    config [<get|set|delete|list|keys|path>...]
+    config <[get|set|delete|list|properties|path]> [...]
       shows the location of the config file
 
     debug
@@ -60,12 +74,12 @@ function start {
 
 # stop running comfortable-swipe commands (except self)
 function stop {
-  function stop_name {
+  function stop_prop {
     pgrep -f "${1:?}" | fgrep -v $$ | xargs kill --
   }
-  stop_name "$BASENAME"
-  stop_name "$(which comfortable-swipe)"
-  stop_name "$(which comfortable-swipe-buffer)"
+  stop_prop "$BASENAME"
+  stop_prop "$(which comfortable-swipe)"
+  stop_prop "$(which comfortable-swipe-buffer)"
 }
 
 
@@ -97,15 +111,30 @@ function buffer {
 }
 
 
+# verbosely show comfortable-swipe status
+function status {
+  # TODO: show configuration status as well
+  echo "Autostart is $("$BASENAME" autostart status)"
+  if pgrep -f "$BASENAME" | fgrep -v $$ > /dev/null 2>&1; then
+    echo "Program is RUNNING"
+  else
+    echo "Program is STOPPED"
+  fi
+}
+
 # get location of configuration file
 function config {
   local CONFIG="$HOME/.config/comfortable-swipe.conf"
-  local KEYS="left3|left4|right3|right4|up3|up4|down3|down4|threshold|mouse3|mouse4"
-  local DEPRECATED="hold3|hold4"
-  local USAGE="Usage: $BASENAME config [get|set|delete|list|keys|path]..."
+  function usage {
+    echo "Usage: $BASENAME config [get|set|delete|list|keys|edit|path]..."
+  }
   # show path to config
   function path {
     echo "$CONFIG"
+  }
+  # eit configuration with gedit
+  function edit {
+    gedit "$CONFIG"
   }
   # get all keys from config, without comments
   # and show only last among duplicates
@@ -135,12 +164,12 @@ function config {
     echo "$KEYS" | sed 's/|/\n/g'
   }
   # Get a specific key in the config
-  # Usage: comfortable-swipe config get <key>
+  # Usage: comfortable-swipe config get <PROP>
   function get {
     # helper function to print usage
     function usage {
-      echo "Usage: $BASENAME config get <KEY>"
-      echo -n "Keys: "
+      echo "Usage: $BASENAME config get <PROP>"
+      echo -n "Props: "
       echo "$KEYS" | sed 's/|/, /g'
     }
     # no next argument: show list
@@ -151,13 +180,13 @@ function config {
     local KEY="$1"
     # check if key is valid
     if ! [[ "$KEY" =~ ^($KEYS|$DEPRECATED)$ ]]; then
-      echo "'$KEY' is an invalid key" >&2
+      echo "'$KEY' is an invalid property" >&2
       echo >&2
       usage >&2
       echo >&2
-      echo "If you want to filter keys, you can instead try:" >&2
+      echo "If you want to filter properties, you can instead try:" >&2
       echo >&2
-      echo "    $BASENAME config list $@"
+      echo "    $BASENAME config list $@" >&2
       echo >&2
       exit 1
     fi
@@ -168,11 +197,11 @@ function config {
   function delete {
     # helper function to print usage
     function usage {
-      echo "Usage: $BASENAME config delete [<KEYS>...]"
+      echo "Usage: $BASENAME config delete [<PROPERTY>...]"
     }
     # no next argument: show help
     if [[ $# -eq 0 ]]; then
-      echo "Key is required!" >&2
+      echo "Property name is required!" >&2
       # no key; show usage
       usage >&2
       exit 1
@@ -196,13 +225,13 @@ function config {
   function set {
     # helper function to print usage
     function usage {
-      echo "Usage: $BASENAME config set <KEY> [=] <VALUE>"
-      echo -n "Valid keys: "
+      echo "Usage: $BASENAME config set <PROPERTY> [=] <VALUE>"
+      echo -n "Valid properties: "
       echo "$KEYS" | sed 's/|/, /g'
     }
     # no next argument: show help
     if [[ $# -eq 0 ]]; then
-      echo "Key is required!" >&2
+      echo "Property name is required!" >&2
       echo >&2
       # no key; show usage
       usage >&2
@@ -221,7 +250,7 @@ function config {
       *)
         # default: just get from next arguments combined
         if [[ $# -eq 1 ]]; then
-          echo "Value is required!" >&2
+          echo "Property value is required!" >&2
           usage >&2
           echo >&2
           echo "If you want to set value to blank, explicitly pass a blank string:" >&2
@@ -243,7 +272,7 @@ function config {
     VALUE="$(echo "$VALUE" | awk '{$1=$1};1')"
     # check if key is valid
     if ! [[ "$KEY" =~ ^($KEYS|$DEPRECATED)$ ]]; then
-      echo "'$KEY' is an invalid key" >&2
+      echo "'$KEY' is an invalid property name" >&2
       echo >&2
       usage
       exit 1
@@ -269,8 +298,8 @@ function config {
   }
   # dispatch subcommands
   if [[ $# -eq 0 ]]; then
-    # no options; just show path
-    path
+    # no options; just show usage
+    usage
   elif declare -f "$1" >/dev/null 2>&1; then
     # invoke subcommand function, passing arguments through
     # TODO: unset all nonlocal functions
@@ -335,18 +364,6 @@ function autostart {
 }
 
 
-# verbosely show comfortable-swipe status
-function status {
-  # TODO: show configuration status as well
-  echo "Autostart is $("$BASENAME" autostart status)"
-  if pgrep -f "$BASENAME" | fgrep -v $$ > /dev/null 2>&1; then
-    echo "comfortable-swipe program is RUNNING"
-  else
-    echo "comfortable-swipe program is STOPPED"
-  fi
-}
-
-
 ####################
 # COMMAND OPTIONS  #
 ####################
@@ -378,7 +395,24 @@ elif declare -f "$1" >/dev/null 2>&1; then
   # TODO: unset all nonlocal functions
   "$@" # same as "$1" "$2" "$3" ... for full argument list
 else
-  echo "Error: function $1 not recognized" >&2
-  echo "Usage: $BASENAME [--help|--version] [start|stop|restart|config|autostart|buffer|debug|status] [<args>]" >&2
-  exit 1
+  # try to invoke config set / get depending on number of arguments
+  if [[ $# -eq 1 ]]; then
+    # one argument, use shorthand get
+    "$BASENAME" config get "$1" 2> /dev/null
+    retval=$?
+  else
+    # multiple arguments, use shorthand set
+    config set "$@" 2> /dev/null
+    retval=$?
+  fi
+  if $retval; then
+    exit $retval
+  else
+    echo "Error: $1 not recognized" >&2
+    echo >&2
+    usage >&2
+    echo -n "Valid props: "  >&2
+    echo "$KEYS" | sed 's/|/, /g'  >&2
+  fi
+  exit $retval
 fi

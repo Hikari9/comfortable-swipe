@@ -64,44 +64,66 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
    ```basha
    $> comfortable-swipe status
-
-   autostart is ON
-   comfortable-swipe program is RUNNING
+   Autostart is ON
+   Program is RUNNING
    ```
 
 ## List of Commands
 
-1. Run / stop the program
+1. Program
 
    ```
    comfortable-swipe start
    comfortable-swipe stop
    comfortable-swipe restart
+   comfortable-swipe status
    ```
 
-1. Show help / version
+1. Help / version
 
    ```
    comfortable-swipe --help
    comfortable-swipe --version
    ```
 
-1. Show path to configuration file
-
-   ```bash
-   comfortable-swipe config
-   ```
-
-1. Toggle autostart
+1. Autostart
 
    ```bash
    comfortable-swipe autostart [on|off|toggle|status|path]
    ```
 
-1) (Advanced) Run program buffer
+1. Configurations
 
    ```bash
-   comfortable-swipe buffer
+   # configuration value
+   comfortable-swipe config get <KEY>
+   comfortable-swipe config set <KEY> [=] <VALUE>
+
+   # list all configurations
+   comfortable-swipe config list [<pattern>]
+
+   # remove configuration value
+   comfortable-swipe config delete <KEY>
+
+   ```
+
+1. Configuration extras
+
+   ```bash
+   # show all possible configuration keys
+   comfortable-swipe config keys
+
+   # show path to config
+   comfortable-swipe config path
+
+   # open config file with editor
+   comfortable-swipe config edit
+   ```
+
+1. (Advanced) Run program buffer
+
+   ```bash
+   ./my-custom-runner | comfortable-swipe buffer
    ```
 
 ## Configuring Swipe Gestures
@@ -109,21 +131,6 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 The default configuration file is located at `~/.config/comfortable-swipe.conf`.
 Comfortable swipe makes use of keyboard shortcuts to perform swipes through `xdotool`.
 
-An example:
-
-```bash
-# File: ~/.config/comfortable-swipe.conf
-
-left3  = ctrl+alt+Right
-left4  = ctrl+alt+shift+Right
-right3 = ctrl+alt+Left
-right4 = ctrl+alt+shift+Left
-up3    = ctrl+alt+Down
-up4    = ctrl+alt+shift+Down
-down3  = ctrl+alt+Up
-down4  = ctrl+alt+shift+Up
-threshold = 0.0
-```
 
 Edit configurations by running:
 
@@ -140,11 +147,11 @@ comfortable-swipe restart
 > **Note**: For v1.1.0 below, the configuration file is located at
 > `/usr/local/share/comfortable-swipe/comfortable-swipe.conf`
 
-> **Note**: You can locate your configuration by running `comfortable-swipe config`
+> **Note**: You can locate your configuration by running `comfortable-swipe config path`
 
 ## Configuration Reference
 
-| Key       |                                 Value                                  | Examples                                                     |
+| Key       |                                 Value                                  | Example                                                      |
 | --------- | :--------------------------------------------------------------------: | ------------------------------------------------------------ |
 | left3     |                          3-finger swipe left                           | ctrl+alt+Right                                               |
 | left4     |                          4-finger swipe left                           | ctrl+alt+shift+Right                                         |
@@ -154,9 +161,9 @@ comfortable-swipe restart
 | up4       |                           4-finger swipe up                            | ctrl+alt+shift+Down                                          |
 | down3     |                          3-finger swipe down                           | ctrl+alt+Up                                                  |
 | down4     |                          4-finger swipe down                           | ctrl+alt+shift+Up                                            |
-| threshold | mouse movement pixels that trigger a swipe (can be as large as 1000.0) | 0.0, 240.0, 1000.0                                           |
-| mouse3    |              holds a mouse button when 3 fingers are down              | button1 (see [Mouse Gestures](#mouse-gestures-experimental)) |  |
-| mouse4    |              holds a mouse button when 4 fingers are down              | button1 (see [Mouse Gestures](#mouse-gestures-experimental)  |
+| thresmouse | mouse movement pixels that trigger a swipe (can be as large as 1000.0) | 0.0, 240.0, 1000.0                                           |
+| mouse3    |              mouses a mouse button when 3 fingers are down              | button1 (see [Mouse Gestures](#mouse-gestures-experimental)) |  |
+| mouse4    |              mouses a mouse button when 4 fingers are down              | button1 (see [Mouse Gestures](#mouse-gestures-experimental)  |
 
 Taken from `man xdotool`:
 
@@ -184,13 +191,13 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 
 ## Example Configurations
 
-This section includes some example configurations for `~/.config/comfortable-swipe.conf` which you can use for your swipe experience.
+This section includes some example configurations which you can use for your swipe experience.
 
 1. Switch workspace (horizontal)
 
    ```bash
-   left3 = ctrl+alt+Right
-   right3 = ctrl+alt+Left
+   comfortable-swipe config set left3 = ctrl+alt+Right
+   comfortable-swipe config set right3 = ctrl+alt+Left
    ```
 
 1. Switch workspace (vertical)
@@ -289,60 +296,56 @@ Keys:
 - hold3 (deprecated) - old equivalent of mouse3
 - hold4 (deprecated) - old equivalent of mouse4
 
-We have included simple mouse gestures on swipe by setting `hold3` and `hold4`.
-
 Possible Values:
 
-- button1 - hold left click on finger swipe
-- button2 - hold middle click on finger swipe
-- button3 - hold right click on finger swipe
-- button4 - wheel up on finger swipe (experimental)
-- button5 - wheel down on finger swipe (experimental)
-- move - just move the mouse cursor with the fingers
+- button1 - left click
+- button2 - middle click
+- button3 - right click
+- button4 - wheel up (experimental)
+- button5 - wheel down (experimental)
+- move - just move the mouse cursor while fingers are down
 - scroll - 3/4 finger natural scroll (no acceleration, very experimental)
 - scroll_reverse - 3/4 finger reverse scroll (no acceleration, very experimental)
 
 Examples:
 
-- 3-finger drag
+- 3/4-finger drag
+  ```bash
+  mouse3 = button1
+  ```
+  ```bash
+  mouse4 = button1
+  ```
+- 3/4-finger natural scroll
 
   ```bash
-  hold3 = button1
+  mouse3 = scroll
   ```
-
-- 4-finger drag (with middle click)
 
   ```bash
-  hold4 = button2
+  mouse4 = scroll
   ```
 
-- 3-finger natural scroll
+- 3/4-finger reverse scroll
 
   ```bash
-  hold3 = scroll
+  mouse3 = scroll_reverse
   ```
-
-- 4-finger reverse scroll
 
   ```bash
-  hold4 = scroll_reverse
+  mouse4 = scroll_reverse
   ```
 
-- Just move the cursor
+- Move 3/4-fingers with the cursor
 
   ```bash
-  hold3 = move
-  hold4 = move
+  mouse3 = move
   ```
-
-- Any other command will disable the mouse hold
-
   ```bash
-  hold3 = disabled
-  hold4 = nothing
+  mouse4 = move
   ```
 
-**Note**: Applying any mouse-hold configuration will disable up/left/right/down behavior to avoid gesture conflicts. The logic of this will be improved in the future.
+**Note**: Applying any mouse-mouse configuration may disable up/left/right/down behavior to avoid gesture conflicts. The logic of this will be improved in the future.
 
 ## Debugging
 
@@ -380,6 +383,8 @@ event9   GESTURE_SWIPE_BEGIN  +2.03s   3
 If you can see `GESTURE_SWIPE_XXX` in your output, that means your touchpad supports multi-touch swipe gestures.
 
 ## Uninstall
+
+Run the following script:
 
 ```bash
 wget -qO - https://raw.githubusercontent.com/Hikari9/comfortable-swipe/master/uninstall | bash

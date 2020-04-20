@@ -33,6 +33,5 @@ if [ -f "$CONF_TARGET" ]; then
 fi
 
 cat <<EOF
-
 Successfully uninstalled comfortable-swipe
 EOF
