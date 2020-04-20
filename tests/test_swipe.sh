@@ -89,12 +89,12 @@ OUTPUT="$(mktemp)"
  event7   GESTURE_SWIPE_END  +2.19s     3
 EOF
 
-EXPECTED_OUTPUT="SWIPE left3
-SWIPE right3"
+EXPECTED_OUTPUT="SWIPE left3 SWIPE right3"
+ACTUAL_OUTPUT="$(cat "$OUTPUT" | xargs)"
+echo "My output: $ACTUAL_OUTPUT"
+echo "Expected: $EXPECTED_OUTPUT"
 
-echo "$EXPECTED_OUTPUT"
-
-if [[ "$(cat "$OUTPUT")" == "$EXPECTED_OUTPUT" ]]; then
+if [[ "$ACTUAL_OUTPUT" == "$EXPECTED_OUTPUT" ]]; then
     echo "PASSED"
 else
     echo "Did not match expected output:" >&2

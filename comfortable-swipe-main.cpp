@@ -103,7 +103,7 @@ int main() {
       keyswipe.run(line.data());
     } else if (mousehold.run(line.data())) {
       // only allow keyswipe gestures on mouse move
-      if (mousehold.button == MOUSE_MOVE) {
+      if (mousehold.button == MOUSE_NONE || mousehold.button == MOUSE_MOVE) {
         keyswipe.run(line.data());
       }
     }
