@@ -43,8 +43,9 @@ function uninstall_existing {
     local PROGRAM="${1:?missing program name}"
     # remove existing comfortable-swipe
     if [[ -x "$(command -v "$PROGRAM")" ]]; then
-        echo "Removing existing $(which "$PROGRAM") ..."
+        echo -n "Removing previous $(which "$PROGRAM") ... "
         trysudo rm -f "$(which "$PROGRAM")"
+        echo "ok"
     fi
 }
 
@@ -140,17 +141,19 @@ function install_autostart {
 }
 
 
+# install configuration files first but defer output later
+# this is to ensure that the prompt runs first in the script
+INSTALL_CONF_OUTPUT="$(install_configuration_file)"
+
 # uninstall existing commands
 uninstall_existing comfortable-swipe
 uninstall_existing comfortable-swipe-buffer
 
-# run install
-INSTALLED_CONF="$(install_configuration_file)"
+# install new binaries
 echo "Installing binaries ..."
-
 install_cpp_program
 install_main_program
-echo "$INSTALLED_CONF"
+echo "$INSTALL_CONF_OUTPUT"
 install_autostart
 
 # add permissions to input group (defer)
@@ -168,15 +171,14 @@ EOF
 fi
 
 cat <<EOF
-Autostart: $("$TARGET" autostart status)
+
+Comfortable Swipe $VERSION
+Autostart switched $("$TARGET" autostart status)
 
 To edit your configuration file, run:
 
     gedit \$(comfortable-swipe config)
 
-To start comfortable-swipe, run:
-
-    comfortable-swipe start
-
-Successfully installed Comfortable Swipe $VERSION
+Try running: comfortable-swipe start
+installation successful
 EOF
