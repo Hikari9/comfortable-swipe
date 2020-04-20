@@ -68,7 +68,7 @@ public:
   int button;
   // constructor
   gesture_swipe_xdomouse(const char *hold3, // 3 finger mouse down
-                    const char *hold4  // 4 finger mouse down
+                         const char *hold4  // 4 finger mouse down
   );
   // destructor
   virtual ~gesture_swipe_xdomouse();
@@ -83,10 +83,12 @@ public:
   virtual bool is_holding() const;
   // utility method to parse mouse input given config characters
   static int parse_mouse_button(const char *);
+
 protected:
   // command holders
   const char *hold3;
   const char *hold4;
+
 private:
   // flag we can use to check if mouse is down
   bool flag_is_holding;
@@ -94,7 +96,8 @@ private:
 /**
  * Constructs a new mouse gesture, given "hold3" and "hold4" configurations.
  */
-gesture_swipe_xdomouse::gesture_swipe_xdomouse(const char *hold3, const char *hold4)
+gesture_swipe_xdomouse::gesture_swipe_xdomouse(const char *hold3,
+                                               const char *hold4)
     : gesture_swipe(), button(MOUSE_NONE), hold3(hold3), hold4(hold4),
       flag_is_holding(false) {}
 /**
@@ -214,6 +217,6 @@ void gesture_swipe_xdomouse::end() {
   // call superclass method
   gesture_swipe::end();
 }
-}
+} // namespace comfortable_swipe
 
 #endif /* __comfortable_swipe_gesture_swipe_xdomouse__ */

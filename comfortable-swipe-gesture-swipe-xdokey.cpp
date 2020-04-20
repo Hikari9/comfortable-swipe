@@ -19,9 +19,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <array>    // std::array
 #include <iostream> // std::cout, std::endl
-#include <array> // std::array
-#include <string> // std::string
+#include <string>   // std::string
 
 extern "C" {
 #include <xdo.h> // xdo_send_keysequence_window
@@ -40,37 +40,38 @@ namespace comfortable_swipe {
  * When constructing, please mind the order in the
  * `gesture_swipe_xdokey::command_name[]` static array.
  */
-class gesture_swipe_xdokey : public gesture_swipe
-{
+class gesture_swipe_xdokey : public gesture_swipe {
 public:
-// stores the 8 command strings for xdo to execute
-std::array<std::string, 8> commands;
-// constructor
-gesture_swipe_xdokey(const decltype(commands)& commands, float threshold=0);
-// destructor
-virtual ~gesture_swipe_xdokey();
-// hooks that we override
-virtual void begin() override;
-virtual void update() override;
-virtual void end() override;
-// override this when keyboard gesture is to be performed
-virtual void do_keyboard_gesture(int mask);
+  // stores the 8 command strings for xdo to execute
+  std::array<std::string, 8> commands;
+  // constructor
+  gesture_swipe_xdokey(const decltype(commands) &commands, float threshold = 0);
+  // destructor
+  virtual ~gesture_swipe_xdokey();
+  // hooks that we override
+  virtual void begin() override;
+  virtual void update() override;
+  virtual void end() override;
+  // override this when keyboard gesture is to be performed
+  virtual void do_keyboard_gesture(int mask);
+
 protected:
-    // stores square of threshold so we can compute faster
-    float threshold_squared;
-    // stores previous gesture so we don't repeat action
-    int previous_gesture;
+  // stores square of threshold so we can compute faster
+  float threshold_squared;
+  // stores previous gesture so we don't repeat action
+  int previous_gesture;
+
 public:
-// static enums we will use for gesture matching
-static const int FRESH = -1;
-static const int MSK_THREE_FINGERS = 0;
-static const int MSK_FOUR_FINGERS = 1;
-static const int MSK_NEGATIVE = 0;
-static const int MSK_POSITIVE = 2;
-static const int MSK_HORIZONTAL = 0;
-static const int MSK_VERTICAL = 4;
-// mappings to our command string names
-static const std::string command_name[];
+  // static enums we will use for gesture matching
+  static const int FRESH = -1;
+  static const int MSK_THREE_FINGERS = 0;
+  static const int MSK_FOUR_FINGERS = 1;
+  static const int MSK_NEGATIVE = 0;
+  static const int MSK_POSITIVE = 2;
+  static const int MSK_HORIZONTAL = 0;
+  static const int MSK_VERTICAL = 4;
+  // mappings to our command string names
+  static const std::string command_name[];
 };
 /**
  * Our mapped directional command names. These will be
@@ -81,8 +82,8 @@ static const std::string command_name[];
  * Refer to the order of this array for the "commands"
  * paramter in the constructor.
  */
-decltype(gesture_swipe_xdokey::command_name)
-gesture_swipe_xdokey::command_name = {
+decltype(
+    gesture_swipe_xdokey::command_name) gesture_swipe_xdokey::command_name = {
     // the order of variables is based on bitmasking
     // <VERTICAL?>  | <POSITIVE?>  | <FOUR FINGERS?>
     "left3",  // 000
@@ -102,13 +103,13 @@ gesture_swipe_xdokey::command_name = {
  * scrolling direction (ie. left3 is natural movement of 3 fingers left).
  */
 gesture_swipe_xdokey::gesture_swipe_xdokey(
-    const decltype(gesture_swipe_xdokey::commands)& commands,
-    float threshold
-): gesture_swipe(), commands(commands), threshold_squared(threshold * threshold) {}
+    const decltype(gesture_swipe_xdokey::commands) &commands, float threshold)
+    : gesture_swipe(), commands(commands),
+      threshold_squared(threshold * threshold) {}
 /**
  * Destructs this keyboard swipe gesture.
  */
-gesture_swipe_xdokey::~gesture_swipe_xdokey() { }
+gesture_swipe_xdokey::~gesture_swipe_xdokey() {}
 /**
  * Hook on begin of swipe gesture.
  */
@@ -150,8 +151,7 @@ void gesture_swipe_xdokey::update() {
         mask |= gesture_swipe_xdokey::MSK_NEGATIVE;
       else
         mask |= gesture_swipe_xdokey::MSK_POSITIVE;
-    }
-    else /* std::abs(x) <= std::abs(y) */
+    } else /* std::abs(x) <= std::abs(y) */
     {
       // gesture is vertical
       mask |= gesture_swipe_xdokey::MSK_VERTICAL;
@@ -162,8 +162,7 @@ void gesture_swipe_xdokey::update() {
     }
     // send command on fresh OR opposite gesture
     if (this->previous_gesture == gesture_swipe_xdokey::FRESH ||
-        this->previous_gesture ==
-            (mask ^ gesture_swipe_xdokey::MSK_POSITIVE)) {
+        this->previous_gesture == (mask ^ gesture_swipe_xdokey::MSK_POSITIVE)) {
       // finally, perform keyboard gesture
       this->do_keyboard_gesture(mask);
     }
@@ -174,7 +173,8 @@ void gesture_swipe_xdokey::update() {
  */
 void gesture_swipe_xdokey::do_keyboard_gesture(int mask) {
   // perform our keyboard command with xdo_send_keysequence
-  xdo_send_keysequence_window(this->xdo, CURRENTWINDOW, commands[mask].data(), 0);
+  xdo_send_keysequence_window(this->xdo, CURRENTWINDOW, commands[mask].data(),
+                              0);
   std::cout << "SWIPE " << command_name[mask] << std::endl;
   // reset our location variables
   this->x = this->y = 0;
@@ -187,5 +187,5 @@ void gesture_swipe_xdokey::end() {
   // just call superclass method
   gesture_swipe::end();
 }
-}
+} // namespace comfortable_swipe
 #endif /* __comfortable_swipe_gesture_swipe_xdokey__ */

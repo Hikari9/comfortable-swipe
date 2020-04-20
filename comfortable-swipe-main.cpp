@@ -28,24 +28,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <iostream>  // std::ios, std::cin, std::getline
-#include <string> // std::string
-#include <map> // std::map
 #include "comfortable-swipe-defines.cpp"
-#include "comfortable-swipe-gesture-swipe.cpp"
 #include "comfortable-swipe-gesture-swipe-xdokey.cpp"
 #include "comfortable-swipe-gesture-swipe-xdomouse.cpp"
+#include "comfortable-swipe-gesture-swipe.cpp"
+#include <iostream> // std::ios, std::cin, std::getline
+#include <map>      // std::map
+#include <string>   // std::string
 
 extern "C" {
-  #include <ini.h> // ini_parse
+#include <ini.h> // ini_parse
 }
 
 /**
  * Registers keys and values from the config file to a map.
  */
-int parse_config(void* config, const char section[], const char name[], const char value[])
-{
-  auto& configmap = *(std::map<std::string, std::string>*) config;
+int parse_config(void *config, const char section[], const char name[],
+                 const char value[]) {
+  auto &configmap = *(std::map<std::string, std::string> *)config;
   configmap[name] = value;
   return 0;
 }
@@ -76,8 +76,7 @@ int main() {
   //   up3=super+Up           maximize
   //   down3=super+Down       minimize
   decltype(gesture_swipe_xdokey::commands) commands;
-  for (size_t i = 0; i < commands.size(); ++i)
-  {
+  for (size_t i = 0; i < commands.size(); ++i) {
     commands[i] = config[gesture_swipe_xdokey::command_name[i]];
   }
   gesture_swipe_xdokey keyswipe(commands, stof(config["threshold"]));
@@ -88,7 +87,8 @@ int main() {
   //   hold3=button1  hold button 1 on 3 fingers
   //   hold4=button3  hold button 3 (right click) on 3 fingers
   //   hold3=ignore   <do nothing>
-  gesture_swipe_xdomouse mousehold(config["hold3"].data(), config["hold4"].data());
+  gesture_swipe_xdomouse mousehold(config["hold3"].data(),
+                                   config["hold4"].data());
   // start reading lines from input one by one
   for (string line; getline(cin, line);) {
     // prioritize mouse hold gesture first before keyboard gesture

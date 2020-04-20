@@ -22,7 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * COMFORTABLE_SWIPE_CONFIG
  *
  * This definition points to the location of the configuration file.
- * A warning will be issued to the compiler if you do not define this at compile time.
+ * A warning will be issued to the compiler if you do not define this at compile
+ * time.
  */
 #ifndef COMFORTABLE_SWIPE_CONFIG
 #pragma message "Please define COMFORTABLE_SWIPE_CONFIG during compilation!"
@@ -33,7 +34,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * COMFORTABLE_SWIPE_AUTOSTART
  *
  * This definition points to the location of the autostart (.desktop) file.
- * A warning will be issued to the compiler if you do not define this at compile time.
+ * A warning will be issued to the compiler if you do not define this at compile
+ * time.
  */
 #ifndef COMFORTABLE_SWIPE_AUTOSTART
 #pragma message "Please define COMFORTABLE_SWIPE_AUTOSTART during compilation!"

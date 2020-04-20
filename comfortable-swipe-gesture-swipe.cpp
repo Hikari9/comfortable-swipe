@@ -70,6 +70,7 @@ public:
   virtual void update();
   virtual void end();
   virtual bool run(const char *);
+
 protected:
   // xdo container
   xdo_t *xdo;
@@ -77,6 +78,7 @@ protected:
   int screen_num, ix, iy;
   // optimization flag for checking if GESTURE_SWIPE_BEGIN was dispatched
   bool flag_swiping;
+
 public:
   // defined in: comfortable-swipe-gesture-swipe.regex.cpp
   static const std::regex GESTURE_SWIPE_BEGIN;
@@ -140,8 +142,7 @@ bool gesture_swipe::run(const char *line) {
       this->begin();
       return true;
     }
-  }
-  else {
+  } else {
     // currently swiping
     if (std::regex_match(line, matches, GESTURE_SWIPE_UPDATE) != 0) {
       // assign necessary variables for swipe update
@@ -172,14 +173,14 @@ bool gesture_swipe::run(const char *line) {
  *                                          ^
  *                                        fingers
  */
-const std::regex gesture_swipe::GESTURE_SWIPE_BEGIN(
-    "^"                       // start of string
-    "[ -]event\\d+"           // event
-    "\\s+GESTURE_SWIPE_BEGIN" // gesture
-    "\\s+\\S+"                // timestamp
-    "\\s+(\\d+)"              // fingers
-    "\\s*$"                   // end of string
-);
+const std::regex
+    gesture_swipe::GESTURE_SWIPE_BEGIN("^"             // start of string
+                                       "[ -]event\\d+" // event
+                                       "\\s+GESTURE_SWIPE_BEGIN" // gesture
+                                       "\\s+\\S+"                // timestamp
+                                       "\\s+(\\d+)"              // fingers
+                                       "\\s*$" // end of string
+    );
 /**
  * Regex pattern for the libinput entry for the end of swipe.
  * Extracts one match for the number of fingers used during the swipe.
@@ -188,14 +189,14 @@ const std::regex gesture_swipe::GESTURE_SWIPE_BEGIN(
  *                                          ^
  *                                        fingers
  */
-const std::regex gesture_swipe::GESTURE_SWIPE_END(
-    "^"                     // start of string
-    "[ -]event\\d+"         // event
-    "\\s+GESTURE_SWIPE_END" // gesture
-    "\\s+\\S+"              // timestamp
-    "\\s+(\\d+)"            // fingers
-    "\\s*$"                 // end of string
-);
+const std::regex
+    gesture_swipe::GESTURE_SWIPE_END("^"                     // start of string
+                                     "[ -]event\\d+"         // event
+                                     "\\s+GESTURE_SWIPE_END" // gesture
+                                     "\\s+\\S+"              // timestamp
+                                     "\\s+(\\d+)"            // fingers
+                                     "\\s*$"                 // end of string
+    );
 // matches signed decimal numbers (eg. "6.02" "-1.1")
 #define _NUMBER_REGEX "-?\\d+(?:\\.\\d+)"
 // matches and extracts a space-prefixed signed fraction (eg. "-3.00/ 5.12")
@@ -218,8 +219,8 @@ const std::regex gesture_swipe::GESTURE_SWIPE_UPDATE(
     "\\s+(\\d+)"               // fingers
     "\\s+" _NUMBER_DIVISION    // speed (dx/dy)
     "\\s+\\(" _NUMBER_DIVISION
-    "\\s+unaccelerated\\)"     // unaccelerated speed (udx/udy)
-    "\\s*$"                    // end of string
+    "\\s+unaccelerated\\)" // unaccelerated speed (udx/udy)
+    "\\s*$"                // end of string
 );
 // clean up temporary macros
 #undef _NUMBER_DIVISION
