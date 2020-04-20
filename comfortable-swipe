@@ -395,24 +395,19 @@ elif declare -f "$1" >/dev/null 2>&1; then
   # TODO: unset all nonlocal functions
   "$@" # same as "$1" "$2" "$3" ... for full argument list
 else
-  # try to invoke config set / get depending on number of arguments
-  if [[ $# -eq 1 ]]; then
-    # one argument, use shorthand get
-    "$BASENAME" config get "$1" 2> /dev/null
-    retval=$?
-  else
-    # multiple arguments, use shorthand set
-    config set "$@" 2> /dev/null
-    retval=$?
-  fi
-  if $retval; then
-    exit $retval
-  else
+  function abort {
     echo "Error: $1 not recognized" >&2
     echo >&2
     usage >&2
     echo -n "Valid props: "  >&2
     echo "$KEYS" | sed 's/|/, /g'  >&2
+  }
+  # try to invoke config set / get depending on number of arguments
+  if [[ $# -eq 1 ]]; then
+    # one argument, use shorthand get
+    "$BASENAME" config get "$1" || abort
+  else
+    # multiple arguments, use shorthand set
+    config set "$@" 2> /dev/null || abort
   fi
-  exit $retval
 fi
