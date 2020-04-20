@@ -3,9 +3,10 @@
 set -e
 
 DIR="$(dirname "$0")"
+COMPILER="$(dirname "$DIR")/compile.sh"
 
 # just call abort on error
-tempout="$(mktemp)"
+TEMPOUT="$(mktemp)"
 abort () {
     rm "$tempout"
     echo "Test aborted"
@@ -13,12 +14,15 @@ abort () {
 }
 
 # run all shell files in this directory
-for sh in "$DIR/test_"*.sh; do
-    /bin/bash "$sh" || abort
+for SH in "$DIR/test_"*.sh; do
+    "$SH" || abort
 done
 
 # run all cpp files in this directory
-for cpp in "$DIR/test_"*.cpp; do
-    g++ -std=c++11 -O2 "$cpp" -lxdo -o "$tempout" || abort
-    "$tempout" || abort
+for CPP in "$DIR/test_"*.cpp; do
+    # compile the test
+    "$COMPILER" "$CPP" -o "$TEMPOUT" || abort
+    # run the test
+    chmod +x "$TEMPOUT"
+    "$TEMPOUT"
 done

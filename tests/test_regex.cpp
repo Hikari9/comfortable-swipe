@@ -1,5 +1,4 @@
-#include "../comfortable_swipe/gesture/swipe_gesture.h"
-#include "../comfortable_swipe/gesture/swipe_gesture.regex.cpp"
+#include "../comfortable-swipe-gesture-swipe.cpp"
 #include <cassert>
 #include <iostream>
 #include <regex>
@@ -53,8 +52,7 @@ void gesture_begin_test(const std::regex &matcher, const char *data,
 }
 
 void gesture_begin_should_match_regex() {
-  std::regex matcher(
-      comfortable_swipe::gesture::swipe_gesture::GESTURE_BEGIN_REGEX_PATTERN);
+  std::regex matcher = comfortable_swipe::gesture_swipe::GESTURE_SWIPE_BEGIN;
   test::gesture_begin_test(matcher, " event15  GESTURE_SWIPE_BEGIN +34.33s 3\n",
                            "3");
   test::gesture_begin_test(matcher, "-event4  GESTURE_SWIPE_BEGIN +3.12s 4\n",
@@ -68,8 +66,7 @@ void gesture_begin_should_match_regex() {
 void gesture_update_should_match_regex() {
   const char *data = " event15  GESTURE_SWIPE_UPDATE +34.70s    3 -0.12/ 4.99 "
                      "(-0.33/13.50 unaccelerated)\n";
-  std::regex matcher(
-      comfortable_swipe::gesture::swipe_gesture::GESTURE_UPDATE_REGEX_PATTERN);
+  std::regex matcher = comfortable_swipe::gesture_swipe::GESTURE_SWIPE_UPDATE;
   std::cmatch matches;
   auto result = std::regex_match(data, matches, matcher);
   assert(result != 0);
@@ -82,8 +79,7 @@ void gesture_update_should_match_regex() {
 
 void gesture_end_should_match_regex() {
   const char *data = " event15  GESTURE_SWIPE_END +35.03s   3\n";
-  std::regex matcher(
-      comfortable_swipe::gesture::swipe_gesture::GESTURE_END_REGEX_PATTERN);
+  std::regex matcher = comfortable_swipe::gesture_swipe::GESTURE_SWIPE_END;
   std::cmatch matches;
   auto result = std::regex_match(data, matches, matcher);
   assert(result != 0);
