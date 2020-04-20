@@ -172,13 +172,12 @@ fi
 
 cat <<EOF
 
-Comfortable Swipe $VERSION
+Successfully installed comfortable-swipe $VERSION
 Autostart switched $("$TARGET" autostart status)
 
-To edit your configuration file, run:
+Edit configuration file with:
 
     gedit \$(comfortable-swipe config)
 
 Try running: comfortable-swipe start
-installation successful
 EOF
