@@ -10,17 +10,17 @@ SOURCE="$DIR/comfortable-swipe"
 TARGET="/usr/local/bin/comfortable-swipe"
 
 # compile targets
-COMPILE="$DIR/compile.sh"
+COMPILE="$DIR/compile"
 COMPILE_SOURCE="$DIR/comfortable-swipe-main.cpp"
 COMPILE_TARGET="/usr/local/bin/comfortable-swipe-buffer"
 
 # configurations
-CONF_SOURCE="$DIR/defaults.conf"
+CONF_SOURCE="$DIR/config/comfortable-swipe.conf"
 CONF_TARGET="$HOME/.config/comfortable-swipe.conf"
 OLD_CONF_TARGET="/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
 
 # autostart
-AUTOSTART_SOURCE="$DIR/comfortable-swipe.desktop"
+AUTOSTART_SOURCE="$DIR/config/comfortable-swipe.desktop"
 AUTOSTART_TARGET="$HOME/.config/autostart/comfortable-swipe.desktop"
 
 # stop any running comfortable-swipe if it exists

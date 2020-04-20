@@ -54,12 +54,20 @@ public:
   virtual void end() override;
   // override this when keyboard gesture is to be performed
   virtual void do_keyboard_gesture(int mask);
+  // public accessors
+  virtual int get_previous_gesture() const {
+      return this->previous_gesture;
+  }
+  virtual int get_current_mask() const {
+      return this->current_mask;
+  }
 
 protected:
   // stores square of threshold so we can compute faster
   float threshold_squared;
   // stores previous gesture so we don't repeat action
   int previous_gesture;
+  int current_mask;
 
 public:
   // static enums we will use for gesture matching
@@ -104,8 +112,12 @@ decltype(
  */
 gesture_swipe_xdokey::gesture_swipe_xdokey(
     const decltype(gesture_swipe_xdokey::commands) &commands, float threshold)
-    : gesture_swipe(), commands(commands),
-      threshold_squared(threshold * threshold) {}
+    : gesture_swipe(),
+      commands(commands),
+      threshold_squared(threshold * threshold),
+      previous_gesture(gesture_swipe_xdokey::FRESH),
+      current_mask(gesture_swipe_xdokey::FRESH)
+    {}
 /**
  * Destructs this keyboard swipe gesture.
  */
@@ -116,8 +128,9 @@ gesture_swipe_xdokey::~gesture_swipe_xdokey() {}
 void gesture_swipe_xdokey::begin() {
   // call superclass method
   gesture_swipe::begin();
-  // assign previous gesture to FRESH
-  this->previous_gesture = gesture_swipe_xdokey::FRESH;
+  // assign gesture to FRESH
+  current_mask = FRESH;
+  previous_gesture = FRESH;
 }
 /**
  * Hook on update of swipe gesture.
@@ -125,47 +138,50 @@ void gesture_swipe_xdokey::begin() {
 void gesture_swipe_xdokey::update() {
   // call superclass method
   gesture_swipe::update();
-  // scale threshold to 1/10 when gesture is not fresh
-  float scale = 1;
-  if (this->previous_gesture == gesture_swipe_xdokey::FRESH)
-    scale = 0.01f; // square root of 1/10
+  // scale threshold to 1/10 when gesture is fresh
+  // acts like our static friction coefficient
+  float scale = get_previous_gesture() == FRESH ? 0.01f : 1.0f;
   // we are working with floating points which are not exact
-  // make sure we compare with a very small value (epsilon)
-  static const float EPSILON = 1e-6f;
-  const float distance_squared = this->x * this->x + this->y * this->y;
-  const float beyond_threshold = this->threshold_squared * scale;
+  // make sure we compare with a very small value (1e-6f)
   // if distance goes out of threshold, perform our swipe
-  if (distance_squared > beyond_threshold + EPSILON) {
+  if (x * x + y * y > threshold_squared * scale + 1e-6f) {
     // we parse our mask based on the values obtained from the regex
     int mask = 0;
-    if (this->fingers == 3)
-      mask |= gesture_swipe_xdokey::MSK_THREE_FINGERS;
-    else if (this->fingers == 4)
-      mask |= gesture_swipe_xdokey::MSK_FOUR_FINGERS;
+    if (fingers == 3)
+      mask |= MSK_THREE_FINGERS;
+    else if (fingers == 4)
+      mask |= MSK_FOUR_FINGERS;
     const float absx = x >= 0 ? x : -x;
     const float absy = y >= 0 ? y : -y;
     if (absx > absy) {
       // gesture is horizontal
-      mask |= gesture_swipe_xdokey::MSK_HORIZONTAL;
+      mask |= MSK_HORIZONTAL;
       if (x < 0)
-        mask |= gesture_swipe_xdokey::MSK_NEGATIVE;
+        mask |= MSK_NEGATIVE;
       else
-        mask |= gesture_swipe_xdokey::MSK_POSITIVE;
+        mask |= MSK_POSITIVE;
     } else /* std::abs(x) <= std::abs(y) */
     {
       // gesture is vertical
-      mask |= gesture_swipe_xdokey::MSK_VERTICAL;
+      mask |= MSK_VERTICAL;
       if (y < 0)
-        mask |= gesture_swipe_xdokey::MSK_NEGATIVE;
+        mask |= MSK_NEGATIVE;
       else
-        mask |= gesture_swipe_xdokey::MSK_POSITIVE;
+        mask |= MSK_POSITIVE;
     }
+    // update our mask
+    current_mask = mask;
     // send command on fresh OR opposite gesture
-    if (this->previous_gesture == gesture_swipe_xdokey::FRESH ||
-        this->previous_gesture == (mask ^ gesture_swipe_xdokey::MSK_POSITIVE)) {
-      // finally, perform keyboard gesture
-      this->do_keyboard_gesture(mask);
+    if (previous_gesture == FRESH || previous_gesture == (mask ^ MSK_POSITIVE)) {
+      // do keyboard gesture
+      do_keyboard_gesture(mask);
+      // reset our location variables
+      x = y = 0;
+      previous_gesture = mask;
     }
+  }
+  else { // not in threshold, set mask to fresh
+    current_mask = FRESH;
   }
 }
 /**
@@ -173,12 +189,8 @@ void gesture_swipe_xdokey::update() {
  */
 void gesture_swipe_xdokey::do_keyboard_gesture(int mask) {
   // perform our keyboard command with xdo_send_keysequence
-  xdo_send_keysequence_window(this->xdo, CURRENTWINDOW, commands[mask].data(),
-                              0);
+  xdo_send_keysequence_window(xdo, CURRENTWINDOW, commands[mask].data(), 0);
   std::cout << "SWIPE " << command_name[mask] << std::endl;
-  // reset our location variables
-  this->x = this->y = 0;
-  this->previous_gesture = mask;
 }
 /**
  * Hook on end of swipe gesture.

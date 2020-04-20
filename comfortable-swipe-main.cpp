@@ -83,20 +83,29 @@ int main() {
   // initialize mouse hold gesture handler
   // for now, this supports 3-finger and 4-finger hold
   // Examples:
-  //   hold3=move     move mouse on 3 fingers
-  //   hold3=button1  hold button 1 on 3 fingers
-  //   hold4=button3  hold button 3 (right click) on 3 fingers
-  //   hold3=ignore   <do nothing>
-  gesture_swipe_xdomouse mousehold(config["hold3"].data(),
-                                   config["hold4"].data());
+  //   mouse3=move     move mouse on 3 fingers
+  //   mouse3=button1  hold button 1 on 3 fingers
+  //   mouse4=button3  hold button 3 (right click) on 3 fingers
+  // warn user that hold3 is deprecated
+  if (config.count("hold3"))
+    std::cerr << "WARNING: hold3 is deprecated. Use mouse3 instead." << std:: endl;
+  if (config.count("hold4"))
+    std::cerr << "WARNING: hold4 is deprecated. Use mouse4 instead." << std::endl;
+  // get input values
+  string mouse3 = config.count("mouse3") ? config["mouse3"] : config["hold3"];
+  string mouse4 = config.count("mouse4") ? config["mouse4"] : config["hold4"];
+  // create our mouse gesture holder
+  gesture_swipe_xdomouse mousehold(mouse3.data(), mouse4.data());
   // start reading lines from input one by one
   for (string line; getline(cin, line);) {
-    // prioritize mouse hold gesture first before keyboard gesture
-    mousehold.run(line.data());
-    // if mouse hold fails, try keyboard swipe
-    // attempt to parse keyboard gestures
-    if (!mousehold.is_holding()) {
+    // optimization: if no mouse config is set, just run keyboard
+    if (mousehold.is_swiping() && mousehold.button == MOUSE_NONE) {
       keyswipe.run(line.data());
+    } else if (mousehold.run(line.data())) {
+      // only allow keyswipe gestures on mouse move
+      if (mousehold.button == MOUSE_MOVE) {
+        keyswipe.run(line.data());
+      }
     }
   }
   return EXIT_SUCCESS;

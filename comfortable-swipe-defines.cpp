@@ -1,6 +1,6 @@
 #ifndef __comfortable_swipe_defines__
 #define __comfortable_swipe_defines__
-/** All global #define statements go here */
+// all global #define statements go here
 /*
 Comfortable Swipe
 by Rico Tiongson

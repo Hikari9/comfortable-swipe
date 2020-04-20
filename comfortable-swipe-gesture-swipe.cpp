@@ -3,7 +3,7 @@
 /**
  * File: comfortable-swipe-gesture-swipe.cpp
  *
- * The definition of the class comfortable_swipe::gesture_swipe.
+ * This is the base class of all comfortable swipe gestures.
  *
  * The class `comfortable_swipe::gesture_swipe` handles dispatching
  * of swipe gestures. The method `gesture_swipe::run(const char*)`
@@ -41,13 +41,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream> // std::cout, std::endl
 #include <regex>    // std::regex, std::regex_match, std::cmatch
 #include <string>   // std::stoi, std::stof
-
 extern "C" {
 #include <xdo.h> // xdo, xdo_new, xdo_free,
                  // xdo_get_mouse_location
                  // CURRENT_WINDOW
 }
-
 namespace comfortable_swipe {
 /**
  * Handles swipe gesture input from libinput debug-events.
@@ -70,6 +68,10 @@ public:
   virtual void update();
   virtual void end();
   virtual bool run(const char *);
+  // public check if currently swiping
+  virtual bool is_swiping() const {
+    return this->flag_swiping;
+  }
 
 protected:
   // xdo container

@@ -67,8 +67,8 @@ public:
   // the button number being clicked
   int button;
   // constructor
-  gesture_swipe_xdomouse(const char *hold3, // 3 finger mouse down
-                         const char *hold4  // 4 finger mouse down
+  gesture_swipe_xdomouse(const char *mouse3, // 3 finger mouse gesture
+                         const char *mouse4  // 4 finger mouse gesture
   );
   // destructor
   virtual ~gesture_swipe_xdomouse();
@@ -77,39 +77,27 @@ public:
   virtual void update() override;
   virtual void end() override;
   // provide our own mouse dispatch functions
-  virtual void do_mousedown(const char *);
-  virtual void do_mouseup(const char *);
-  // utility method to check if mouse is being held
-  virtual bool is_holding() const;
+  virtual void do_mousedown(int button, int fingers);
+  virtual void do_mouseup(int button, int fingers);
   // utility method to parse mouse input given config characters
   static int parse_mouse_button(const char *);
 
 protected:
   // command holders
-  const char *hold3;
-  const char *hold4;
+  const char *mouse3;
+  const char *mouse4;
 
-private:
-  // flag we can use to check if mouse is down
-  bool flag_is_holding;
 };
 /**
- * Constructs a new mouse gesture, given "hold3" and "hold4" configurations.
+ * Constructs a new mouse gesture, given "mouse3" and "mouse4" configurations.
  */
-gesture_swipe_xdomouse::gesture_swipe_xdomouse(const char *hold3,
-                                               const char *hold4)
-    : gesture_swipe(), button(MOUSE_NONE), hold3(hold3), hold4(hold4),
-      flag_is_holding(false) {}
+gesture_swipe_xdomouse::gesture_swipe_xdomouse(const char *mouse3,
+                                               const char *mouse4)
+    : gesture_swipe(), button(MOUSE_NONE), mouse3(mouse3), mouse4(mouse4) {}
 /**
  * Destructs this mouse swipe gesture.
  */
 gesture_swipe_xdomouse::~gesture_swipe_xdomouse() {}
-/**
- * Determines if some mousehold command is being run.
- */
-bool gesture_swipe_xdomouse::is_holding() const {
-  return this->flag_is_holding;
-}
 /**
  * Utility method to parse mouse number from input.
  * Returns MOUSE_NONE on failure.
@@ -132,32 +120,21 @@ int gesture_swipe_xdomouse::parse_mouse_button(const char *input) {
   return MOUSE_NONE;
 }
 /**
- * Perform mousedown command on hold input.
+ * Run mousedown command on a mouse button input.
  */
-void gesture_swipe_xdomouse::do_mousedown(const char *input) {
-  const int button = this->button = this->parse_mouse_button(input);
-  if (button != MOUSE_NONE) {
-    // eg. MOUSE DOWN hold3 mouse1
-    std::printf("MOUSE DOWN hold%d %s\n", this->fingers, input);
-    if (MOUSE_LEFT_CLICK <= button && button <= MOUSE_RIGHT_CLICK) {
-      // send mouse down on associated button
-      xdo_mouse_down(this->xdo, CURRENTWINDOW, button);
-    }
-    this->flag_is_holding = true;
+void gesture_swipe_xdomouse::do_mousedown(int button, int fingers) {
+  if (MOUSE_LEFT_CLICK <= button && button <= MOUSE_RIGHT_CLICK) {
+    // send mouse down on associated button
+    xdo_mouse_down(xdo, CURRENTWINDOW, button);
   }
 }
 /**
- * Run mouseup command on hold output.
+ * Run mouseup command on a mouse button output.
  */
-void gesture_swipe_xdomouse::do_mouseup(const char *input) {
-  const int button = this->button = this->parse_mouse_button(input);
-  if (button != MOUSE_NONE) {
-    std::printf("MOUSE UP hold%d %s\n", this->fingers, input);
-    if (MOUSE_LEFT_CLICK <= button && button <= MOUSE_RIGHT_CLICK) {
-      // send mouse up on associated button
-      xdo_mouse_up(this->xdo, CURRENTWINDOW, button);
-    }
-    this->flag_is_holding = false;
+void gesture_swipe_xdomouse::do_mouseup(int button, int fingers) {
+  if (MOUSE_LEFT_CLICK <= button && button <= MOUSE_RIGHT_CLICK) {
+    // send mouse up on associated button
+    xdo_mouse_up(xdo, CURRENTWINDOW, button);
   }
 }
 /**
@@ -166,11 +143,16 @@ void gesture_swipe_xdomouse::do_mouseup(const char *input) {
 void gesture_swipe_xdomouse::begin() {
   // call superclass method
   gesture_swipe::begin();
-  // dispatch mouse down event
-  if (this->fingers == 3) {
-    this->do_mousedown(this->hold3);
-  } else if (this->fingers == 4) {
-    this->do_mousedown(this->hold4);
+  // map fingers to gesture command
+  auto command = fingers == 3 ? mouse3 : (fingers == 4 ? mouse4 : NULL);
+  if (command != NULL) {
+    // get button int from the command
+    button = parse_mouse_button(command);
+    // perform mousedown on the button and print to console
+    if (button != MOUSE_NONE) {
+      do_mousedown(button, fingers);
+      std::printf("MOUSE DOWN mouse%d %s\n", this->fingers, command);
+    }
   }
 }
 /**
@@ -179,26 +161,25 @@ void gesture_swipe_xdomouse::begin() {
 void gesture_swipe_xdomouse::update() {
   // call superclass method
   gesture_swipe::update();
-  if (this->is_holding()) {
+  if (button != MOUSE_NONE) {
     // if MOUSE_MOVE or MOUSE_CLICK*
-    if (0 <= this->button && this->button <= 3) {
+    if (0 <= button && button <= 3) {
       // drag mouse with pointer during update
-      xdo_move_mouse_relative(this->xdo, this->udx, this->udy);
-    } else if (this->button == MOUSE_SCROLL ||
-               this->button == MOUSE_SCROLL_REVERSE) {
+      xdo_move_mouse_relative(xdo, udx, udy);
+    } else if (button == MOUSE_SCROLL ||
+               button == MOUSE_SCROLL_REVERSE) {
       // perform naive scroll depending on vertical direction
       int wheel = MOUSE_WHEEL_DOWN;
-      if ((this->udy > 0) == (this->button == MOUSE_SCROLL))
+      if ((udy > 0) == (button == MOUSE_SCROLL))
         wheel = MOUSE_WHEEL_UP;
-
       // click wheel on update (note: this is not precise)
-      xdo_mouse_down(this->xdo, CURRENTWINDOW, wheel);
-      xdo_mouse_up(this->xdo, CURRENTWINDOW, wheel);
-    } else if (this->button == MOUSE_WHEEL_UP ||
-               this->button == MOUSE_WHEEL_DOWN) {
+      xdo_mouse_down(xdo, CURRENTWINDOW, wheel);
+      xdo_mouse_up(xdo, CURRENTWINDOW, wheel);
+    } else if (button == MOUSE_WHEEL_UP ||
+               button == MOUSE_WHEEL_DOWN) {
       // click wheel button on 4 or 5
-      xdo_mouse_down(this->xdo, CURRENTWINDOW, this->button);
-      xdo_mouse_up(this->xdo, CURRENTWINDOW, this->button);
+      xdo_mouse_down(xdo, CURRENTWINDOW, button);
+      xdo_mouse_up(xdo, CURRENTWINDOW, button);
     }
   }
 }
@@ -207,13 +188,14 @@ void gesture_swipe_xdomouse::update() {
  */
 void gesture_swipe_xdomouse::end() {
   // optimization: only perform mouseup when flag is set
-  if (this->is_holding()) {
-    if (this->fingers == 3) {
-      this->do_mouseup(this->hold3);
-    } else if (this->fingers == 4) {
-      this->do_mouseup(this->hold4);
-    }
+  if (button != MOUSE_NONE) {
+    // map fingers to gesture command
+    // perform mouseup on the button and print to console
+    do_mouseup(button, fingers);
+    std::printf("MOUSE UP mouse%d %s\n", fingers, fingers == 3 ? mouse3 : mouse4);
   }
+  // reset button
+  button = MOUSE_NONE;
   // call superclass method
   gesture_swipe::end();
 }

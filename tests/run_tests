@@ -3,7 +3,7 @@
 set -e
 
 DIR="$(dirname "$0")"
-COMPILER="$(dirname "$DIR")/compile.sh"
+COMPILER="$(dirname "$DIR")/compile"
 
 # just call abort on error
 TEMPOUT="$(mktemp)"

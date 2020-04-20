@@ -4,7 +4,7 @@ set -ex
 
 DIR="$(dirname "$0")"
 ROOT="$(dirname "$DIR")"
-COMPILER="$ROOT/compile.sh"
+COMPILER="$ROOT/compile"
 
 # just call abort on error
 TEMPOUT="$(mktemp)"
@@ -20,7 +20,7 @@ echo "threshold = 0.0" >> "$EMPTY_CONFIG"
 "$COMPILER" "$ROOT/comfortable-swipe-main.cpp" -o "$TEMPOUT" \
     -DCOMFORTABLE_SWIPE_AUTOSTART="\"$ROOT/comfortable-swipe.desktop\"" \
     -DCOMFORTABLE_SWIPE_CONFIG="\"$EMPTY_CONFIG\"" \
-    || abort
+|| abort
 chmod +x "$TEMPOUT"
 
 set +x
