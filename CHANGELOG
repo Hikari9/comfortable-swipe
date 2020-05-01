@@ -1,5 +1,12 @@
 v1.2.0 (2020-04-20)
 * Simplified source files
+* Add `config get|set|list|delete` to command line
+* Add specific autostart toggles
+* Use clang-format and prettier for formatting
+* Add `--bare` and `--attach` flags to buffer
+* Remove `restart` and integrated single-instance to `start`
+* Provide separate `comfortable-swipe-buffer` program
+* Improve README
 
 v1.1.0 (2020-04-18)
 * Add mouse hold gestures
