@@ -63,80 +63,13 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    Comfortable swipe is RUNNING in the background
    ```
 
-1. Autostart (this is turned on by default)
-
-   ```bash
-   comfortable-swipe autostart [on|off|toggle|status|path]
-   ```
-
 1. List configurations
 
    ```bash
-   If you want to list down configurations, you can run:
-
-       comfortable-swipe config list
-
-   Configuration:
-
-      comfortable-swipe <PROPERTY>                 gets configuration property
-      comfortable-swipe <PROPERTY> [=] <VALUE>     sets configuration to a value
-
-   Valid props: left3, left4, right3, right4, up3, up4, down3, down4, threshold, mouse3, mouse4
+   comfortable-swipe config list
    ```
 
-1. Get config (examples)
-
-   ```bash
-   $ comfortable-swipe left3
-   ctrl+alt+Right
-
-   $ comfortable-swipe left4
-   ctrl+alt+shift+Right
-
-   $ comfortable-swipe right3
-   ctrl+alt+Left
-
-   $ comfortable-swipe right4
-   ctrl+alt+shift+Left
-
-   $ comfortable-swipe up3
-   ctrl+alt+Down
-
-   $ comfortable-swipe up4
-   ctrl+alt+shift+Down
-
-   $ comfortable-swipe down3
-   ctrl+alt+Up
-
-   $ comfortable-swipe down4
-   ctrl+alt+shift+Up
-
-   $ comfortable-swipe threshold
-   1.0
-   ```
-
-1. Set config (examples)
-
-   ```bash
-   $ comfortable-swipe left3 = super+Right
-   left3 = super+Right
-
-   $ comfortable-swipe right3 = super+Left
-   right3 = super+Left
-
-   $ comfortable-swipe right4 = super + Left + alt
-   right4 = super+Left+alt
-   ```
-
-1. Delete config
-
-   ```bash
-   $ comfortable-swipe config delete mouse3
-   Deleted:
-   mouse3 = button1
-   ```
-
-1. List all cofigurations
+   Example:
 
    ```bash
    $ comfortable-swipe config list
@@ -152,14 +85,84 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    left3 = ctrl+super+Right
    ```
 
-1. Show path to config file:
+1) Get config
+
+   ```
+   comfortable-swipe <PROPERTY>
+   ```
+
+   Examples:
+
+   ```bash
+   $ comfortable-swipe left3
+   ctrl+alt+Right
+   ```
+
+   ```bash
+   $ comfortable-swipe left4
+   ctrl+alt+shift+Right
+   ```
+
+   ```bash
+   $ comfortable-swipe threshold
+   1.0
+   ```
+
+1) Set config
+
+   ```bash
+   comfortable-swipe <PROPERTY> [=] <VALUES>
+   ```
+
+   Examples:
+
+   ```bash
+   comfortable-swipe left3 super+Right
+   comfortable-swipe right3 super+Left
+   comfortable-swipe right4 ctrl   alt + Left
+   comfortable-swipe down4 super+d
+   comfortable-swipe up3 = ctrl+shift+Up
+   ```
+
+1) Show path to config file:
 
    ```bash
    $ comfortable-swipe config path
    /home/hikari9/.config/comfortable-swipe.conf
    ```
 
-1. (Advanced) Show output with `--attach`
+<details>
+<summary>Other Commands</summary>
+
+1. Autostart
+
+   ```bash
+   comfortable-swipe autostart
+   comfortable-swipe autostart on
+   comfortable-swipe autostart off
+   comfortable-swipe autostart toggle
+   comfortable-swipe autostart status
+   comfortable-swipe autostart path
+   ```
+
+1. Configurations
+
+   ```bash
+   comfortable-swipe config list
+   comfortable-swipe config get <PROPERTY>
+   comfortable-swipe config set <PROPERTY> [=] <VALUE>
+   comfortable-swipe config path
+   comfortable-swipe config keys
+   ```
+
+1. Help and Version
+
+   ```bash
+   comfortable-swipe --version
+   comfortable-swipe --help
+   ```
+
+1. Show output with `--attach`
 
    Example output of 3-finger left, 4-finger left, 3-finger right, 3-finger up:
 
@@ -173,6 +176,8 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    ```
 
    You can also pass `--bare` to attach without actually swiping.
+
+</details>
 
 ## Swipe Gesture Configurations
 
