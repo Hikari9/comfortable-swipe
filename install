@@ -175,5 +175,7 @@ cat <<EOF
 Successfully installed comfortable-swipe $VERSION
 Autostart switched $("$TARGET" autostart status)
 
-Try running: comfortable-swipe start
 EOF
+
+# start the program
+"$TARGET" start

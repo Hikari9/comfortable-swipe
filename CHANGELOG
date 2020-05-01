@@ -1,3 +1,6 @@
+v1.2.0 (2020-04-20)
+* Simplified source files
+
 v1.1.0 (2020-04-18)
 * Add mouse hold gestures
 * Add experimental `hold3` configuration

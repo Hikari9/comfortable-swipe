@@ -60,7 +60,6 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
   cout.tie(0);
-  cout.flush();
   // get configuration file
   map<string, string> config;
   if (ini_parse(COMFORTABLE_SWIPE_CONFIG, parse_config, &config) < 0) {

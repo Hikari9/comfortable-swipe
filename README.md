@@ -75,7 +75,6 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    ```
    comfortable-swipe start
    comfortable-swipe stop
-   comfortable-swipe restart
    comfortable-swipe status
    ```
 
@@ -95,35 +94,95 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 1. Configurations
 
    ```bash
-   # configuration value
+   comfortable-swipe config list
    comfortable-swipe config get <KEY>
    comfortable-swipe config set <KEY> [=] <VALUE>
-
-   # list all configurations
-   comfortable-swipe config list [<pattern>]
-
-   # remove configuration value
    comfortable-swipe config delete <KEY>
-
    ```
 
-1. Configuration extras
-
+   Get config:
    ```bash
-   # show all possible configuration keys
-   comfortable-swipe config keys
-
-   # show path to config
-   comfortable-swipe config path
-
-   # open config file with editor
-   comfortable-swipe config edit
+   $> comfortable-swipe config get left3
+   ctrl+alt+Right
    ```
 
-1. (Advanced) Run program buffer
+   Set config (whitespace ignored):
+   ```bash
+   $> comfortable-swipe config set up4 super+Up
+   up4 = super+Up
+
+   $> comfortable-swipe config set left3 = super+Right
+   left3 = super+Right
+
+   $> comfortable-swipe config set right3 = super + Left + alt
+   right3 = super+Left+alt
+   ```
+
+   Delete config:
+   ```bash
+   $> comfortable-swipe config delete mouse3
+   ```
+
+   List all cofigurations
+   ```bash
+   $> comfortable-swipe config list
+   threshold = 1.0
+   left4 = ctrl+super+shift+Right
+   right3 = ctrl+super+Left
+   right4 = ctrl+super+shift+Left
+   up3 = ctrl+F12
+   up4 = super+d
+   down3 = ctrl+F12
+   down4 = super+d
+   mouse4 = button1
+   left3 = ctrl+super+Right
+   ```
+
+   Show all possible keys:
+   ```bash
+   $> comfortable-swipe config keys
+   left3
+   left4
+   right3
+   right4
+   up3
+   up4
+   down3
+   down4
+   threshold
+   mouse3
+   mouse4
+   ```
+
+   Show path to config file:
+   ```bash
+   $> comfortable-swipe config path
+   /home/hikari9/.config/comfortable-swipe.conf
+   ```
+
+1. (Advanced) Invoke program buffer with `comfortable-swipe buffer`
 
    ```bash
-   ./my-custom-runner | comfortable-swipe buffer
+   cat <<"EOF" | comfortable-swipe buffer
+   -event7   GESTURE_SWIPE_BEGIN  +0.45s   3
+   event7   GESTURE_SWIPE_UPDATE  +0.45s  3  8.81/-2.34 (32.48/-8.62 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.46s  3 15.54/-3.88 (41.99/-10.50 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.46s  3 18.09/-4.16 (48.88/-11.25 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.47s  3 19.67/-3.61 (53.15/-9.75 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.48s  3 19.79/-3.19 (53.48/-8.62 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.49s  3 17.72/-2.36 (47.90/-6.37 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.49s  3 15.66/-2.36 (42.32/-6.37 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.50s  3 13.35/-2.08 (36.09/-5.62 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.51s  3 10.80/-1.94 (29.20/-5.25 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.52s  3  8.38/-1.53 (22.64/-4.12 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.53s  3  6.43/-1.25 (17.39/-3.37 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.53s  3  4.86/-0.83 (13.12/-2.25 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.54s  3  3.76/-0.55 (10.17/-1.50 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.55s  3  2.67/-0.28 ( 7.22/-0.75 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.56s  3  1.70/ 0.28 ( 4.59/ 0.75 unaccelerated)
+   event7   GESTURE_SWIPE_UPDATE  +0.56s  3  1.09/ 0.14 ( 2.95/ 0.37 unaccelerated)
+   event7   GESTURE_SWIPE_END  +0.59s     3
+   EOF
    ```
 
 ## Configuring Swipe Gestures
