@@ -1,8 +1,37 @@
 #!/bin/bash
 
-echo "Uninstalling..."
-rm "${XDG_CONFIG_HOME:-$HOME/.config}/autostart/comfortable-swipe.desktop" 2> /dev/null
-comfortable-swipe stop 2> /dev/null
-rm "$HOME/.local/bin/comfortable-swipe" 2> /dev/null # compat
-sudo rm /usr/local/bin/comfortable-swipe 2> /dev/null
-echo "Successfully uninstalled comfortable-swipe"
+set -e
+
+function trysudo {
+    $@ 2> /dev/null || sudo $@
+}
+
+function uninstall {
+  TARGET="${1?missing uninstall parameter}"
+  if [[ -f "$TARGET" ]]; then
+    trysudo rm -f "$TARGET"
+    echo "Removed: $TARGET"
+  elif [[ ! -z "$TARGET" ]]; then
+    echo "Not found: $TARGET"
+  fi
+}
+
+# stop program first if it is still running
+comfortable-swipe stop 2> /dev/null || true
+
+# uninstall binaries
+uninstall "$(which comfortable-swipe || echo /usr/share/bin/comfortable-swipe)"
+uninstall "$(which comfortable-swipe-buffer || echo /usr/share/bin/comfortable-swipe-buffer)"
+
+# uninstall desktop file
+uninstall "$HOME/.config/autostart/comfortable-swipe.desktop"
+
+# tell user we are keeping configuration file
+CONF_TARGET="$HOME/.config/comfortable-swipe.conf"
+if [ -f "$CONF_TARGET" ]; then
+  echo "Keeping your configuration file: $CONF_TARGET"
+fi
+
+cat <<EOF
+Successfully uninstalled comfortable-swipe
+EOF

@@ -1,5 +1,6 @@
 # C++ generated headers
 *.gch
+*.o
 
 # IDE-specific
 .idea

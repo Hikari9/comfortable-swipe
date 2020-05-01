@@ -2,95 +2,180 @@
 
 set -e
 
-function install {
-    # prefer running as root
-    local dir="$(dirname "$0")"
-    local program="comfortable-swipe"
-    local program_exe="/usr/local/bin/$program"
-    local compile_command="$dir/cpp.compile.sh"
-    local compile_target="$dir/command_line.cpp"
-    local conf_path="/usr/local/share/$program/$program.conf"
-    local dconf_path="$dir/defaults.conf"
-    local old_conf_path="${XDG_CONFIG_HOME:-$HOME/.config}/$program.conf"
+DIR="$(dirname "$0")"
+VERSION="$(cat $DIR/VERSION | tr -d '[:space:]')"
 
-    if [ -x "$(command -v "$program_exe")" ]; then
-        # stop any running $program if it exists
-        "$program_exe" stop > /dev/null
-    fi
+# target executable
+SOURCE="$DIR/comfortable-swipe"
+TARGET="/usr/local/bin/comfortable-swipe"
 
-    #copy config file
-    abort () {
-        exec echo "Installation aborted"
-    }
-    sudo mkdir -p "$(dirname $conf_path)" || abort
+# compile targets
+COMPILE="$DIR/compile"
+COMPILE_SOURCE="$DIR/comfortable-swipe-main.cpp"
+COMPILE_TARGET="/usr/local/bin/comfortable-swipe-buffer"
 
-    # check if "-y" or "--yes" is passed as an argument
-    YES=false
-    while test $# -gt 0
-    do
-        case "$1" in
-            -y) YES=true
-                ;;
-            --yes) YES=true
-                ;;
-        esac
-        shift
-    done
+# configurations
+CONF_SOURCE="$DIR/config/comfortable-swipe.conf"
+CONF_TARGET="$HOME/.config/comfortable-swipe.conf"
+OLD_CONF_TARGET="/usr/local/share/comfortable-swipe/comfortable-swipe.conf"
 
-    sudo chown $USER "$(dirname $conf_path)"
-    if [ ! -f "$conf_path" ]; then
-        if [ ! -f "$old_conf_path" ]; then
-            # old config file not found, create from scratch
-            cat "$dconf_path" > "$conf_path" || abort
-        else
-            # old config file found, move to the new path
-            cat "$old_conf_path" > "$conf_path" || abort
-            echo "Configuration copied from $old_conf_path to $conf_path"
-        fi
-    else
-        # config file found, ask user if overwrite
-        echo "Old conf file found in $conf_path"
-        if [ "$YES" == false ]; then
-            read -r -p "Keep the old conf file? (default: yes) [Y/n] " response
-            response="${response,,}" # tolower
-            if [[ "$response" =~ ^(no|n)$ ]]; then
-                read -r -p "Conf file will be overwritten. Are you sure? [Y/n] " response
-                response="${response,,}"
-                if [[ "$response" =~ ^(yes|y)$ ]]; then
-                    cat "$dconf_path" > "$conf_path" || abort
-                else
-                    abort
-                fi
-            fi
-        fi
-    fi
+# autostart
+AUTOSTART_SOURCE="$DIR/config/comfortable-swipe.desktop"
+AUTOSTART_TARGET="$HOME/.config/autostart/comfortable-swipe.desktop"
 
-    echo "Installing to $program_exe ..."
+# stop any running comfortable-swipe if it exists
+comfortable-swipe stop > /dev/null 2>&1 || true
 
-    # remove existing $program
-    if [ -x "$(command -v "$program_exe")" ]; then
-        sudo rm -f "$(which "$program")"
-    fi
 
-    # compile library
-    sudo "$compile_command" "$compile_target" -o "$program_exe" || abort
-
-    # add permissions to input group (defer)
-    # GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
-
-    # turn on autostart by default
-    local autostart_status="$("$program_exe" autostart)"
-    if [[ "$autostart_status" == *off* ]]; then
-        autostart_status="$("$program_exe" autostart)"
-    fi
-
-    echo "Successfully installed $program $(cat $dir/VERSION | tr -d '[:space:]')"
-    echo ""
-    echo "$autostart_status"
-    echo "Edit configuration file: gedit \$($program config)"
-    echo ""
-    echo "Try running: $program start"
+# shorthand to abort the installation
+function abort {
+    echo "Installation aborted"
+    exit 1
 }
 
-install
-unset -f install
+# shorthand to try a command with sudo if it fails
+function trysudo {
+    $@ 2> /dev/null || sudo $@
+}
+
+# uninstall existing program
+function uninstall_existing {
+    local PROGRAM="${1:?missing program name}"
+    # remove existing comfortable-swipe
+    if [[ -x "$(command -v "$PROGRAM")" ]]; then
+        echo -n "Removing previous $(which "$PROGRAM") ... "
+        trysudo rm -f "$(which "$PROGRAM")"
+        echo "ok"
+    fi
+}
+
+
+## CONFIGURATION FILE LOADING
+# This section handles installation of configuration file.
+# We determine first if any old configuration files exists.
+# make sure config directory exists
+function install_configuration_file {
+    mkdir -p "$(dirname "$CONF_TARGET")"
+
+    # check if configuration already exists
+    if [[ -f "$CONF_TARGET" ]]; then
+        # ask user if we overwrite configuration
+        echo "Old conf file found in $CONF_TARGET" >&2
+        read -r -p "Keep the old conf file? (default: yes) [Y/n] " response >&2
+        if ! [[ "${response,,}" =~ ^(yes|y)$ ]]; then
+            # MAKE SURE they really want to overwrite
+            read -r -p "Conf file will be overwritten! Are you sure? [Y/n] " response >&2
+            if [[ "${response,,}" =~ ^(yes|y)$ ]]; then
+                # They agreed... replace configuration
+                cat "$CONF_SOURCE" > "$CONF_TARGET"
+            else
+                abort
+            fi
+        fi
+    else
+        # target does not exist yet
+        # try copying from older configurations
+        if [[ -f "$OLD_CONF_TARGET" ]]; then
+            # move configuration from an older version (< v1.2)
+            echo "Moving configuration from $OLD_CONF_TARGET to $CONF_TARGET ..."
+            mv "$OLD_CONF_TARGET" "$CONF_TARGET"
+            # clean up old directory if possible
+            rmdir "$(dirname "$OLD_CONF_TARGET")" > /dev/null 2>&1 || true
+        else
+            # fresh installation! just copy default configuration
+            cat "$CONF_SOURCE" > "$CONF_TARGET"
+        fi
+    fi
+
+    echo "Installed: $CONF_TARGET"
+}
+
+
+## Installation of main program
+#
+#    /usr/local/bin/comfortable-swipe
+#
+function install_main_program {
+    # copy source to target with executable permissions
+    TRYSUDO=
+    if ! touch "$TARGET" 2> /dev/null; then
+        TRYSUDO=sudo
+    fi
+    # install to target, with hardcoded version
+    $TRYSUDO sed -E "s/^VERSION=.*/VERSION=$VERSION/" "$SOURCE" > "$TARGET"
+    # allow execute permissions
+    $TRYSUDO chmod +x "$TARGET"
+    echo "Installed: $TARGET"
+}
+
+
+
+## Compilation and installation of C++ buffer program:
+#
+#    /usr/local/bin/comfortable-swipe-buffer
+#
+function install_cpp_program {
+    # compile program to temporary file first
+    TMP_TARGET="$(mktemp)"
+    $COMPILE "$COMPILE_SOURCE" -o "$TMP_TARGET" -DCOMFORTABLE_SWIPE_VERSION="\"$VERSION\"" -DCOMFORTABLE_SWIPE_CONFIG="\"$CONF_TARGET\"" -DCOMFORTABLE_SWIPE_AUTOSTART="\"$AUTOSTART_TARGET\""
+    # compilation ok, now try to install
+    # eheck permissions maybe if will need sudo
+    TRYSUDO=
+    if ! touch "$COMPILE_TARGET" 2> /dev/null; then
+        TRYSUDO=sudo
+    fi
+    # move executable to target
+    $TRYSUDO mv "$TMP_TARGET" "$COMPILE_TARGET"
+    echo "Installed: $COMPILE_TARGET"
+}
+
+
+
+## Installation of Autostart Desktop file
+#
+#     /home/$USER/.config/autostart/comfortable-swipe.desktop
+#
+function install_autostart {
+    cat "$AUTOSTART_SOURCE" > "$AUTOSTART_TARGET"
+    echo "Installed: $AUTOSTART_TARGET"
+}
+
+
+# install configuration files first but defer output later
+# this is to ensure that the prompt runs first in the script
+INSTALL_CONF_OUTPUT="$(install_configuration_file)"
+
+# uninstall existing commands
+uninstall_existing comfortable-swipe
+uninstall_existing comfortable-swipe-buffer
+
+# install new binaries
+echo "Installing binaries ..."
+install_cpp_program
+install_main_program
+echo "$INSTALL_CONF_OUTPUT"
+install_autostart
+
+# add permissions to input group (defer)
+# GROUP=$(ls -l /dev/input/event* | awk '{print $4}' | head --line=1) || abort
+
+# make sure comfortable-swipe is in path
+if ! command -v comfortable-swipe > /dev/null 2>&1; then
+cat <<EOF >&2
+WARNING: $(dirname "$TARGET") is not in PATH!
+Make sure to add the following in your ~/.profile:
+
+    export PATH="$PATH:$(dirname "$TARGET")"
+
+EOF
+fi
+
+cat <<EOF
+
+Successfully installed comfortable-swipe $VERSION
+Autostart switched $("$TARGET" autostart status)
+
+EOF
+
+# start the program
+"$TARGET" start
