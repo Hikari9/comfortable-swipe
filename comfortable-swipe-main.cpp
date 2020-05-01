@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "comfortable-swipe-gesture-swipe.cpp"
 #include <iostream> // std::ios, std::cin, std::getline
 #include <map>      // std::map
+#include <set>      // std::set
 #include <string>   // std::string
 
 extern "C" {
@@ -53,18 +54,28 @@ int parse_config(void *config, const char section[], const char name[],
 /**
  * The main driver program.
  */
-int main() {
+int main(int argc, char* argv[]) {
   using namespace std;
   using namespace comfortable_swipe;
   // unsync stdio for faster IO
   ios::sync_with_stdio(false);
   cin.tie(0);
   cout.tie(0);
-  // get configuration file
+  // parse configuration file
   map<string, string> config;
   if (ini_parse(COMFORTABLE_SWIPE_CONFIG, parse_config, &config) < 0) {
     cerr << "error: config " << COMFORTABLE_SWIPE_CONFIG << endl;
     return EXIT_FAILURE;
+  }
+  // clear config and just use "threshold" if --bare
+  if (set<string>(argv + 1, argv + argc).count("--bare")) {
+    if (config.count("threshold")) {
+      auto threshold = config["threshold"];
+      config.clear();
+      config["threshold"] = threshold;
+    } else {
+      config.clear();
+    }
   }
   // initialize keyboard swipe gesture handler
   // commands are: [left|up|right|down][3|4]
@@ -75,10 +86,13 @@ int main() {
   //   up3=super+Up           maximize
   //   down3=super+Down       minimize
   decltype(gesture_swipe_xdokey::commands) commands;
-  for (size_t i = 0; i < commands.size(); ++i) {
+  for (size_t i = 0; i < commands.size(); ++i)
     commands[i] = config[gesture_swipe_xdokey::command_name[i]];
-  }
-  gesture_swipe_xdokey keyswipe(commands, stof(config["threshold"]));
+  // correctly parse threshold as float
+  float threshold = 0.0f;
+  try { threshold = stof(config["threshold"]); } catch(std::invalid_argument) { }
+  // create swipe handler
+  gesture_swipe_xdokey keyswipe(commands, threshold);
   // initialize mouse hold gesture handler
   // for now, this supports 3-finger and 4-finger hold
   // Examples:

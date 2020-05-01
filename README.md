@@ -48,34 +48,26 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
 1. **_Important_**: After inputing your `sudo` password, log out then log back in
 
-1. Run
-
-   ```bash
-   comfortable-swipe start
-   ```
-
-1. (Optional) Automatically run on startup
-
-   ```bash
-   comfortable-swipe autostart on
-   ```
-
-1. You can check general program status
-
-   ```basha
-   $> comfortable-swipe status
-   Autostart is ON
-   Program is RUNNING
-   ```
 
 ## List of Commands
 
-1. Program
+1. Start the Program
 
    ```
    comfortable-swipe start
-   comfortable-swipe stop
-   comfortable-swipe status
+   ```
+
+   You will see this output:
+
+   ```
+   $ comfortable-swipe start
+   Comfortable swipe is RUNNING in the background
+   ```
+
+1. Autostart (this is turned on by default)
+
+   ```bash
+   comfortable-swipe autostart [on|off|toggle|status|path]
    ```
 
 1. Help / version
@@ -85,47 +77,76 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    comfortable-swipe --version
    ```
 
-1. Autostart
+1. List configurations
 
    ```bash
-   comfortable-swipe autostart [on|off|toggle|status|path]
+   If you want to list down configurations, you can run:
+
+       comfortable-swipe config list
+
+   Configuration:
+
+      comfortable-swipe <PROPERTY>                 gets configuration property
+      comfortable-swipe <PROPERTY> [=] <VALUE>     sets configuration to a value
+
+   Valid props: left3, left4, right3, right4, up3, up4, down3, down4, threshold, mouse3, mouse4
    ```
 
-1. Configurations
-
+1. Get config (examples)
    ```bash
-   comfortable-swipe config list
-   comfortable-swipe config get <KEY>
-   comfortable-swipe config set <KEY> [=] <VALUE>
-   comfortable-swipe config delete <KEY>
-   ```
-
-   Get config:
-   ```bash
-   $> comfortable-swipe config get left3
+   $ comfortable-swipe left3
    ctrl+alt+Right
+
+   $ comfortable-swipe left4
+   ctrl+alt+shift+Right
+
+   $ comfortable-swipe right3
+   ctrl+alt+Left
+
+   $ comfortable-swipe right4
+   ctrl+alt+shift+Left
+
+   $ comfortable-swipe up3
+   ctrl+alt+Down
+
+   $ comfortable-swipe up4
+   ctrl+alt+shift+Down
+
+   $ comfortable-swipe down3
+   ctrl+alt+Up
+
+   $ comfortable-swipe down4
+   ctrl+alt+shift+Up
+
+   $ comfortable-swipe threshold
+   1.0
    ```
 
-   Set config (whitespace ignored):
-   ```bash
-   $> comfortable-swipe config set up4 super+Up
-   up4 = super+Up
+1. Set config (examples)
 
-   $> comfortable-swipe config set left3 = super+Right
+   ```bash
+   $ comfortable-swipe left3 = super+Right
    left3 = super+Right
 
-   $> comfortable-swipe config set right3 = super + Left + alt
-   right3 = super+Left+alt
+   $ comfortable-swipe right3 = super+Left
+   right3 = super+Left
+
+   $ comfortable-swipe right4 = super + Left + alt
+   right4 = super+Left+alt
    ```
 
-   Delete config:
+1. Delete config
    ```bash
-   $> comfortable-swipe config delete mouse3
+   $ comfortable-swipe config delete mouse3
+
+   Deleted:
+   left3 = ctrl+super+Right
    ```
 
-   List all cofigurations
+1. List all cofigurations
    ```bash
-   $> comfortable-swipe config list
+   $ comfortable-swipe config list
+
    threshold = 1.0
    left4 = ctrl+super+shift+Right
    right3 = ctrl+super+Left
@@ -138,60 +159,20 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    left3 = ctrl+super+Right
    ```
 
-   Show all possible keys:
+1. Show path to config file:
    ```bash
-   $> comfortable-swipe config keys
-   left3
-   left4
-   right3
-   right4
-   up3
-   up4
-   down3
-   down4
-   threshold
-   mouse3
-   mouse4
-   ```
+   $ comfortable-swipe config path
 
-   Show path to config file:
-   ```bash
-   $> comfortable-swipe config path
    /home/hikari9/.config/comfortable-swipe.conf
    ```
 
-1. (Advanced) Invoke program buffer with `comfortable-swipe buffer`
-
-   ```bash
-   cat <<"EOF" | comfortable-swipe buffer
-   -event7   GESTURE_SWIPE_BEGIN  +0.45s   3
-   event7   GESTURE_SWIPE_UPDATE  +0.45s  3  8.81/-2.34 (32.48/-8.62 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.46s  3 15.54/-3.88 (41.99/-10.50 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.46s  3 18.09/-4.16 (48.88/-11.25 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.47s  3 19.67/-3.61 (53.15/-9.75 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.48s  3 19.79/-3.19 (53.48/-8.62 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.49s  3 17.72/-2.36 (47.90/-6.37 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.49s  3 15.66/-2.36 (42.32/-6.37 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.50s  3 13.35/-2.08 (36.09/-5.62 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.51s  3 10.80/-1.94 (29.20/-5.25 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.52s  3  8.38/-1.53 (22.64/-4.12 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.53s  3  6.43/-1.25 (17.39/-3.37 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.53s  3  4.86/-0.83 (13.12/-2.25 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.54s  3  3.76/-0.55 (10.17/-1.50 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.55s  3  2.67/-0.28 ( 7.22/-0.75 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.56s  3  1.70/ 0.28 ( 4.59/ 0.75 unaccelerated)
-   event7   GESTURE_SWIPE_UPDATE  +0.56s  3  1.09/ 0.14 ( 2.95/ 0.37 unaccelerated)
-   event7   GESTURE_SWIPE_END  +0.59s     3
-   EOF
-   ```
-
-## Configuring Swipe Gestures
+## Swipe Gesture Configurations
 
 The default configuration file is located at `~/.config/comfortable-swipe.conf`.
-Comfortable swipe makes use of keyboard shortcuts to perform swipes through `xdotool`.
+Comfortable swipe makes use of **keyboard shortcuts** to perform swipes, through `xdotool`.
 
 
-Edit configurations by running:
+Edit the configuration file by running:
 
 ```
 gedit ~/.config/comfortable-swipe.conf
@@ -200,17 +181,17 @@ gedit ~/.config/comfortable-swipe.conf
 After making changes, make sure to restart the program:
 
 ```
-comfortable-swipe restart
+comfortable-swipe start
 ```
 
-> **Note**: For v1.1.0 below, the configuration file is located at
+> **Warning**: For v1.1.0 below, the configuration file is located at
 > `/usr/local/share/comfortable-swipe/comfortable-swipe.conf`
 
-> **Note**: You can locate your configuration by running `comfortable-swipe config path`
+> **Note**: You can locate the absolute path to your configuration by running: `comfortable-swipe config path`
 
 ## Configuration Reference
 
-| Key       |                                 Value                                  | Example                                                      |
+| Key       |                                 Value                                  | Defaults                                                      |
 | --------- | :--------------------------------------------------------------------: | ------------------------------------------------------------ |
 | left3     |                          3-finger swipe left                           | ctrl+alt+Right                                               |
 | left4     |                          4-finger swipe left                           | ctrl+alt+shift+Right                                         |
@@ -220,7 +201,7 @@ comfortable-swipe restart
 | up4       |                           4-finger swipe up                            | ctrl+alt+shift+Down                                          |
 | down3     |                          3-finger swipe down                           | ctrl+alt+Up                                                  |
 | down4     |                          4-finger swipe down                           | ctrl+alt+shift+Up                                            |
-| thresmouse | mouse movement pixels that trigger a swipe (can be as large as 1000.0) | 0.0, 240.0, 1000.0                                           |
+| threshold | mouse movement pixels that trigger a swipe (can be as large as 1000.0) | 0.0, 240.0, 1000.0                                           |
 | mouse3    |              mouses a mouse button when 3 fingers are down              | button1 (see [Mouse Gestures](#mouse-gestures-experimental)) |  |
 | mouse4    |              mouses a mouse button when 4 fingers are down              | button1 (see [Mouse Gestures](#mouse-gestures-experimental)  |
 

@@ -37,9 +37,10 @@ Global Options:
     -v, --version     print the program version
 
 Commands:
-    start [--attach]
+    start [--attach|--bare]
       starts 3/4-finger gesture service in a detached process
-      flag '--attach' to attach the output in the console
+        --attach    attach process to console
+        --bare      attach with bare configurations
 
     stop
       stops 3/4-finger gesture service
@@ -82,14 +83,16 @@ case $i in
     echo "comfortable-swipe $VERSION"
     exit 0
   ;;
-  --attach)
+  --attach | --bare)  # for start
     if [[ "$1" != start ]]; then
-      echo "Unknown option: $i" >&2
-      exit 1
+      if [[ "$1" != buffer ]]; then
+        echo "Unknown option: $i" >&2
+        exit 1
+      fi
     fi
+    OPTION_ATTACH="true"
   ;;
   *)
-    # unknown option
     if [[ "$i" == -* ]]; then
       echo "Unknown option: $i" >&2
       exit 1
@@ -97,7 +100,6 @@ case $i in
   ;;
 esac
 done
-
 
 #########
 # START #
@@ -108,12 +110,12 @@ done
 # internally pipes debug text to the buffer
 function start {
   stop > /dev/null 2>&1
-  if [[ "$1" == "--attach" ]]; then
+  if [[ "$OPTION_ATTACH" == "true" ]]; then
     # attach the buffered output
-    debug | buffer
+    debug | buffer $@
   else
     # detach buffered output
-    nohup "$BASENAME" debug </dev/null 2>&1 | "$BASENAME" buffer >/dev/null 2>&1 &
+    nohup "$BASENAME" debug </dev/null 2>&1 | "$BASENAME" buffer $@ >/dev/null 2>&1 &
     echo "Comfortable swipe is RUNNING in the background"
   fi
 }
@@ -254,7 +256,7 @@ function config {
       # echo >&2
       usage >&2
       echo >&2
-      echo "If you want to list down properties, you can instead try:" >&2
+      echo "If you want to list down configurations, you can run:" >&2
       echo >&2
       echo "    $BASENAME config list" >&2
       echo >&2
@@ -288,8 +290,11 @@ function config {
       echo "$DELETE"
       local RESULT="$(egrep -v "^\\s*($(echo "$DELETE" | awk '{print $1}' | paste -s -d '|'))\\s*=" "$CONFIG")"
       echo "$RESULT" > "$CONFIG"
-      # restart comfortable-swipe
-      start
+      # restart comfortable-swipe if it is running
+      if [[ "$(status)" == ON ]]; then
+        stop > /dev/null 2>&1
+        start > /dev/null
+      fi
     fi
   }
 
@@ -372,7 +377,11 @@ function config {
     fi
     # show newly set value
     echo "$KEY = $(get "$KEY")"
-    start
+    # restart comfortable-swipe if it is running
+    if [[ "$(status)" == ON ]]; then
+      stop > /dev/null 2>&1
+      start > /dev/null
+    fi
   }
 
   ######################
