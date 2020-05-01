@@ -54,7 +54,7 @@ int parse_config(void *config, const char section[], const char name[],
 /**
  * The main driver program.
  */
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   using namespace std;
   using namespace comfortable_swipe;
   // unsync stdio for faster IO
@@ -90,7 +90,10 @@ int main(int argc, char* argv[]) {
     commands[i] = config[gesture_swipe_xdokey::command_name[i]];
   // correctly parse threshold as float
   float threshold = 0.0f;
-  try { threshold = stof(config["threshold"]); } catch(std::invalid_argument) { }
+  try {
+    threshold = stof(config["threshold"]);
+  } catch (std::invalid_argument) {
+  }
   // create swipe handler
   gesture_swipe_xdokey keyswipe(commands, threshold);
   // initialize mouse hold gesture handler
