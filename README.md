@@ -20,7 +20,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 1. Install libinput-tools and C libraries
 
    ```bash
-   sudo apt install libinput-tools libconfuse-dev libxdo-dev
+   sudo apt install libinput-tools libinih-dev libxdo-dev
    ```
 
 1. Clone this repository
