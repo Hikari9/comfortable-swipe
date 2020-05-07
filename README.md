@@ -83,7 +83,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    comfortable-swipe mouse4
    ```
 
-1) **Set config**
+1. **Set config**
 
    ```bash
    comfortable-swipe <PROPERTY> [=] <VALUES>
@@ -97,7 +97,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    comfortable-swipe up3 = ctrl+shift+Up
    ```
 
-1) **Toggle Autostart**
+1. **Toggle Autostart**
 
    ```bash
    comfortable-swipe autostart
