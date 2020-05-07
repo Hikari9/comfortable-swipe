@@ -48,9 +48,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
 1. **_Important_**: After inputing your `sudo` password, log out then log back in
 
-## List of Commands
-
-1. **Start the Program**
+1. Start the Program
 
    ```
    comfortable-swipe start
@@ -63,24 +61,19 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    Comfortable swipe is RUNNING in the background
    ```
 
-1. **Stop the Program**
+1. (Optional) Stop the Program
 
    ```
    comfortable-swipe stop
    ```
 
-1. **Toggle Autostart** (optional)
+1. (Optional) Toggle autostart
 
    ```bash
    comfortable-swipe autostart
-   comfortable-swipe autostart on
-   comfortable-swipe autostart off
-   comfortable-swipe autostart toggle
-   comfortable-swipe autostart status
-   comfortable-swipe autostart path
    ```
 
-1. **Program status**
+1. (Optional) See program status
 
    ```bash
    comfortable-swipe status
@@ -108,7 +101,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
       mouse4 is  NOTSET
    ```
 
-1. **Get config**
+1. (Optional) Get config
 
    ```
    comfortable-swipe <PROPERTY>
@@ -128,7 +121,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    comfortable-swipe mouse4
    ```
 
-1. **Set config**
+1. (Optional) Set config
 
    ```bash
    comfortable-swipe <PROPERTY> [=] <VALUES>
@@ -160,6 +153,16 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    ```bash
    comfortable-swipe --version
    comfortable-swipe --help
+   ```
+
+1. Autostart commands
+
+   ```bash
+   comfortable-swipe autostart on
+   comfortable-swipe autostart off
+   comfortable-swipe autostart toggle
+   comfortable-swipe autostart status
+   comfortable-swipe autostart path
    ```
 
 1. Show output with `--attach`

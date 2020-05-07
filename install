@@ -116,6 +116,7 @@ function install_cpp_program {
     $COMPILE "$COMPILE_SOURCE" -o "$TMP_TARGET" -DCOMFORTABLE_SWIPE_VERSION="\"$VERSION\"" -DCOMFORTABLE_SWIPE_CONFIG="\"$CONF_TARGET\"" -DCOMFORTABLE_SWIPE_AUTOSTART="\"$AUTOSTART_TARGET\""
     # compilation ok, now try to install
     # check permissions maybe if will need sudo
+    trysudo mkdir -p "$(dirname "$COMPILE_TARGET")"
     trysudo mv "$TMP_TARGET" "$COMPILE_TARGET"
     echo "Installed: $COMPILE_TARGET"
 }
@@ -127,6 +128,7 @@ function install_cpp_program {
 #     /home/$USER/.config/autostart/comfortable-swipe.desktop
 #
 function install_autostart {
+    mkdir -p "$(dirname "$AUTOSTART_TARGET")"
     cat "$AUTOSTART_SOURCE" > "$AUTOSTART_TARGET"
     echo "Installed: $AUTOSTART_TARGET"
 }

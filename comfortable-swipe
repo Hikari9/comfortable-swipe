@@ -115,7 +115,7 @@ function start {
     debug | buffer $@
   else
     # detach buffered output
-    nohup "$BASENAME" debug </dev/null 2>&1 | "$BASENAME" buffer $@ >/dev/null 2>&1 &
+    nohup "$BASENAME" debug </dev/null 2>&1 | "$BASENAME" buffer $@ >/dev/null 2>&1 & disown
     echo "Comfortable swipe is RUNNING in the background"
   fi
 }
