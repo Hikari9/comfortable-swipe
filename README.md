@@ -63,6 +63,51 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    Comfortable swipe is RUNNING in the background
    ```
 
+1. **Stop the Program**
+
+   ```
+   comfortable-swipe stop
+   ```
+
+1. **Toggle Autostart** (optional)
+
+   ```bash
+   comfortable-swipe autostart
+   comfortable-swipe autostart on
+   comfortable-swipe autostart off
+   comfortable-swipe autostart toggle
+   comfortable-swipe autostart status
+   comfortable-swipe autostart path
+   ```
+
+1. **Program status**
+
+   ```bash
+   comfortable-swipe status
+   ```
+
+   Example:
+
+   ```
+   $ comfortable-swipe status
+
+   Autostart is ON
+   Program is RUNNING
+   --------------------
+   Configuration: /home/user/.config/comfortable-swipe.conf
+       left3 is   VALID (ctrl+super+Right)
+       left4 is   VALID (ctrl+super+shift+Right)
+      right3 is   VALID (ctrl+super+Left)
+      right4 is   VALID (ctrl+super+shift+Left)
+         up3 is   VALID (ctrl+F12)
+         up4 is   VALID (super+d)
+       down3 is   VALID (ctrl+F12)
+       down4 is   VALID (super+d)
+   threshold is   VALID (1.0)
+      mouse3 is  NOTSET
+      mouse4 is  NOTSET
+   ```
+
 1. **Get config**
 
    ```
@@ -95,17 +140,6 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    comfortable-swipe right4 = ctrl+alt+Left
    comfortable-swipe down4 = super+d
    comfortable-swipe up3 = ctrl+shift+Up
-   ```
-
-1. **Toggle Autostart**
-
-   ```bash
-   comfortable-swipe autostart
-   comfortable-swipe autostart on
-   comfortable-swipe autostart off
-   comfortable-swipe autostart toggle
-   comfortable-swipe autostart status
-   comfortable-swipe autostart path
    ```
 
 <details>
@@ -177,16 +211,10 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
 </details>
 
-## Swipe Gesture Configurations
+## Gesture Configurations
 
 The default configuration file is located at `~/.config/comfortable-swipe.conf`.
 Comfortable swipe makes use of **keyboard shortcuts** to perform swipes, through `xdotool`.
-
-List all properties with:
-
-```
-comfortable-swipe config list
-```
 
 Set a property directly with:
 
