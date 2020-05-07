@@ -507,13 +507,13 @@ If you can see `GESTURE_SWIPE_XXX` in your output, that means your touchpad supp
 
 For the following reasons:
 
-1.  We want prioritize "comfort" over functionality, which we deliver through performance in our near-zero-overhead implementation (that's why C++)
-2.  Running a new shell command with unpredictable process time will break our unthreaded optimizations (unlike native keystrokes)
-3.  There are other gesture libraries that already do this properly (eg. [libinput gestures](https://github.com/bulletmark/libinput-gestures), [Fusuma](https://github.com/iberianpig/fusuma)), we don't want to be a clone of them
+1.  We want prioritize "comfort" over functionality, which we deliver through performance in our negligible-overhead implementation (that's why C++)
+1.  There are other gesture libraries that already do this properly (eg. [libinput gestures](https://github.com/bulletmark/libinput-gestures), [Fusuma](https://github.com/iberianpig/fusuma)), we don't want to be a clone of them
+1.  Running a new shell command with unpredictable process time will break our unthreaded optimizations (unlike native keystrokes)
 
-That's why it's not possible...
+That's why it's not possible... or not?
 
-**Answer 2**: _... but actually **YES**!_
+**Answer 2**: _... but actually **IT'S POSSIBLE**!_
 
 Although we don't provide this out of the box in our config, this can definitely be
 done with the default bash tools.
