@@ -200,10 +200,10 @@ function status {
     else
       vstatus="VALID"
       if [[ "$key" != mouse* ]]; then
-        if [[ "$key" == *3 && -n "$mouse3" ]]; then
-          vstatus="IGNORED"
-        elif [[ "$key" == *4 && -n "$mouse4" ]]; then
-          vstatus="IGNORED"
+        if [[ "$key" == *3 && -n "$mouse3" && "$mouse3" != move ]]; then
+          vstatus="DISABLED"
+        elif [[ "$key" == *4 && -n "$mouse4" && "$mouse4" != move ]]; then
+          vstatus="DISABLED"
         fi
       fi
       if [[ "$key" == threshold ]]; then
