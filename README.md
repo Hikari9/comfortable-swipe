@@ -419,46 +419,49 @@ Possible Values:
 - scroll - 3/4 finger natural scroll (no acceleration, very experimental)
 - scroll_reverse - 3/4 finger reverse scroll (no acceleration, very experimental)
 
+> **Tip**: You can clear mouse gestures by setting them blank
+>
+> ```
+> comfortable-swipe mouse3 =
+> comfortable-swipe mouse4 =
+> ```
+
 Examples:
 
-- 3/4-finger drag
+✔️ swipes OK
+⭕ swipes DISABLED
+
+- 3/4-finger drag ⭕
+
   ```bash
   comfortable-swipe mouse3 = button1
-  ```
-  ```bash
   comfortable-swipe mouse4 = button1
   ```
-- 3/4-finger natural scroll
+
+  You can also use `button2` for middle click and `button3` for right click.
+
+- 3/4-finger natural scroll ⭕
 
   ```bash
   comfortable-swipe mouse3 = scroll
-  ```
-
-  ```bash
   comfortable-swipe mouse4 = scroll
   ```
 
-- 3/4-finger reverse scroll
+- 3/4-finger reverse scroll ⭕
 
   ```bash
   comfortable-swipe mouse3 = scroll_reverse
-  ```
-
-  ```bash
   comfortable-swipe mouse4 = scroll_reverse
   ```
 
-- Move 3/4-fingers with the cursor
+- Move 3/4-fingers with the cursor ✔️
 
   ```bash
   comfortable-swipe mouse3 = move
+  comfortable-swipe mouse4 = move
   ```
 
-  ```bash
-  mcomfortable-swipe ouse4 = move
-  ```
-
-> **Warning**: Applying any mouse-mouse configuration will **disable up/left/right/down behavior** to avoid gesture conflicts. The logic of this will be improved in the future.
+> **Warning**: Some mouse configuration will **disable up/left/right/down behavior** to avoid gesture conflicts. The logic of this will be improved in the future.
 
 ## Debugging
 
