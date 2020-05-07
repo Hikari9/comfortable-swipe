@@ -97,14 +97,10 @@ function install_configuration_file {
 #
 function install_main_program {
     # copy source to target with executable permissions
-    TRYSUDO=
-    if ! touch "$TARGET" 2> /dev/null; then
-        TRYSUDO=sudo
-    fi
     # install to target, with hardcoded version
-    $TRYSUDO sed -E "s/^VERSION=.*/VERSION=$VERSION/" "$SOURCE" > "$TARGET"
+    trysudo sed -E "s/^VERSION=.*/VERSION=$VERSION/" "$SOURCE" > "$TARGET"
     # allow execute permissions
-    $TRYSUDO chmod +x "$TARGET"
+    trysudo chmod +x "$TARGET"
     echo "Installed: $TARGET"
 }
 
@@ -119,13 +115,8 @@ function install_cpp_program {
     TMP_TARGET="$(mktemp)"
     $COMPILE "$COMPILE_SOURCE" -o "$TMP_TARGET" -DCOMFORTABLE_SWIPE_VERSION="\"$VERSION\"" -DCOMFORTABLE_SWIPE_CONFIG="\"$CONF_TARGET\"" -DCOMFORTABLE_SWIPE_AUTOSTART="\"$AUTOSTART_TARGET\""
     # compilation ok, now try to install
-    # eheck permissions maybe if will need sudo
-    TRYSUDO=
-    if ! touch "$COMPILE_TARGET" 2> /dev/null; then
-        TRYSUDO=sudo
-    fi
-    # move executable to target
-    $TRYSUDO mv "$TMP_TARGET" "$COMPILE_TARGET"
+    # check permissions maybe if will need sudo
+    trysudo mv "$TMP_TARGET" "$COMPILE_TARGET"
     echo "Installed: $COMPILE_TARGET"
 }
 

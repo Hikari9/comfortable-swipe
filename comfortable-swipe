@@ -173,15 +173,53 @@ function buffer {
 ##########
 
 
+function _program_running {
+  pgrep -f "$BASENAME" | fgrep -v $$ > /dev/null 2>&1
+}
+
+
 # verbosely show comfortable-swipe status
 function status {
-  # TODO: show configuration status as well
+  # show autostart status
   echo "Autostart is $("$BASENAME" autostart status)"
-  if pgrep -f "$BASENAME" | fgrep -v $$ > /dev/null 2>&1; then
+  # show program status
+  if _program_running; then
     echo "Program is RUNNING"
   else
     echo "Program is STOPPED"
   fi
+  # show configuration status
+  echo --------------------
+  echo "Configuration: $(config path)"
+  mouse3="$(config get mouse3)"
+  mouse4="$(config get mouse4)"
+  for key in $(config keys); do
+    value="$(config get "$key")"
+    if [[ -z "$value" ]]; then
+      vstatus="NOTSET"
+    else
+      vstatus="VALID"
+      if [[ "$key" != mouse* ]]; then
+        if [[ "$key" == *3 && -n "$mouse3" ]]; then
+          vstatus="IGNORED"
+        elif [[ "$key" == *4 && -n "$mouse4" ]]; then
+          vstatus="IGNORED"
+        fi
+      fi
+      if [[ "$key" == threshold ]]; then
+        if ! [[ "$value" =~ ^[+-]?[0-9]+\.?[0-9]*$ ]]; then
+          # not a float
+          vstatus="INVALID"
+        fi
+      fi
+    fi
+    echo "$key $vstatus" | awk '{printf "%9s is %7s", $1, $2}'
+    if [[ ! -z "$value" ]]; then
+      echo " ($value)"
+    else
+      echo
+    fi
+  done
 }
 
 
@@ -291,8 +329,7 @@ function config {
       local RESULT="$(egrep -v "^\\s*($(echo "$DELETE" | awk '{print $1}' | paste -s -d '|'))\\s*=" "$CONFIG")"
       echo "$RESULT" > "$CONFIG"
       # restart comfortable-swipe if it is running
-      if [[ "$(status)" == ON ]]; then
-        stop > /dev/null 2>&1
+      if _program_running; then
         start > /dev/null
       fi
     fi
@@ -378,8 +415,7 @@ function config {
     # show newly set value
     echo "$KEY = $(get "$KEY")"
     # restart comfortable-swipe if it is running
-    if [[ "$(status)" == ON ]]; then
-      stop > /dev/null 2>&1
+    if _program_running; then
       start > /dev/null
     fi
   }
@@ -451,7 +487,7 @@ function autostart {
   #####################################
   # toggle to opposite autostart status
   function toggle {
-    [[ $(status) = ON ]] && off || on
+    [[ $(status) == ON ]] && off || on
   }
 
   ######################
@@ -495,9 +531,9 @@ else
   # try to invoke config set / get depending on number of arguments
   if [[ $# -eq 1 ]]; then
     # one argument, use shorthand get
-    "$BASENAME" config get "$1" || abort
+    config get "$1" || abort
   else
     # multiple arguments, use shorthand set
-    "$BASENAME" config set "$@" 2> /dev/null || abort
+    config set "$@" 2> /dev/null || abort
   fi
 fi
