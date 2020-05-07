@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
   float threshold = 0.0f;
   try {
     threshold = stof(config["threshold"]);
-  } catch (std::invalid_argument) {
+  } catch (...) {
   }
   // create swipe handler
   gesture_swipe_xdokey keyswipe(commands, threshold);
