@@ -428,7 +428,7 @@ Possible Values:
 
 Examples:
 
-✅ swipes OK
+✔️ swipes OK
 ⭕ swipes DISABLED
 
 - 3/4-finger drag ⭕
@@ -454,7 +454,7 @@ Examples:
   comfortable-swipe mouse4 = scroll_reverse
   ```
 
-- Move 3/4-fingers with the cursor ✅
+- Move 3/4-fingers with the cursor ✔️
 
   ```bash
   comfortable-swipe mouse3 = move
