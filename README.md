@@ -11,7 +11,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 
 ## Installation
 
-1. Install git and g++
+1. Install git and g++ &geq; 7.5
 
    ```bash
    sudo apt install git g++
@@ -69,7 +69,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    comfortable-swipe config list
    ```
 
-   Example:
+   <details> <summary> Example: </summary>
 
    ```bash
    $ comfortable-swipe config list
@@ -85,13 +85,15 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    left3 = ctrl+super+Right
    ```
 
+   </details>
+
 1) Get config
 
    ```
    comfortable-swipe <PROPERTY>
    ```
 
-   Examples:
+   <details> <summary> Examples: </summary>
 
    ```bash
    $ comfortable-swipe left3
@@ -108,19 +110,19 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    1.0
    ```
 
+   </details>
+
 1) Set config
 
    ```bash
    comfortable-swipe <PROPERTY> [=] <VALUES>
    ```
 
-   Examples:
-
    ```bash
-   comfortable-swipe left3 super+Right
-   comfortable-swipe right3 super+Left
-   comfortable-swipe right4 ctrl   alt + Left
-   comfortable-swipe down4 super+d
+   comfortable-swipe left3 = super+Right
+   comfortable-swipe right3 = super+Left
+   comfortable-swipe right4 = ctrl+alt+Left
+   comfortable-swipe down4 = super+d
    comfortable-swipe up3 = ctrl+shift+Up
    ```
 
@@ -131,10 +133,7 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    /home/hikari9/.config/comfortable-swipe.conf
    ```
 
-<details>
-<summary>Other Commands</summary>
-
-1. Autostart
+1) Autostart
 
    ```bash
    comfortable-swipe autostart
@@ -144,6 +143,9 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    comfortable-swipe autostart status
    comfortable-swipe autostart path
    ```
+
+<details>
+<summary><b>Other Commands</b></summary>
 
 1. Configurations
 
@@ -184,17 +186,25 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
 The default configuration file is located at `~/.config/comfortable-swipe.conf`.
 Comfortable swipe makes use of **keyboard shortcuts** to perform swipes, through `xdotool`.
 
-Edit the configuration file by running:
+List all properties with:
+
+```
+comfortable-swipe config list
+```
+
+Set a property directly with:
+
+```
+comfortable-swipe <PROPERTY> [=] <VALUE>
+```
+
+Or edit the configuration file manually:
 
 ```
 gedit ~/.config/comfortable-swipe.conf
 ```
 
-After making changes, make sure to restart the program:
-
-```
-comfortable-swipe start
-```
+After editing, make sure to restart with `comfortable-swipe start`.
 
 > **Warning**: For v1.1.0 below, the configuration file is located at
 > `/usr/local/share/comfortable-swipe/comfortable-swipe.conf`
@@ -203,19 +213,19 @@ comfortable-swipe start
 
 ## Configuration Reference
 
-| Key       |                                 Value                                  | Defaults                                                          |
-| --------- | :--------------------------------------------------------------------: | ----------------------------------------------------------------- |
-| left3     |                          3-finger swipe left                           | ctrl+alt+Right                                                    |
-| left4     |                          4-finger swipe left                           | ctrl+alt+shift+Right                                              |
-| right3    |                          3-finger swipe right                          | ctrl+alt+Left                                                     |
-| right4    |                          4-finger swipe right                          | ctrl+alt+shift+Left                                               |
-| up3       |                           3-finger swipe up                            | ctrl+alt+Down                                                     |
-| up4       |                           4-finger swipe up                            | ctrl+alt+shift+Down                                               |
-| down3     |                          3-finger swipe down                           | ctrl+alt+Up                                                       |
-| down4     |                          4-finger swipe down                           | ctrl+alt+shift+Up                                                 |
-| threshold | mouse movement pixels that trigger a swipe (can be as large as 1000.0) | 0.0, 240.0, 1000.0                                                |
-| mouse3    |             mouses a mouse button when 3 fingers are down              | button1 <br> (see [Mouse Gestures](#mouse-gestures-experimental)) |  |
-| mouse4    |             mouses a mouse button when 4 fingers are down              | button1 <br> (see [Mouse Gestures](#mouse-gestures-experimental)  |
+| Property  |                                 Value                                  | Examples                                                                           |
+| --------- | :--------------------------------------------------------------------: | ---------------------------------------------------------------------------------- |
+| left3     |                          3-finger swipe left                           | ctrl+alt+Right                                                                     |
+| left4     |                          4-finger swipe left                           | ctrl+alt+shift+Right                                                               |
+| right3    |                          3-finger swipe right                          | ctrl+alt+Left                                                                      |
+| right4    |                          4-finger swipe right                          | ctrl+alt+shift+Left                                                                |
+| up3       |                           3-finger swipe up                            | ctrl+alt+Down                                                                      |
+| up4       |                           4-finger swipe up                            | ctrl+alt+shift+Down                                                                |
+| down3     |                          3-finger swipe down                           | ctrl+alt+Up                                                                        |
+| down4     |                          4-finger swipe down                           | ctrl+alt+shift+Up                                                                  |
+| threshold | mouse movement pixels that trigger a swipe (can be as large as 1000.0) | 0.0 / 240.0 / 1000.0                                                               |
+| mouse3    |             mouses a mouse button when 3 fingers are down              | button1 / move / scroll<br> _(see [Mouse Gestures](#mouse-gestures-experimental))_ |  |
+| mouse4    |             mouses a mouse button when 4 fingers are down              | button1 / move / scroll <br> _(see [Mouse Gestures](#mouse-gestures-experimental)_ |
 
 ### Keystrokes
 
@@ -235,11 +245,11 @@ Taken from `man xdotool`:
 
 Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete list of keycodes you can use.
 
-Keyboard shortcuts:
-
+- [DEFKEY - All Linux keyboard shortcuts](https://defkey.com/)
 - [Unity Keyboard Shortcuts](https://cheatography.com/sapemeg/cheat-sheets/ubuntu-unity-16-04/)
 - [GNOME Keyboard Shortcuts](https://wiki.gnome.org/Design/OS/KeyboardShortcuts)
 - [KDE Keyboard Shortcuts](https://community.linuxmint.com/tutorial/view/47)
+- [PopOS Keyboard Shortcuts](https://support.system76.com/articles/pop-keyboard-shortcuts/)
 
 ## Example Configurations
 
@@ -248,92 +258,118 @@ This section includes some example configurations which you can use for your swi
 1. Switch workspace (horizontal)
 
    ```bash
-   comfortable-swipe config set left3 = ctrl+alt+Right
-   comfortable-swipe config set right3 = ctrl+alt+Left
+   # Ubuntu flavors + GNOME
+   comfortable-swipe left3 = ctrl+alt+Right
+   comfortable-swipe right3 = ctrl+alt+Left
    ```
 
 1. Switch workspace (vertical)
 
-   ```
-   up3 = ctrl+alt+Down
-   down3 = ctrl+alt+Up
+   ```bash
+   # Ubuntu flavors + GNOME
+   comfortable-swipe up3 = ctrl+alt+Down
+   comfortable-swipe down3 = ctrl+alt+Up
    ```
 
    ```bash
-   up3 = super+PgDown
-   down3 = super+PgUp
+   # GNOME alt.
+   comfortable-swipe up3 = super+PgDown
+   comfortable-swipe down3 = super+PgUp
+   ```
+
+   ```bash
+   # Pop OS
+   comfortable-swipe up3 = ctrl+super+Down
+   comfortable-swipe down3 = ctrl+super+Up
    ```
 
 1. Move window to workspace (horizontal)
 
    ```bash
-   left4 = ctrl+alt+shift+Right
-   right4 = ctrl+alt+shift+Left
+   # Ubuntu flavors + GNOME + Kali
+   comfortable-swipe left4 = ctrl+alt+shift+Right
+   comfortable-swipe right4 = ctrl+alt+shift+Left
+   ```
+
+   ```bash
+   # Elementary OS
+   comfortable-swipe left4 = super+alt+Right
+   comfortable-swipe right4 = super+alt+Left
    ```
 
 1. Move window to workspace (vertical)
 
    ```bash
-   up4 = ctrl+alt+shift+Down
-   down4 = ctrl+alt+shift+Up
+   # Ubuntu flavors + GNOME + Kali
+   comfortable-swipe up4 = ctrl+alt+shift+Down
+   comfortable-swipe down4 = ctrl+alt+shift+Up
    ```
 
    ```bash
-   up4 = super+shift+PgDown
-   down4 = super+shift+PgUp
+   # GNOME alt.
+   comfortable-swipe up4 = super+shift+PgDown
+   comfortable-swipe down4 = super+shift+PgUp
    ```
 
 1. Move window to other monitor
 
    ```bash
-   left4 = super+shift+Right
-   right4 = super+shift+Left
+   # Ubuntu flavors + GNOME
+   comfortable-swipe left4 = super+shift+Right
+   comfortable-swipe right4 = super+shift+Left
    ```
 
 1. Toggle workspace overview
 
    ```bash
-   up3 = super+s
+   # Ubuntu flavors + Elementary OS
+   comfortable-swipe up3 = super+s
+   ```
+
+   ```bash
+   # Elementary OS (all workspaces)
+   comfortable-swipe up4 = super+a
    ```
 
 1. Show desktop
 
    ```bash
-   down3 = super+d
+   # Ubuntu flavors
+   comfortable-swipe down3 = ctrl+super+d
    ```
 
    ```bash
-   down3 = ctrl+super+d
+   # Linux Mint
+   comfortable-swipe down3 = super+d
    ```
 
    ```bash
-   down3 = ctrl+alt+d
+   # Kali
+   comfortable-swipe down3 = ctrl+alt+d
+   ```
+
+   ```bash
+   # KDE
+   comfortable-swipe down3 = ctrl+F12
    ```
 
 1. Snap windows to the left/right
 
    ```bash
-   left3 = super+Left
-   right3 = super+Right
+   comfortable-swipe left3 = super+Left
+   comfortable-swipe right3 = super+Right
    ```
 
 1. Toggle maximize
 
    ```bash
-   up3 = super+Up
+   comfortable-swipe up3 = super+Up
    ```
 
 1. Toggle minimize
 
    ```bash
-   down3 = super+Down
-   ```
-
-1. Alt+Tab switch application (experimental)
-
-   ```bash
-   left3 = alt+Tab
-   right3 = alt+shift+Tab
+   comfortable-swipe down3 = super+Down
    ```
 
 ## Mouse Gestures (Experimental)
@@ -363,42 +399,42 @@ Examples:
 
 - 3/4-finger drag
   ```bash
-  mouse3 = button1
+  comfortable-swipe mouse3 = button1
   ```
   ```bash
-  mouse4 = button1
+  comfortable-swipe mouse4 = button1
   ```
 - 3/4-finger natural scroll
 
   ```bash
-  mouse3 = scroll
+  comfortable-swipe mouse3 = scroll
   ```
 
   ```bash
-  mouse4 = scroll
+  comfortable-swipe mouse4 = scroll
   ```
 
 - 3/4-finger reverse scroll
 
   ```bash
-  mouse3 = scroll_reverse
+  comfortable-swipe mouse3 = scroll_reverse
   ```
 
   ```bash
-  mouse4 = scroll_reverse
+  comfortable-swipe mouse4 = scroll_reverse
   ```
 
 - Move 3/4-fingers with the cursor
 
   ```bash
-  mouse3 = move
+  comfortable-swipe mouse3 = move
   ```
 
   ```bash
-  mouse4 = move
+  mcomfortable-swipe ouse4 = move
   ```
 
-**Note**: Applying any mouse-mouse configuration may disable up/left/right/down behavior to avoid gesture conflicts. The logic of this will be improved in the future.
+> **Warning**: Applying any mouse-mouse configuration will **disable up/left/right/down behavior** to avoid gesture conflicts. The logic of this will be improved in the future.
 
 ## Debugging
 
@@ -457,7 +493,12 @@ done with the default bash tools.
 Running shell commands our **NOT** part of the core features of comfortable-swipe,
 but through the default bash tools you can _mimic_ this functionality via our program output.
 
+<details>
+<summary>
+
 **Use Case**: _"I want to run `gnome-terminal` if I swipe up with 3 fingers."_
+
+</summary>
 
 1. Attach the program to the shell:
 
@@ -558,6 +599,8 @@ but through the default bash tools you can _mimic_ this functionality via our pr
    ```
 
    Substitute `<COMMAND>` with the shell command of your choice.
+
+</details>
 
 ## Uninstall
 
