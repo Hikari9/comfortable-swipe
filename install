@@ -2,6 +2,11 @@
 
 set -e
 
+if [[ "$USER" == root ]]; then
+    echo "Please run 'bash install' as non-root user" 2>&1
+    exit 1
+fi
+
 DIR="$(dirname "$0")"
 VERSION="$(cat $DIR/VERSION | tr -d '[:space:]')"
 
