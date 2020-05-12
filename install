@@ -101,7 +101,8 @@ function install_main_program {
     if [[ -f "$TARGET" ]]; then
         trysudo rm "$TARGET"
     fi
-    trysudo sed -E "s/^VERSION=.*/VERSION=$VERSION/" "$SOURCE" > "$TARGET"
+    trysudo cp "$SOURCE" "$TARGET"
+    trysudo sed -E "s/^VERSION=.*/VERSION=$VERSION/" -i "$TARGET"
     # allow execute permissions with group
     trysudo chmod +x "$TARGET"
     # make sure non-root user is owner
