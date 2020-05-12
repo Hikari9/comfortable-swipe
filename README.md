@@ -278,9 +278,9 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 - [KDE Keyboard Shortcuts](https://community.linuxmint.com/tutorial/view/47)
 - [PopOS Keyboard Shortcuts](https://support.system76.com/articles/pop-keyboard-shortcuts/)
 
-## Known Issues (#76, #82)
+## Known Issues: Pop!_OS 20.04+
 
-Pop!_OS 20.04+ may be sensitive to capitalization. Make sure to capitalize every first letter of the gesture:
+Pop!_OS 20.04+ may be sensitive to capitalization  (#76, #82). Make sure to capitalize every first letter:
 
 ```bash
 # Pop!_OS
