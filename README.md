@@ -61,16 +61,16 @@ Comfortable, seamless, and fast 3-finger (and 4-finger) touchpad swipe gestures 
    Comfortable swipe is RUNNING in the background
    ```
 
+1. (Optional) Toggle autostart
+
+   ```bash
+   comfortable-swipe autostart on
+   ```
+
 1. (Optional) Stop the Program
 
    ```
    comfortable-swipe stop
-   ```
-
-1. (Optional) Toggle autostart
-
-   ```bash
-   comfortable-swipe autostart
    ```
 
 1. (Optional) See program status
