@@ -134,7 +134,7 @@ void gesture_swipe_xdokey::update() {
   gesture_swipe::update();
   // scale threshold to 1/10 when gesture is fresh
   // acts like our static friction coefficient
-  float scale = get_previous_gesture() == FRESH ? 0.01f : 1.0f;
+  const float scale = get_previous_gesture() == FRESH ? 0.01f : 1.0f;
   // we are working with floating points which are not exact
   // make sure we compare with a very small value (1e-6f)
   // if distance goes out of threshold, perform our swipe
