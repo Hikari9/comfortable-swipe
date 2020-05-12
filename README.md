@@ -278,6 +278,16 @@ Refer to https://www.linux.org/threads/xdotool-keyboard.10528/ for a complete li
 - [KDE Keyboard Shortcuts](https://community.linuxmint.com/tutorial/view/47)
 - [PopOS Keyboard Shortcuts](https://support.system76.com/articles/pop-keyboard-shortcuts/)
 
+## Known Issues (#76, #82)
+
+Pop!_OS 20.04+ may be sensitive to capitalization. Make sure to capitalize every first letter of the gesture:
+
+```bash
+# Pop!_OS
+comfortable-swipe up3 = Super+Ctrl+Down
+comfortable-swipe down3 = Super+Ctrl+Up
+```
+
 ## Example Configurations
 
 This section includes some example configurations which you can use for your swipe experience.
@@ -306,8 +316,8 @@ This section includes some example configurations which you can use for your swi
 
    ```bash
    # Pop OS
-   comfortable-swipe up3 = ctrl+super+Down
-   comfortable-swipe down3 = ctrl+super+Up
+   comfortable-swipe up3 = Super+Ctrl+Down
+   comfortable-swipe down3 = Super+Ctrl+Up
    ```
 
 1. Move window to workspace (horizontal)
