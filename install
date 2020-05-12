@@ -98,9 +98,14 @@ function install_configuration_file {
 function install_main_program {
     # copy source to target with executable permissions
     # install to target, with hardcoded version
+    if [[ -f "$TARGET" ]]; then
+        trysudo rm "$TARGET"
+    fi
     trysudo sed -E "s/^VERSION=.*/VERSION=$VERSION/" "$SOURCE" > "$TARGET"
-    # allow execute permissions
+    # allow execute permissions with group
     trysudo chmod +x "$TARGET"
+    # make sure non-root user is owner
+    trysudo chown "$USER" "$TARGET"
     echo "Installed: $TARGET"
 }
 
@@ -114,10 +119,17 @@ function install_cpp_program {
     # compile program to temporary file first
     TMP_TARGET="$(mktemp)"
     $COMPILE "$COMPILE_SOURCE" -o "$TMP_TARGET" -DCOMFORTABLE_SWIPE_VERSION="\"$VERSION\"" -DCOMFORTABLE_SWIPE_CONFIG="\"$CONF_TARGET\"" -DCOMFORTABLE_SWIPE_AUTOSTART="\"$AUTOSTART_TARGET\""
-    # compilation ok, now try to install
-    # check permissions maybe if will need sudo
+    # compilation ok, now try to install with sudo
     trysudo mkdir -p "$(dirname "$COMPILE_TARGET")"
+    # remove existing file for permissions to work
+    if [[ -f "$COMPILE_TARGET" ]]; then
+        sudo rm "$COMPILE_TARGET"
+    fi
     trysudo mv "$TMP_TARGET" "$COMPILE_TARGET"
+    # bugfix: add with group permissions
+    trysudo chmod go+x "$COMPILE_TARGET"
+    # make sure non-root user is owner
+    trysudo chown "$USER" "$COMPILE_TARGET"
     echo "Installed: $COMPILE_TARGET"
 }
 

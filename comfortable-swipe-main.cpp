@@ -112,17 +112,22 @@ int main(int argc, char *argv[]) {
   // get input values
   string mouse3 = config.count("mouse3") ? config["mouse3"] : config["hold3"];
   string mouse4 = config.count("mouse4") ? config["mouse4"] : config["hold4"];
+  bool nomouse = mouse3.empty() || mouse4.empty(); // TODO: check if mouse invalid
   // create our mouse gesture holder
   gesture_swipe_xdomouse mousehold(mouse3.data(), mouse4.data());
   // start reading lines from input one by one
   for (string line; getline(cin, line);) {
-    // optimization: if no mouse config is set, just run keyboard
-    if (mousehold.is_swiping() && mousehold.button == MOUSE_NONE) {
+    if (nomouse) {
       keyswipe.run(line.data());
-    } else if (mousehold.run(line.data())) {
-      // only allow keyswipe gestures on mouse move
-      if (mousehold.button == MOUSE_NONE || mousehold.button == MOUSE_MOVE) {
+    } else {
+      // optimization: if no mouse config is set, just run keyboard
+      if (mousehold.is_swiping() && mousehold.button == MOUSE_NONE) {
         keyswipe.run(line.data());
+      } else if (mousehold.run(line.data())) {
+        // only allow keyswipe gestures on mouse move
+        if (mousehold.button == MOUSE_NONE || mousehold.button == MOUSE_MOVE) {
+          keyswipe.run(line.data());
+        }
       }
     }
   }
