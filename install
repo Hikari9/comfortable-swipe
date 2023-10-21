@@ -34,7 +34,7 @@ comfortable-swipe stop > /dev/null 2>&1 || true
 
 # shorthand to abort the installation
 function abort {
-    echo "Installation aborted"
+    echo "Installation aborted" >&2 
     exit 1
 }
 
@@ -67,14 +67,23 @@ function install_configuration_file {
         # ask user if we overwrite configuration
         echo "Old conf file found in $CONF_TARGET" >&2
         read -r -p "Keep the old conf file? (default: yes) [Y/n] " response >&2
-        if ! [[ "${response,,}" =~ ^(yes|y)$ ]]; then
+
+        # If response is empty, consider it as 'yes' (default)
+		if [[ -z "$response" ]]; then
+            response="y"
+        fi
+
+        if [[ "${response,,}" =~ ^(no|n)$ ]]; then
             # MAKE SURE they really want to overwrite
             read -r -p "Conf file will be overwritten! Are you sure? [Y/n] " response >&2
-            if [[ "${response,,}" =~ ^(yes|y)$ ]]; then
+			if [[ -z "$response" ]]; then
+				response="y"
+			fi
+        	if [[ "${response,,}" =~ ^(no|n)$ ]]; then
+                abort
+            else
                 # They agreed... replace configuration
                 cat "$CONF_SOURCE" > "$CONF_TARGET"
-            else
-                abort
             fi
         fi
     else
